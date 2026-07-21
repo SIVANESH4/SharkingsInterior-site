@@ -16,10 +16,56 @@
   /* Font Families */
   --font-display: "Cormorant Garamond", serif;
   --font-sans: "Montserrat", sans-serif;
+
+  /* Premium Custom Animations */
+  --animate-ken-burns: ken-burns 8s ease-in-out infinite alternate;
+  --animate-scroll-bounce: scroll-bounce 2.2s ease-in-out infinite;
+  --animate-progress-bar: progress-bar 6s linear forwards;
+  --animate-ambient-glow: ambient-glow 12s ease-in-out infinite alternate;
+
+  @keyframes ken-burns {
+    0% { transform: scale(1); }
+    100% { transform: scale(1.04); }
+  }
+  @keyframes scroll-bounce {
+    0%, 100% { transform: translateY(0); opacity: 0.5; }
+    50% { transform: translateY(6px); opacity: 1; }
+  }
+  @keyframes progress-bar {
+    from { width: 0%; }
+    to { width: 100%; }
+  }
+  @keyframes ambient-glow {
+    0% { transform: translate(0px, 0px) scale(1); }
+    50% { transform: translate(25px, -15px) scale(1.08); }
+    100% { transform: translate(-15px, 15px) scale(0.95); }
+  }
 }
 
 @layer base {
   body {
-    @apply bg-luxury-cream text-luxury-charcoal font-sans antialiased selection:bg-luxury-red selection:text-luxury-cream;
+    @apply bg-luxury-charcoal text-luxury-cream font-sans antialiased selection:bg-luxury-red selection:text-luxury-cream overflow-x-hidden;
   }
 }
+
+*{
+  scrollbar-width: none;
+}
+
+/* 3D Perspective Pop-Up Unfold (guaranteed 100% visible) */
+.reveal-3d-popup {
+  opacity: 1;
+  transform: perspective(1200px) translateY(0px) rotateX(0deg) scale(1);
+  transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+
+.reveal-3d-popup.active {
+  opacity: 1;
+  transform: perspective(1200px) translateY(0px) rotateX(0deg) scale(1);
+}
+
+.delay-100 { transition-delay: 100ms; }
+.delay-200 { transition-delay: 200ms; }
+.delay-300 { transition-delay: 300ms; }
+.delay-400 { transition-delay: 400ms; }
