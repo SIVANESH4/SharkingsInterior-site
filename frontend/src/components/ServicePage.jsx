@@ -108,7 +108,7 @@ const SERVICES_CATALOG = [
     id: 'wardrobe',
     category: 'BESPOKE STORAGE SYSTEMS',
     categoryGroup: 'MODULAR',
-    title: 'Wardrobe',
+    title: 'Wardrobe Suite',
     badge: 'LUXURY SUITE',
     description: 'Floor-to-ceiling luxury wardrobe suites featuring tinted glass sliding doors, integrated sensor strip lighting, velvet jewelry drawers, and lacquered finish panels.',
     image: 'https://images.unsplash.com/photo-1600566753376-12c8ab7fb75b?q=80&w=1000&auto=format&fit=crop',
@@ -225,35 +225,15 @@ const SERVICES_CATALOG = [
   }
 ];
 
-const MATERIAL_FINISHES = {
-  veneers: [
-    { name: 'Natural Walnut', spec: 'A Grade, Book-matched, Low-VOC Matte Seal', desc: 'Deep warm wood grains with fine horizontal striations, perfect for study panels and kitchen cabinets.' },
-    { name: 'Smoked Oak', spec: 'Quarter-cut, Wire-brushed Texture, Charcoal Stain', desc: 'Moody dark gray texture with strong tactile presence, anchoring living room feature walls.' },
-    { name: 'Ebony Macassar', spec: 'High-gloss Lacquer Finish, Hand-polished', desc: 'Rare linear striping that creates a striking luxury backdrop for custom console tables.' }
-  ],
-  metals: [
-    { name: 'Brushed Gold', spec: 'Electroplated Brass, Anti-fingerprint Coating', desc: 'Warm glowing trim details used on cabinet handles, socket frames, and recess profiles.' },
-    { name: 'Antiqued Brass', spec: 'Hand-patinated Solid Brass, Raw Wax Seal', desc: 'Bespoke aging look that gains character over time, perfect for custom luxury hardware.' },
-    { name: 'Gunmetal Black', spec: 'PVD Coated Stainless Steel, Sandblasted Matte', desc: 'Industrial refinement with absolute scratch resistance, highlighting edge channels and brackets.' }
-  ],
-  fabrics: [
-    { name: 'Luxury Sage Velvet', spec: '100% Organic Cotton, 50,000 Martindale Rubs', desc: 'Rich mossy green drape with high texture, custom woven for lounge armchairs.' },
-    { name: 'Cream Bouclé', spec: 'Alpaca Wool Blend, Heavy Textured Weave', desc: 'Soft cloud-like warmth for master bedroom seating, creating sensory tactile comfort.' },
-    { name: 'Crimson Silk Velvet', spec: 'Mulberry Silk Back, Deep Crimson Pile', desc: 'A striking focal accent fabric for custom dining chairs and decorative cushions.' }
-  ]
-};
-
 export default function ServicePage({ onNavigate }) {
   useScrollReveal();
-  const [selectedServiceIdx, setSelectedServiceIdx] = useState(3); // Container Cafe active by default
+  const [selectedServiceIdx, setSelectedServiceIdx] = useState(3);
   const [activeCategoryFilter, setActiveCategoryFilter] = useState('ALL');
-  const [activeMaterialCat, setActiveMaterialCat] = useState('veneers');
-  const [selectedMaterialIdx, setSelectedMaterialIdx] = useState(0);
   const [isDesktop, setIsDesktop] = useState(true);
   const [mouseOffset, setMouseOffset] = useState({ x: 0, y: 0 });
   const cardRef = useRef(null);
+  const stageRef = useRef(null);
 
-  // Filtered Services List
   const filteredServices = activeCategoryFilter === 'ALL'
     ? SERVICES_CATALOG
     : SERVICES_CATALOG.filter(s => s.categoryGroup === activeCategoryFilter);
@@ -267,6 +247,14 @@ export default function ServicePage({ onNavigate }) {
     handleResize();
     return () => window.removeEventListener('resize', handleResize);
   }, []);
+
+  const selectService = (globalIdx) => {
+    setSelectedServiceIdx(globalIdx);
+    // Smooth auto scroll to active card stage on mobile view
+    if (window.innerWidth < 1024 && stageRef.current) {
+      stageRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  };
 
   const handleMouseMove = (e) => {
     if (!isDesktop || !cardRef.current) return;
@@ -289,119 +277,150 @@ export default function ServicePage({ onNavigate }) {
   };
 
   return (
-    <div className="relative min-h-screen bg-[#fbf9f6] text-luxury-charcoal font-sans overflow-x-hidden">
+    <div className="min-h-screen bg-[#f9f8f4] text-[#1a1a1a] font-sans selection:bg-[#710014] selection:text-white relative overflow-x-hidden">
       
-      {/* Background Watermark */}
-      <div className="absolute font-display text-[16vw] text-[#710014]/[0.02] font-extralight select-none pointer-events-none z-0 left-0 top-1/4 whitespace-nowrap">
-        ARCHITECTURAL SERVICES
-      </div>
+      {/* Background Architectural Grid */}
+      <div
+        className="absolute inset-0 opacity-[0.03] pointer-events-none z-0"
+        style={{
+          backgroundImage: `
+            linear-gradient(to right, #000000 1px, transparent 1px),
+            linear-gradient(to bottom, #000000 1px, transparent 1px)
+          `,
+          backgroundSize: '35px 35px'
+        }}
+      />
 
-      {/* Subtle Ambient Glow Orbs */}
-      <div className="absolute top-1/4 -left-32 w-[600px] h-[600px] bg-[#710014]/[0.03] rounded-full blur-[160px] pointer-events-none z-0" />
-      <div className="absolute bottom-10 right-0 w-[550px] h-[550px] bg-[#838f6f]/[0.04] rounded-full blur-[150px] pointer-events-none z-0" />
-
-      {/* TOP STICKY BAR */}
-      <header className="w-full flex items-center justify-between px-6 md:px-16 py-5 border-b border-black/10 bg-[#fbf9f6]/90 backdrop-blur-md sticky top-0 z-50">
-        
-        {/* Back Button */}
-        <button 
-          onClick={() => onNavigate('landing')}
-          className="flex items-center gap-2.5 px-4 py-2 bg-white border border-black/10 text-xs font-sans font-bold tracking-widest text-[#1a1a1a] hover:bg-[#710014] hover:text-white transition-all duration-300 rounded-none group cursor-pointer shadow-sm"
-        >
-          <svg 
-            xmlns="http://www.w3.org/2000/svg" 
-            fill="none" 
-            viewBox="0 0 24 24" 
-            strokeWidth={2} 
-            stroke="currentColor" 
-            className="w-4 h-4 transform group-hover:-translate-x-1 transition-transform"
+      {/* Header */}
+      <header className="w-full bg-[#f9f8f4]/90 backdrop-blur-md border-b border-[#e5e0d3] sticky top-0 z-50 py-4 sm:py-5">
+        <div className="max-w-7xl mx-auto px-5 sm:px-12 flex items-center justify-between">
+          
+          <button 
+            onClick={() => onNavigate('landing')}
+            className="flex items-center gap-2 font-sans text-xs font-bold tracking-[0.2em] text-[#1a1a1a] hover:text-[#710014] transition-colors uppercase cursor-pointer focus:outline-none group"
           >
-            <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
-          </svg>
-          <span>BACK TO HOME</span>
-        </button>
+            <svg 
+              xmlns="http://www.w3.org/2000/svg" 
+              fill="none" 
+              viewBox="0 0 24 24" 
+              strokeWidth={2.5} 
+              stroke="currentColor" 
+              className="w-4 h-4 transform group-hover:-translate-x-1 transition-transform text-[#710014]"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+            </svg>
+            <span>HOME</span>
+          </button>
 
-        {/* Branding Logo */}
-        <a 
-          href="/" 
-          onClick={(e) => { e.preventDefault(); onNavigate('landing'); }} 
-          className="flex flex-col items-center group cursor-pointer"
-        >
-          <span className="font-display text-lg md:text-2xl font-light tracking-[0.2em] text-[#1a1a1a] group-hover:text-[#710014] transition-colors">
-            SHARKINGS
-          </span>
-          <span className="font-sans text-[8px] font-bold tracking-[0.45em] text-[#710014] mt-0.5 ml-[0.1em]">
-            INTERIOR
-          </span>
-        </a>
+          <a 
+            href="/" 
+            onClick={(e) => { e.preventDefault(); onNavigate('landing'); }} 
+            className="flex flex-col items-center group cursor-pointer"
+          >
+            <span className="font-display text-lg sm:text-xl font-light tracking-[0.25em] text-[#1a1a1a] group-hover:text-[#710014] transition-colors">
+              SHARKINGS
+            </span>
+            <span className="font-sans text-[8px] font-bold tracking-[0.45em] text-[#710014] mt-0.5 ml-[0.1em]">
+              INTERIOR
+            </span>
+          </a>
 
-        {/* Call to Action */}
-        <button
-          onClick={() => onNavigate('landing')}
-          className="hidden md:inline-flex px-6 py-2.5 bg-[#710014] text-white text-xs font-sans font-extrabold tracking-widest uppercase hover:bg-[#580010] transition-all duration-300 rounded-none shadow-md cursor-pointer"
-        >
-          BOOK CONSULTATION
-        </button>
+          <button
+            onClick={() => onNavigate('landing')}
+            className="px-4 py-2 sm:px-5 sm:py-2.5 bg-[#710014] text-white text-[10px] font-sans font-bold tracking-wider uppercase hover:bg-[#580010] transition-colors cursor-pointer shadow-sm"
+          >
+            CONSULTATION
+          </button>
 
+        </div>
       </header>
 
-      {/* MAIN CONTAINER */}
-      <main className="max-w-7xl mx-auto px-6 md:px-16 lg:px-24 py-12 md:py-20 space-y-20 relative z-10">
+      {/* Main Container */}
+      <main className="max-w-7xl mx-auto px-5 sm:px-12 lg:px-16 py-8 sm:py-16 space-y-8 sm:space-y-10 relative z-10">
 
-        {/* PAGE HEADER */}
-        <section className="space-y-4 reveal-3d-popup border-b border-black/10 pb-10">
-          <div className="flex items-center gap-3">
-            <span className="w-8 h-[1px] bg-[#710014]/30" />
-            <span className="font-sans text-[10px] md:text-xs font-bold tracking-[0.35em] text-[#710014] uppercase">
-              OUR EXPERTISE
-            </span>
-          </div>
+        {/* Title Block */}
+        <section className="space-y-3 border-b border-[#e5e0d3] pb-6">
+          <span className="font-sans text-[10px] sm:text-xs font-bold tracking-[0.35em] text-[#710014] uppercase block">
+            OUR EXPERTISE
+          </span>
 
-          <h1 className="font-display text-4xl md:text-6xl lg:text-7xl font-light text-[#1a1a1a] tracking-tight">
-            Architectural <span className="italic font-normal text-[#710014]">Services</span>
+          <h1 className="font-display text-3xl sm:text-5xl lg:text-6xl font-light text-[#1a1a1a] leading-tight uppercase tracking-wider">
+            Architectural Services
           </h1>
 
-          <p className="font-sans text-xs md:text-sm text-luxury-charcoal/70 max-w-3xl leading-relaxed font-light">
+          <p className="font-sans text-xs sm:text-sm text-[#4a4a4a] leading-relaxed font-normal max-w-2xl">
             An immersive look into our structural engineering capabilities, high-performance interior blueprints, and bespoke modular creations across Madurai and Ramanathapuram.
           </p>
-        </section>
 
-        {/* CATEGORY FILTER TABS */}
-        <section className="space-y-4 reveal-3d-popup">
-          <div className="flex items-center gap-2 overflow-x-auto scrollbar-none pb-2">
-            {['ALL', 'RESIDENTIAL', 'MODULAR', 'CONTAINER', 'COMMERCIAL', 'SPECIALTY'].map((cat) => (
-              <button
-                key={cat}
-                onClick={() => setActiveCategoryFilter(cat)}
-                className={`px-5 py-2 rounded-none font-sans text-[10px] font-bold tracking-widest uppercase transition-all duration-300 flex-shrink-0 cursor-pointer ${
-                  activeCategoryFilter === cat
-                    ? 'bg-[#710014] text-white shadow-md'
-                    : 'bg-white text-luxury-charcoal/60 border border-black/10 hover:border-[#710014] hover:text-[#710014]'
-                }`}
-              >
-                {cat}
-              </button>
-            ))}
+          {/* Filter Bar Row */}
+          <div className="pt-3 flex items-center gap-2 overflow-x-auto scrollbar-none">
+            <div className="bg-white border border-[#e5e0d3] p-1 flex flex-nowrap overflow-x-auto gap-2 shadow-sm w-full sm:w-auto">
+              {[
+                { label: 'ALL SERVICES', value: 'ALL' },
+                { label: 'RESIDENTIAL', value: 'RESIDENTIAL' },
+                { label: 'MODULAR SYSTEMS', value: 'MODULAR' },
+                { label: 'ECO CONTAINER', value: 'CONTAINER' },
+                { label: 'COMMERCIAL & OFFICE', value: 'COMMERCIAL' },
+                { label: 'SPECIALTY ARCHITECTURE', value: 'SPECIALTY' }
+              ].map((tab) => (
+                <button
+                  key={tab.value}
+                  onClick={() => setActiveCategoryFilter(tab.value)}
+                  className={`px-4 py-2 font-sans text-[9px] sm:text-[10px] font-bold tracking-widest uppercase transition-all duration-300 flex-shrink-0 cursor-pointer ${
+                    activeCategoryFilter === tab.value
+                      ? 'bg-[#710014] text-white shadow-md'
+                      : 'bg-transparent text-[#666666] hover:text-[#710014] hover:bg-[#710014]/5'
+                  }`}
+                >
+                  {tab.label}
+                </button>
+              ))}
+            </div>
           </div>
         </section>
 
-        {/* 2-COLUMN INTERACTIVE ATELIER SHOWCASE */}
-        <section className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-start reveal-3d-popup delay-100">
-          
-          {/* LEFT COLUMN: 13 Services Navigation List (5 Cols) */}
-          <div className="lg:col-span-5 bg-white border border-black/10 p-6 md:p-8 space-y-3 shadow-[0_15px_45px_rgba(0,0,0,0.03)] relative overflow-hidden">
-            
-            {/* Accent Line */}
-            <div className="absolute top-0 left-0 right-0 h-[2px] bg-[#710014]" />
+        {/* MOBILE INSTANT SELECTOR BAR (< lg): Touch-Friendly Horizontal Pill Scroller */}
+        <section className="lg:hidden space-y-3 bg-white border border-[#e5e0d3] p-4 rounded-2xl shadow-sm">
+          <div className="flex items-center justify-between font-sans text-xs font-bold text-[#710014]">
+            <span className="uppercase tracking-wider">Tap Service to Inspect ({filteredServices.length})</span>
+            <span className="text-[10px] text-[#777] font-normal">Auto-scrolls to details ↓</span>
+          </div>
 
-            <div className="border-b border-black/10 pb-4 mb-4 flex items-center justify-between">
-              <span className="font-sans text-xs font-bold tracking-wider text-[#710014] uppercase">
-                CAPABILITIES LIST ({filteredServices.length})
+          <div className="flex items-center gap-2 overflow-x-auto scrollbar-none py-1">
+            {filteredServices.map((service) => {
+              const globalIdx = SERVICES_CATALOG.findIndex(s => s.id === service.id);
+              const isSelected = selectedServiceIdx === globalIdx;
+
+              return (
+                <button
+                  key={service.id}
+                  onClick={() => selectService(globalIdx)}
+                  className={`px-4 py-2 rounded-xl text-xs font-sans font-bold flex-shrink-0 transition-all border ${
+                    isSelected
+                      ? 'bg-[#710014] text-white border-[#710014] shadow-md scale-105'
+                      : 'bg-[#f9f8f4] text-[#333] border-[#e5e0d3] hover:border-[#710014]'
+                  }`}
+                >
+                  {service.title}
+                </button>
+              );
+            })}
+          </div>
+        </section>
+
+        {/* 2-Column Atelier Showcase Stage */}
+        <section className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          
+          {/* DESKTOP LEFT COLUMN: Capabilities List (5 Cols) */}
+          <div className="hidden lg:block lg:col-span-5 bg-white border border-[#e5e0d3] p-6 rounded-3xl space-y-4 shadow-sm relative overflow-hidden">
+            <div className="border-b border-[#e5e0d3] pb-4 mb-2 flex items-center justify-between">
+              <span className="font-sans text-xs font-bold tracking-[0.2em] text-[#710014] uppercase">
+                CAPABILITIES ({filteredServices.length})
               </span>
-              <span className="font-sans text-[10px] text-black/40 font-semibold">SELECT TO EXPLORE</span>
+              <span className="font-sans text-[10px] text-[#777777] font-semibold uppercase">SELECT TO INSPECT</span>
             </div>
 
-            <div className="space-y-1 max-h-[600px] overflow-y-auto pr-2 scrollbar-thin">
+            <div className="space-y-1 max-h-[550px] overflow-y-auto pr-2 scrollbar-thin">
               {filteredServices.map((service) => {
                 const globalIdx = SERVICES_CATALOG.findIndex(s => s.id === service.id);
                 const isSelected = selectedServiceIdx === globalIdx;
@@ -409,15 +428,15 @@ export default function ServicePage({ onNavigate }) {
                 return (
                   <button
                     key={service.id}
-                    onClick={() => setSelectedServiceIdx(globalIdx)}
-                    className={`w-full text-left py-3.5 px-4 transition-all duration-300 flex items-center justify-between group cursor-pointer rounded-none border-b border-black/5 last:border-0 ${
+                    onClick={() => selectService(globalIdx)}
+                    className={`w-full text-left py-3.5 px-4 transition-all duration-300 flex items-center justify-between group cursor-pointer border-b border-[#f0ece1] last:border-0 ${
                       isSelected
                         ? 'bg-[#710014]/5 text-[#710014] font-bold border-l-4 border-l-[#710014] pl-5'
-                        : 'text-luxury-charcoal/70 hover:bg-[#f6f5f1] hover:text-[#710014]'
+                        : 'text-[#333333] hover:bg-[#f6f4ee] hover:text-[#710014]'
                     }`}
                   >
-                    <span className="font-sans text-xs md:text-sm tracking-wide font-semibold">
-                      {service.title.toUpperCase()}
+                    <span className="font-sans text-xs md:text-sm tracking-wide font-semibold uppercase">
+                      {service.title}
                     </span>
 
                     <svg 
@@ -428,21 +447,20 @@ export default function ServicePage({ onNavigate }) {
                       stroke="currentColor" 
                       className={`w-4 h-4 transition-transform duration-300 ${
                         isSelected 
-                          ? 'text-[#710014] translate-x-1 rotate-45' 
-                          : 'text-black/20 group-hover:text-[#710014] group-hover:translate-x-1'
+                          ? 'text-[#710014] translate-x-1' 
+                          : 'text-[#999999] group-hover:text-[#710014] group-hover:translate-x-1'
                       }`}
                     >
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25" />
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
                     </svg>
                   </button>
                 );
               })}
             </div>
-
           </div>
 
-          {/* RIGHT COLUMN: 3D Active Card Showcase Stage (7 Cols) */}
-          <div className="lg:col-span-7">
+          {/* RIGHT COLUMN / MOBILE ACTIVE STAGE: Active Card Showcase Stage */}
+          <div ref={stageRef} className="lg:col-span-7 scroll-mt-24">
             <div
               ref={cardRef}
               onMouseMove={handleMouseMove}
@@ -451,63 +469,61 @@ export default function ServicePage({ onNavigate }) {
                 transform: isDesktop ? `perspective(1200px) rotateY(${mouseOffset.x}deg) rotateX(${mouseOffset.y}deg)` : 'none',
                 transition: 'transform 0.15s ease-out'
               }}
-              className="w-full bg-white border border-black/10 shadow-[0_25px_70px_rgba(0,0,0,0.06)] relative overflow-hidden backdrop-blur-xl space-y-6"
+              className="w-full bg-white border border-[#e5e0d3] rounded-3xl shadow-xl relative overflow-hidden space-y-6"
             >
-              {/* Top Burgundy Accent Line */}
-              <div className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-transparent via-[#710014] to-transparent z-30" />
+              {/* Top Red Line */}
+              <div className="absolute top-0 left-0 right-0 h-[3px] bg-[#710014] z-30" />
 
               {/* Showcase Image Area */}
-              <div className="relative w-full aspect-[16/9] bg-luxury-charcoal overflow-hidden group">
+              <div className="relative w-full aspect-[16/9] bg-[#eee9df] overflow-hidden group">
                 <img
                   src={activeService.image}
                   alt={activeService.title}
-                  className="w-full h-full object-cover opacity-90 transition-transform duration-700 group-hover:scale-105"
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
 
                 {/* Badge Overlay Top Left */}
-                <div className="absolute top-4 left-4 z-20">
-                  <span className="px-3.5 py-1.5 bg-black/80 border border-white/10 text-[#c5a059] text-[9px] font-sans font-bold tracking-[0.25em] uppercase rounded-none backdrop-blur-md flex items-center gap-1.5 shadow-lg">
-                    <span>✨</span>
-                    <span>{activeService.badge}</span>
+                <div className="absolute top-3 left-3 sm:top-4 sm:left-4 z-20">
+                  <span className="px-3 py-1 bg-[#710014] text-white text-[9px] font-sans font-bold tracking-[0.2em] uppercase rounded shadow-md">
+                    ✨ {activeService.badge}
                   </span>
                 </div>
 
                 {/* Timeline Tag Top Right */}
-                <div className="absolute top-4 right-4 z-20">
-                  <span className="px-3 py-1 bg-[#710014] text-white text-[9px] font-sans font-extrabold tracking-widest uppercase rounded-none shadow-md">
-                    {activeService.timeline} Execution
+                <div className="absolute top-3 right-3 sm:top-4 sm:right-4 z-20">
+                  <span className="px-3 py-1 bg-black/80 text-white text-[9px] font-sans font-bold tracking-widest uppercase rounded shadow-md">
+                    {activeService.timeline} EXECUTION
                   </span>
                 </div>
               </div>
 
               {/* Card Body Details */}
-              <div className="p-6 md:p-8 space-y-6">
+              <div className="p-5 sm:p-8 space-y-5">
                 
                 {/* Category & Title */}
-                <div className="space-y-1 border-b border-black/10 pb-4">
+                <div className="space-y-1 border-b border-[#e5e0d3] pb-4">
                   <span className="text-[10px] font-sans font-bold tracking-[0.25em] text-[#710014] uppercase">
                     {activeService.category}
                   </span>
-                  <h2 className="font-display text-3xl md:text-4xl font-light text-[#1a1a1a]">
+                  <h2 className="font-display text-2xl sm:text-4xl font-light text-[#1a1a1a] uppercase tracking-wide">
                     {activeService.title}
                   </h2>
                 </div>
 
                 {/* Description */}
-                <p className="font-sans text-xs md:text-sm text-luxury-charcoal/80 leading-relaxed font-light">
+                <p className="font-sans text-xs sm:text-sm text-[#4a4a4a] leading-relaxed font-normal">
                   {activeService.description}
                 </p>
 
                 {/* Features Grid */}
-                <div className="space-y-3 bg-[#f6f5f1] border border-black/5 p-4 md:p-5">
-                  <span className="text-[10px] font-sans font-bold tracking-wider text-[#710014] uppercase block">
+                <div className="space-y-3 bg-[#f9f8f4] border border-[#e5e0d3] p-4 sm:p-5 rounded-2xl">
+                  <span className="text-[10px] font-sans font-bold tracking-[0.25em] text-[#710014] uppercase block">
                     ARCHITECTURAL SPECIFICATIONS & SCOPE
                   </span>
 
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs font-sans font-semibold text-[#333333]">
                     {activeService.features.map((feat, idx) => (
-                      <div key={idx} className="flex items-center gap-2 text-xs font-sans text-luxury-charcoal/85">
+                      <div key={idx} className="flex items-center gap-2">
                         <span className="text-[#710014] font-bold">✦</span>
                         <span>{feat}</span>
                       </div>
@@ -516,29 +532,29 @@ export default function ServicePage({ onNavigate }) {
                 </div>
 
                 {/* Guarantee Banner */}
-                <div className="flex items-center gap-3 py-3 px-4 bg-[#710014]/5 border border-[#710014]/20 text-[#710014]">
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5 flex-shrink-0">
+                <div className="flex items-center gap-3 py-3 px-4 bg-[#710014]/5 border border-[#710014]/20 text-[#710014] rounded-xl">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5 flex-shrink-0 text-[#710014]">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 01-1.043 3.296 3.745 3.745 0 01-3.296 1.043A3.745 3.745 0 0112 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 01-3.296-1.043 3.745 3.745 0 01-1.043-3.296A3.745 3.745 0 013 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 011.043-3.296 3.746 3.746 0 013.296-1.043A3.746 3.746 0 0112 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 013.296 1.043 3.746 3.746 0 011.043 3.296A3.745 3.745 0 0121 12z" />
                   </svg>
-                  <span className="font-sans text-xs font-bold tracking-wider uppercase">
+                  <span className="font-sans text-[10px] sm:text-xs font-bold tracking-wider uppercase">
                     {activeService.guarantee}
                   </span>
                 </div>
 
                 {/* Action CTA Buttons */}
-                <div className="flex flex-col sm:flex-row items-center gap-4 pt-2">
+                <div className="flex flex-col sm:flex-row items-center gap-3 pt-2">
                   <button
                     onClick={() => onNavigate('landing')}
-                    className="w-full sm:w-1/2 py-3.5 px-6 bg-[#710014] text-white text-xs font-sans font-extrabold tracking-widest uppercase hover:bg-[#580010] transition-all shadow-lg cursor-pointer text-center rounded-none"
+                    className="w-full sm:w-1/2 py-3.5 px-6 bg-[#710014] text-white text-xs font-sans font-bold tracking-widest uppercase hover:bg-[#580010] transition-all shadow-md cursor-pointer text-center rounded-none"
                   >
                     BOOK VIP CONSULTATION
                   </button>
 
                   <a
                     href="tel:+918098090204"
-                    className="w-full sm:w-1/2 py-3.5 px-6 bg-white border-2 border-[#710014] text-[#710014] text-xs font-sans font-extrabold tracking-widest uppercase hover:bg-[#710014] hover:text-white transition-all cursor-pointer text-center rounded-none flex items-center justify-center gap-2"
+                    className="w-full sm:w-1/2 py-3.5 px-6 bg-white border border-[#710014] text-[#710014] text-xs font-sans font-bold tracking-widest uppercase hover:bg-[#710014] hover:text-white transition-all cursor-pointer text-center rounded-none flex items-center justify-center gap-2"
                   >
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4 text-[#710014]">
                       <path fillRule="evenodd" d="M1.5 4.5a3 3 0 0 1 3-3h1.372c.86 0 1.61.586 1.819 1.42l1.105 4.423a1.875 1.875 0 0 1-.694 1.955l-1.293.97c.135.252.286.505.452.757.946 1.433 2.164 2.651 3.597 3.597.252.166.505.317.757.452l.97-1.293a1.875 1.875 0 0 1 1.955-.694l4.423 1.105c.834.209 1.42.959 1.42 1.82V19.5a3 3 0 0 1-3 3h-2.25C8.552 22.5 1.5 15.448 1.5 6.75V4.5Z" clipRule="evenodd" />
                     </svg>
                     <span>CALL DIRECT LINE</span>
@@ -552,104 +568,20 @@ export default function ServicePage({ onNavigate }) {
 
         </section>
 
-        {/* MATERIAL SPECIFICATION LIBRARY */}
-        <section className="space-y-10 bg-white border border-black/10 p-8 md:p-12 shadow-[0_25px_70px_rgba(0,0,0,0.05)] relative overflow-hidden reveal-3d-popup">
-          
-          <div className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-transparent via-[#710014] to-transparent" />
-
-          <div className="max-w-2xl space-y-3">
-            <span className="text-[10px] font-sans font-bold tracking-[0.25em] text-[#710014] uppercase">
-              INTERACTIVE MATERIAL TACTILITY
-            </span>
-            <h2 className="font-display text-3xl md:text-4xl font-light text-[#1a1a1a]">
-              The Material Specification Library
-            </h2>
-            <p className="font-sans text-xs md:text-sm text-luxury-charcoal/70 font-light leading-relaxed">
-              Explore custom teak veneers, brushed gold hardware, and organic velvet swatches integrated across our bespoke interior blueprints.
-            </p>
-          </div>
-
-          {/* Category Tabs */}
-          <div className="flex flex-wrap gap-3 border-b border-black/10 pb-4">
-            {Object.keys(MATERIAL_FINISHES).map((cat) => (
-              <button
-                key={cat}
-                onClick={() => { setActiveMaterialCat(cat); setSelectedMaterialIdx(0); }}
-                className={`px-5 py-2.5 font-sans text-[10px] tracking-widest uppercase font-bold transition-all duration-300 cursor-pointer rounded-none ${
-                  activeMaterialCat === cat
-                    ? 'bg-[#710014] text-white shadow-md'
-                    : 'bg-[#f6f5f1] border border-black/10 text-luxury-charcoal/60 hover:text-[#710014]'
-                }`}
-              >
-                {cat}
-              </button>
-            ))}
-          </div>
-
-          {/* Material Split Panel */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-            
-            <div className="lg:col-span-5 space-y-2">
-              {MATERIAL_FINISHES[activeMaterialCat].map((finish, idx) => (
-                <button
-                  key={finish.name}
-                  onClick={() => setSelectedMaterialIdx(idx)}
-                  className={`w-full text-left p-4 border transition-all duration-300 cursor-pointer rounded-none ${
-                    selectedMaterialIdx === idx
-                      ? 'bg-[#710014]/5 border-[#710014] text-[#710014] font-bold border-l-4'
-                      : 'bg-white border-black/5 text-luxury-charcoal/70 hover:bg-[#f6f5f1]'
-                  }`}
-                >
-                  <div className="font-display text-lg font-light">{finish.name}</div>
-                  <div className="font-sans text-[9px] text-black/40 uppercase tracking-widest mt-1">{finish.spec}</div>
-                </button>
-              ))}
-            </div>
-
-            <div className="lg:col-span-7 bg-[#f6f5f1] border border-black/10 p-6 md:p-8 space-y-4">
-              <span className="text-[10px] font-sans text-[#710014] font-bold tracking-widest uppercase block">
-                COORDINATE PREVIEW
-              </span>
-              
-              <div className="space-y-1">
-                <h4 className="font-display text-2xl font-light text-[#1a1a1a]">
-                  {MATERIAL_FINISHES[activeMaterialCat][selectedMaterialIdx].name}
-                </h4>
-                <div className="text-[10px] font-sans text-[#710014] font-semibold uppercase tracking-wider">
-                  SPEC: {MATERIAL_FINISHES[activeMaterialCat][selectedMaterialIdx].spec}
-                </div>
-              </div>
-
-              <div className="w-12 h-[1px] bg-[#710014]/30" />
-
-              <p className="font-sans text-xs md:text-sm text-luxury-charcoal/80 leading-relaxed font-light">
-                {MATERIAL_FINISHES[activeMaterialCat][selectedMaterialIdx].desc}
-              </p>
-            </div>
-
-          </div>
-
-        </section>
-
       </main>
 
-      {/* FOOTER */}
-      <footer className="w-full bg-[#38000a] text-white py-12 px-6 md:px-16 border-t border-white/10 mt-20">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
-          
-          <div className="flex flex-col items-center md:items-start">
-            <span className="font-display text-xl font-light tracking-[0.2em] text-[#c5a059]">
-              SHARKINGS INTERIOR
-            </span>
-            <span className="font-sans text-[9px] text-white/50 tracking-widest mt-1">
-              Madurai & Ramanathapuram Architectural Atelier
-            </span>
-          </div>
-
-          <div className="font-sans text-xs text-white/60">
-            © {new Date().getFullYear()} Sharkings Interior. All rights reserved.
-          </div>
-
+      {/* Footer */}
+      <footer className="w-full bg-[#38000a] text-white py-10 px-6 md:px-16 border-t border-white/10 mt-16">
+        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+          <span className="font-display text-xs tracking-widest text-[#c5a059] uppercase">
+            SHARKINGS INTERIOR ATELIER • MADURAI & RAMANATHAPURAM
+          </span>
+          <button
+            onClick={() => onNavigate('landing')}
+            className="font-sans text-[10px] font-bold tracking-[0.25em] uppercase text-white/80 hover:text-[#c5a059] transition-colors cursor-pointer"
+          >
+            ← RETURN TO MAIN STUDIO
+          </button>
         </div>
       </footer>
 

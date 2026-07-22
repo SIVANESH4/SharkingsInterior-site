@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import Navbar from './Navbar';
 import Hero from './sections/Hero';
 import WhyUs from './sections/WhyUs';
 import ServicesSlider from './sections/ServicesSlider';
@@ -21,9 +22,8 @@ const LandingPage = ({ onNavigate }) => {
   const [isPaused, setIsPaused] = useState(false);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [scrollY, setScrollY] = useState(0);
-  const [whyUsScrollProgress, setWhyUsScrollProgress] = useState(0);
   const [whyUsBgProgress, setWhyUsBgProgress] = useState(0);
-  const [whyUsCardsProgress, setWhyUsCardsProgress] = useState(0);
+  const [whyUsContentProgress, setWhyUsContentProgress] = useState(0);
   const [scrollProgress, setScrollProgress] = useState(0);
   const [isDesktop, setIsDesktop] = useState(true);
 
@@ -73,7 +73,7 @@ const LandingPage = ({ onNavigate }) => {
     imageUrls.forEach((url) => {
       const img = new Image();
       img.src = url;
-      
+
       const handleLoad = () => {
         loadedCount++;
         const percent = Math.round((loadedCount / imageUrls.length) * 100);
@@ -119,10 +119,10 @@ const LandingPage = ({ onNavigate }) => {
         const rect = servicesRef.current.getBoundingClientRect();
         const sectionHeight = rect.height;
         const viewportHeight = window.innerHeight;
-        
+
         const scrolled = -rect.top;
         const totalScrollable = sectionHeight - viewportHeight;
-        
+
         if (scrolled >= 0 && scrolled <= totalScrollable) {
           setScrollProgress(scrolled / totalScrollable);
         } else if (scrolled < 0) {
@@ -132,36 +132,26 @@ const LandingPage = ({ onNavigate }) => {
         }
       }
 
-      // 3. Why Us section relative scroll progress inside its h-[300vh] wrapper
+      // 3. Why Us section 2-step scroll progress
       if (whyUsRef.current) {
         const rect = whyUsRef.current.getBoundingClientRect();
         const sectionHeight = rect.height;
         const viewportHeight = window.innerHeight;
-        
-        const scrolled = -rect.top;
-        const totalScrollable = sectionHeight - viewportHeight;
-        
-        if (scrolled >= 0 && scrolled <= totalScrollable) {
-          setWhyUsScrollProgress(scrolled / totalScrollable);
-        } else if (scrolled < 0) {
-          setWhyUsScrollProgress(0);
-        } else {
-          setWhyUsScrollProgress(1);
-        }
 
-        // Phase 1: Background rises up from scrolled = 0 to scrolled = viewportHeight (100vh runway)
-        const bgProg = Math.min(Math.max(0, scrolled / viewportHeight), 1);
+        // Step 1: Cream BG pops up as section top enters viewport (rect.top: viewportHeight -> 0)
+        const bgProg = Math.min(Math.max(0, (viewportHeight - rect.top) / viewportHeight), 1);
         setWhyUsBgProgress(bgProg);
 
-        // Phase 2: Cards reveal sequentially from scrolled = viewportHeight to scrolled = totalScrollable
-        const cardsStart = viewportHeight;
-        const cardsEnd = totalScrollable;
-        let cardsProg = 0;
-        if (scrolled > cardsStart) {
-          cardsProg = Math.min(Math.max(0, (scrolled - cardsStart) / (cardsEnd - cardsStart)), 1);
+        // Step 2: Every content pops up on next scroll inside pinned area (rect.top <= 0)
+        const scrolled = -rect.top;
+        const totalScrollable = sectionHeight - viewportHeight;
+        let contentProg = 0;
+        if (scrolled >= 0 && totalScrollable > 0) {
+          contentProg = Math.min(Math.max(0, scrolled / (totalScrollable * 0.5)), 1);
         }
-        setWhyUsCardsProgress(cardsProg);
+        setWhyUsContentProgress(contentProg);
       }
+
 
       // 4. Testimonial section relative scroll progress
       if (testimonialRef.current) {
@@ -214,7 +204,7 @@ const LandingPage = ({ onNavigate }) => {
         }
       }
     };
-    
+
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
@@ -250,61 +240,15 @@ const LandingPage = ({ onNavigate }) => {
 
   // Cinematic Framed Card Reveal Transition Calculations
   const frameProgress = typeof window !== 'undefined' ? Math.min(scrollY / window.innerHeight, 1) : 0;
-  const heroScale = 1 - frameProgress * 0.08; 
-  const heroRadius = frameProgress * 24; 
-  const heroPadding = frameProgress * 16; 
-
-  // Scroll-linked Gradual Staggered Card Reveal calculation helper for pinned Why Us section
-  const getWhyUsRevealStyle = (startThreshold, duration) => {
-    if (!isDesktop) {
-      // Stacking overlay card logic for mobile to fit everything inside 100vh
-      const localProgress = Math.min(Math.max(0, (whyUsCardsProgress - startThreshold) / duration), 1);
-      
-      let opacity = 0;
-      if (whyUsCardsProgress >= startThreshold) {
-        opacity = localProgress;
-        const nextStart = startThreshold + duration;
-        if (whyUsCardsProgress > nextStart) {
-          const fadeOutProgress = Math.min(Math.max(0, (whyUsCardsProgress - nextStart) / 0.05), 1);
-          opacity = 1 - fadeOutProgress;
-        }
-      }
-      const translateY = (1 - localProgress) * 30; 
-      const rotateX = (1 - localProgress) * 12; // 3D Tilt on mobile
-      const rotateY = (1 - localProgress) * -8;
-      const scale = 0.96 + localProgress * 0.04;
-      return {
-        position: 'absolute',
-        left: '16px',
-        right: '16px',
-        top: '16px',
-        bottom: '16px',
-        opacity: opacity,
-        transform: `perspective(800px) translateY(${translateY}px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(${scale})`,
-        pointerEvents: opacity > 0.5 ? 'auto' : 'none',
-        transition: 'opacity 0.4s ease-out, transform 0.5s ease-out',
-        willChange: 'opacity, transform'
-      };
-    }
-    // Desktop layout reveals (side-by-side grids - 3D Card Unfolding)
-    const localProgress = Math.min(Math.max(0, (whyUsCardsProgress - startThreshold) / duration), 1);
-    const opacity = localProgress;
-    const translateY = (1 - localProgress) * 50;
-    const rotateX = (1 - localProgress) * 16; 
-    const rotateY = (1 - localProgress) * -12;
-    const scale = 0.95 + localProgress * 0.05;
-    return {
-      opacity: opacity,
-      transform: `perspective(1200px) translateY(${translateY}px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(${scale})`,
-      transition: 'opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1)',
-      willChange: 'opacity, transform'
-    };
-  };
+  const heroScale = 1 - frameProgress * 0.08;
+  const heroRadius = frameProgress * 24;
+  const heroPadding = frameProgress * 16;
 
   return (
     <div className="relative w-full bg-luxury-charcoal text-luxury-cream">
-      
-      <Hero 
+      <Navbar onNavigate={onNavigate} />
+
+      <Hero
         onNavigate={onNavigate}
         loading={loading}
         progress={progress}
@@ -323,27 +267,25 @@ const LandingPage = ({ onNavigate }) => {
         heroOpacity={heroOpacity}
       />
 
-      <WhyUs 
+      <WhyUs
         whyUsRef={whyUsRef}
         whyUsBgProgress={whyUsBgProgress}
-        whyUsCardsProgress={whyUsCardsProgress}
-        isDesktop={isDesktop}
-        getWhyUsRevealStyle={getWhyUsRevealStyle}
+        whyUsContentProgress={whyUsContentProgress}
       />
 
-      <ServicesSlider 
+      <ServicesSlider
         servicesRef={servicesRef}
         scrollProgress={scrollProgress}
         onNavigate={onNavigate}
       />
 
-      <CuratedAtelier 
+      <CuratedAtelier
         activeTabIdx={activeTabIdx}
         setActiveTabIdx={setActiveTabIdx}
         onNavigate={onNavigate}
       />
 
-      <InteractiveStudio 
+      <InteractiveStudio
         selectedPigmentIdx={selectedPigmentIdx}
         setSelectedPigmentIdx={setSelectedPigmentIdx}
         spatialArrangement={spatialArrangement}
@@ -359,26 +301,26 @@ const LandingPage = ({ onNavigate }) => {
 
       <ProjectGlimpse onNavigate={onNavigate} />
 
-      <Testimonial 
+      <Testimonial
         testimonialRef={testimonialRef}
         testimonialProgress={testimonialProgress}
         isDesktop={isDesktop}
       />
 
-      <Showrooms 
+      <Showrooms
         showroomRef={showroomRef}
         scrollProgress={showroomProgress}
         isDesktop={isDesktop}
       />
 
-      <BookConsultation 
+      <BookConsultation
         consultationRef={consultationRef}
         scrollProgress={consultationProgress}
         isDesktop={isDesktop}
         onNavigate={onNavigate}
       />
 
-      <GetInTouch 
+      <GetInTouch
         getInTouchRef={getInTouchRef}
         scrollProgress={getInTouchProgress}
         isDesktop={isDesktop}

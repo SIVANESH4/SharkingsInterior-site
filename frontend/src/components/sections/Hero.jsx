@@ -94,58 +94,6 @@ export default function Hero({
         </div>
       </div>
 
-      {/* Header / Navigation Bar */}
-      <header className="absolute top-0 left-0 w-full z-50 flex items-center justify-between px-6 md:px-16 py-6 bg-gradient-to-b from-luxury-charcoal/50 to-transparent">
-        <a href="/" className="group flex flex-col focus:outline-none">
-          <span className="font-display text-xl md:text-2xl font-light tracking-[0.25em] text-luxury-cream transition-colors duration-300 group-hover:text-luxury-sage">
-            SHARKINGS
-          </span>
-          <span className="font-sans text-[9px] font-semibold tracking-[0.45em] text-luxury-sage mt-0.5 ml-[0.1em] transition-colors duration-300 group-hover:text-luxury-cream">
-            INTERIOR
-          </span>
-        </a>
-
-        <nav className="hidden lg:flex items-center gap-8">
-          {[
-            { label: 'Why Us', href: '#why-us' },
-            { label: 'Services', href: '#/services', isPage: true },
-            { label: '3D Studio', href: '#interactive-studio' },
-            { label: 'Projects', href: '#projects' },
-            { label: 'Showrooms', href: '#showrooms' },
-            { label: 'Reviews', href: '#testimonials' }
-          ].map((item) => (
-            <a
-              key={item.label}
-              href={item.href}
-              onClick={(e) => {
-                e.preventDefault();
-                if (item.isPage) {
-                  onNavigate && onNavigate('services');
-                } else {
-                  smoothScrollToTarget(item.href);
-                }
-              }}
-              className="relative py-2 font-sans text-[11px] font-semibold uppercase tracking-widest text-luxury-cream/80 hover:text-[#c5a059] transition-colors duration-300 group"
-            >
-              {item.label}
-              <span className="absolute bottom-0 left-1/2 w-0 h-[1px] bg-[#c5a059] group-hover:w-full group-hover:left-0 transition-all duration-300" />
-            </a>
-          ))}
-        </nav>
-
-        <a
-          href="#get-in-touch"
-          onClick={(e) => {
-            e.preventDefault();
-            smoothScrollToTarget('#get-in-touch');
-          }}
-          className="relative px-6 py-2.5 font-sans text-[11px] font-bold uppercase tracking-widest text-luxury-cream border border-[#c5a059]/40 hover:border-[#c5a059] overflow-hidden group transition-colors duration-500"
-        >
-          <span className="relative z-10 text-[#c5a059] group-hover:text-luxury-charcoal transition-colors">Contact Us</span>
-          <span className="absolute inset-0 bg-[#c5a059] translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-out" />
-        </a>
-      </header>
-
       {/* STICKY HERO CONTAINER */}
       <div
         className="sticky top-0 h-screen w-full bg-luxury-charcoal z-10 overflow-hidden"
@@ -245,10 +193,10 @@ export default function Hero({
                         style={{ transitionDelay: '450ms' }}
                       >
                         <a
-                          href="#projects"
+                          href="#/projects"
                           onClick={(e) => {
                             e.preventDefault();
-                            smoothScrollToTarget('#projects');
+                            onNavigate && onNavigate('projects');
                           }}
                           className="relative px-8 py-3.5 bg-luxury-cream text-luxury-charcoal font-sans text-xs uppercase tracking-widest font-semibold overflow-hidden group transition-all duration-300 cursor-pointer"
                           style={{
