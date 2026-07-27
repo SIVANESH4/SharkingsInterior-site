@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { useScrollReveal } from '../hooks/useScrollReveal';
+import slogo from '../assets/slogo.webp';
 
 const SERVICES_CATALOG = [
   {
@@ -315,14 +316,13 @@ export default function ServicePage({ onNavigate }) {
           <a 
             href="/" 
             onClick={(e) => { e.preventDefault(); onNavigate('landing'); }} 
-            className="flex flex-col items-center group cursor-pointer"
+            className="flex items-center group cursor-pointer"
           >
-            <span className="font-display text-lg sm:text-xl font-light tracking-[0.25em] text-[#1a1a1a] group-hover:text-[#710014] transition-colors">
-              SHARKINGS
-            </span>
-            <span className="font-sans text-[8px] font-bold tracking-[0.45em] text-[#710014] mt-0.5 ml-[0.1em]">
-              INTERIOR
-            </span>
+            <img
+              src={slogo}
+              alt="Sharkings Interior"
+              className="h-7 sm:h-8.5 w-auto object-contain transition-transform duration-300 group-hover:scale-105 mix-blend-multiply"
+            />
           </a>
 
           <button

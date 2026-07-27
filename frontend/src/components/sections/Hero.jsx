@@ -94,9 +94,9 @@ export default function Hero({
         </div>
       </div>
 
-      {/* STICKY HERO CONTAINER */}
+      {/* HERO SECTION CONTAINER */}
       <div
-        className="sticky top-0 h-screen w-full bg-luxury-charcoal z-10 overflow-hidden"
+        className="relative w-full h-screen min-h-[640px] bg-luxury-charcoal z-10 overflow-hidden"
         onMouseMove={handleMouseMove}
         style={{
           padding: `${heroPadding}px`,
@@ -133,7 +133,7 @@ export default function Hero({
                   className={`absolute inset-0 w-full h-full transition-opacity duration-[1500ms] ease-in-out ${isActive ? 'opacity-100 z-10 pointer-events-auto' : 'opacity-0 z-0 pointer-events-none'
                     }`}
                 >
-                  <div className="absolute inset-0 bg-gradient-to-t from-luxury-charcoal/80 via-transparent to-black/10 z-20 pointer-events-none" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-luxury-charcoal/80 via-transparent to-black/20 z-20 pointer-events-none" />
                   <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_60%,rgba(22,22,22,0.4)_95%)] z-20 pointer-events-none" />
 
                   <div
@@ -158,7 +158,7 @@ export default function Hero({
                       opacity: isActive ? heroOpacity : 0
                     }}
                   >
-                    <div className="max-w-3xl space-y-6 md:space-y-8 mt-12 md:mt-20">
+                    <div className="max-w-3xl space-y-5 md:space-y-7 mt-2 md:mt-6">
 
                       <div
                         className={`flex items-center gap-3 transition-all duration-[1000ms] cubic-bezier(0.16, 1, 0.3, 1) ${isActive ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-[10px]'
