@@ -1,37 +1,43 @@
 import React, { useState, useEffect, useRef } from 'react';
 
 const TESTIMONIALS_DATA = [
-  {
+ {
     id: 1,
     name: 'Sivakumar Rajendran',
-    role: 'Managing Director',
+    role: 'Homeowner',
     location: 'Anna Nagar, Madurai',
-    quote: 'Sharkings Interior transformed our brand-new villa into a masterpiece. Their earthy palette, coupled with precise gold accents, created a warm yet deeply luxurious atmosphere.',
-    avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=200&auto=format&fit=crop',
+    quote: 'We gave them our villa keys and honestly didn\'t expect it to turn out this good. The living room feels super cozy now, and the gold highlights don\'t look flashy at all—they fit right in.',
     rating: 5,
-    tag: 'Villa Architecture'
+    tag: 'Villa Renovation'
   },
   {
     id: 2,
     name: 'Meera Krishnakumar',
-    role: 'Creative Director',
+    role: 'Architect',
     location: 'Ramanathapuram',
-    quote: 'I wanted a home rooted in nature with a modern architectural edge. The team nailed the brief. Their interactive 3D concepts made visualizing and tweaking designs effortless.',
-    avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=200&auto=format&fit=crop',
+    quote: 'Working with them was a relief. I’m pretty picky about layouts, but their 3D tool made it so easy to sit down and figure out what actually worked before buying anything.',
     rating: 5,
-    tag: '3D & Interior Design'
+    tag: 'Interior Design'
   },
   {
     id: 3,
     name: 'Arun Pragadeesh',
-    role: 'Restaurateur',
+    role: 'Restaurant Owner',
     location: 'KK Nagar, Madurai',
-    quote: 'They handled our restaurant renovation with extreme precision. Earthy tones of terracotta and gold look phenomenal under ambient light. Footfall increased by 40%!',
-    avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=200&auto=format&fit=crop',
+    quote: 'Got my restaurant done through them. They finished right on time before our opening date, which is rare for contractors here. Customers keep complimenting the terracotta walls.',
     rating: 5,
-    tag: 'Commercial Space'
+    tag: 'Commercial Project'
   }
 ];
+
+const getInitials = (name) => {
+  if (!name) return 'SI';
+  const parts = name.trim().split(' ');
+  if (parts.length >= 2) {
+    return `${parts[0][0]}${parts[parts.length - 1][0]}`.toUpperCase();
+  }
+  return name.substring(0, 2).toUpperCase();
+};
 
 export default function Testimonial({ testimonialRef }) {
   const [mobileActive, setMobileActive] = useState(0);
@@ -77,13 +83,13 @@ export default function Testimonial({ testimonialRef }) {
   };
 
   return (
-    <section 
+    <section
       ref={testimonialRef}
-      id="testimonials" 
+      id="testimonials"
       className="relative w-full py-16 sm:py-24 md:py-32 bg-luxury-charcoal text-luxury-cream z-30 overflow-hidden"
     >
       <div className="max-w-7xl mx-auto px-5 sm:px-8 lg:px-12 relative z-10 space-y-10 md:space-y-14">
-        
+
         {/* Minimal Header */}
         <div className="text-center max-w-2xl mx-auto space-y-3">
           <div className="flex items-center justify-center gap-3">
@@ -95,8 +101,7 @@ export default function Testimonial({ testimonialRef }) {
           </div>
 
           <h2 className="font-display text-2xl sm:text-4xl lg:text-5xl font-light text-luxury-cream tracking-wide">
-            Trusted by Homeowners
-          </h2>
+            Loved by Our Clients          </h2>
           <p className="font-sans text-xs sm:text-sm text-luxury-cream/60 leading-relaxed font-light">
             Real feedback from families and business owners across Madurai & Ramanathapuram.
           </p>
@@ -130,11 +135,11 @@ export default function Testimonial({ testimonialRef }) {
               </div>
 
               <div className="flex items-center gap-3.5 pt-4 border-t border-white/10">
-                <img 
-                  src={client.avatar} 
-                  alt={client.name} 
-                  className="w-11 h-11 rounded-full object-cover border border-[#c5a059]/30 flex-shrink-0"
-                />
+                <div className="w-11 h-11 rounded-full bg-[#c5a059]/15 border border-[#c5a059]/40 flex items-center justify-center flex-shrink-0">
+                  <span className="font-sans text-xs font-bold tracking-wider text-[#c5a059]">
+                    {getInitials(client.name)}
+                  </span>
+                </div>
                 <div>
                   <h3 className="font-display text-sm font-light text-luxury-cream group-hover:text-[#c5a059] transition-colors">
                     {client.name}
@@ -150,20 +155,20 @@ export default function Testimonial({ testimonialRef }) {
 
         {/* MOBILE VIEW: Fully Dynamic Touch-Swipeable Sliding Carousel */}
         <div className="block md:hidden space-y-5">
-          
+
           {/* Touch Slider Viewport */}
-          <div 
+          <div
             className="w-full overflow-hidden relative cursor-grab active:cursor-grabbing"
             onTouchStart={handleTouchStart}
             onTouchMove={handleTouchMove}
             onTouchEnd={handleTouchEnd}
           >
-            <div 
+            <div
               className="flex transition-transform duration-500 ease-out"
               style={{ transform: `translateX(-${mobileActive * 100}%)` }}
             >
               {TESTIMONIALS_DATA.map((client) => (
-                <div 
+                <div
                   key={client.id}
                   className="w-full flex-shrink-0 px-1"
                 >
@@ -187,11 +192,11 @@ export default function Testimonial({ testimonialRef }) {
                     </p>
 
                     <div className="flex items-center gap-3 pt-3 border-t border-white/10">
-                      <img 
-                        src={client.avatar} 
-                        alt={client.name} 
-                        className="w-10 h-10 rounded-full object-cover border border-[#c5a059]/30 flex-shrink-0"
-                      />
+                      <div className="w-10 h-10 rounded-full bg-[#c5a059]/15 border border-[#c5a059]/40 flex items-center justify-center flex-shrink-0">
+                        <span className="font-sans text-xs font-bold tracking-wider text-[#c5a059]">
+                          {getInitials(client.name)}
+                        </span>
+                      </div>
                       <div>
                         <h3 className="font-display text-sm font-light text-luxury-cream">
                           {client.name}
@@ -209,7 +214,7 @@ export default function Testimonial({ testimonialRef }) {
 
           {/* Mobile Dynamic Controls: Arrow Taps + Active Dots + Swipe Hint */}
           <div className="flex items-center justify-between px-2 pt-2">
-            
+
             {/* Prev Button */}
             <button
               onClick={() => setMobileActive((prev) => (prev - 1 + TESTIMONIALS_DATA.length) % TESTIMONIALS_DATA.length)}
@@ -228,11 +233,10 @@ export default function Testimonial({ testimonialRef }) {
                   key={idx}
                   onClick={() => setMobileActive(idx)}
                   aria-label={`Go to slide ${idx + 1}`}
-                  className={`h-2 rounded-full transition-all duration-300 cursor-pointer ${
-                    mobileActive === idx 
-                      ? 'w-7 bg-[#c5a059]' 
+                  className={`h-2 rounded-full transition-all duration-300 cursor-pointer ${mobileActive === idx
+                      ? 'w-7 bg-[#c5a059]'
                       : 'w-2 bg-white/20'
-                  }`}
+                    }`}
                 />
               ))}
             </div>

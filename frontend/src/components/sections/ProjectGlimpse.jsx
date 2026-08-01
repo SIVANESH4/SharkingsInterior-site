@@ -458,7 +458,7 @@ export default function ProjectGlimpse({ onNavigate }) {
           {/* Bottom Action CTA */}
           <div className="flex justify-center pt-6">
             <button
-              onClick={() => onNavigate('services')}
+              onClick={() => onNavigate('projects')}
               className="relative px-9 py-3.5 bg-white text-luxury-charcoal font-sans text-[10px] uppercase tracking-[0.2em] font-semibold overflow-hidden group transition-all duration-300 shadow-[0_15px_30px_rgba(255,255,255,0.05)] rounded-full hover:shadow-[0_15px_35px_rgba(255,255,255,0.1)]"
             >
               <span className="relative z-10 flex items-center gap-2">

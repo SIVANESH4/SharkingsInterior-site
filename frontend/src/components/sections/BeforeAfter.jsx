@@ -1,9 +1,11 @@
 import { useState, useEffect, useRef } from 'react';
 import { useScrollReveal } from '../../hooks/useScrollReveal';
+import news1Img from '../../assets/news-1.webp';
+import modularKitchenImg from '../../assets/modular-kitchen.webp';
 
 export default function BeforeAfter() {
   useScrollReveal();
-  const [sliderPos, setSliderPos] = useState(30); // percentage (0 - 100)
+  const [sliderPos, setSliderPos] = useState(50); // percentage (0 - 100)
   const [isDragging, setIsDragging] = useState(false);
   const containerRef = useRef(null);
 
@@ -18,7 +20,6 @@ export default function BeforeAfter() {
 
       if (scrolled >= 0 && scrolled <= totalDist) {
         const prog = Math.min(Math.max(0, scrolled / totalDist), 1);
-        // Smoothly interpolate slider position from 20% to 80% based on scroll
         setSliderPos(20 + prog * 60);
       }
     };
@@ -48,31 +49,30 @@ export default function BeforeAfter() {
   };
 
   return (
-    <section id="transformation" className="relative z-30 bg-[#fbf9f6] text-luxury-charcoal py-24 px-6 md:px-16 lg:px-24 border-t border-black/5 overflow-hidden">
+    <section id="transformation" className="relative z-30 bg-[#fbf9f6] text-luxury-charcoal py-20 px-6 md:px-16 lg:px-24 border-t border-black/5 overflow-hidden">
       {/* Background Watermark */}
       <div className="absolute font-display text-[16vw] text-[#710014]/[0.02] font-extralight select-none pointer-events-none z-0 left-0 top-1/3 whitespace-nowrap">
         LIVE TRANSFORMATION
       </div>
 
-      <div className="max-w-7xl mx-auto space-y-16 relative z-10">
+      <div className="max-w-7xl mx-auto space-y-10 relative z-10">
         
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto space-y-4 reveal-3d-popup">
+        <div className="text-center max-w-3xl mx-auto space-y-3 reveal-3d-popup">
           <div className="flex items-center justify-center gap-3">
             <span className="w-8 h-[1px] bg-[#710014]/30" />
             <span className="font-sans text-[10px] md:text-xs font-bold tracking-[0.35em] text-[#710014] uppercase">
-              LIVE TRANSFORMATION
+              INTERACTIVE COMPARISON
             </span>
             <span className="w-8 h-[1px] bg-[#710014]/30" />
           </div>
 
           <h2 className="font-display text-3xl md:text-5xl lg:text-6xl font-light text-[#1a1a1a] tracking-tight">
-            The Magic of Sharkings <span className="italic font-normal text-[#710014]">Design</span>
+            The Art of Sharkings <span className="italic font-normal text-[#710014]">Design</span>
           </h2>
 
           <p className="font-sans text-xs md:text-sm text-luxury-charcoal/70 leading-relaxed font-light max-w-2xl mx-auto">
-            Drag the gold slider below to see the dramatic before-and-after transformation of a high-end luxury modular kitchen layout.
-          </p>
+Drag the slider to compare before-and-after layouts and see how a custom design completely changes the space.          </p>
         </div>
 
         {/* Interactive Comparison Card Container */}
@@ -83,28 +83,27 @@ export default function BeforeAfter() {
           onMouseDown={() => setIsDragging(true)}
           onMouseUp={() => setIsDragging(false)}
           onMouseLeave={() => setIsDragging(false)}
-          className="relative w-full aspect-[16/10] md:aspect-[16/9] lg:max-h-[600px] rounded-none overflow-hidden shadow-[0_25px_70px_rgba(0,0,0,0.08)] border border-black/10 select-none cursor-ew-resize bg-luxury-charcoal reveal-3d-popup delay-100"
+          className="relative w-full aspect-[16/10] md:aspect-[16/9] lg:max-h-[580px] rounded-2xl overflow-hidden shadow-[0_25px_70px_rgba(0,0,0,0.08)] border border-black/10 select-none cursor-ew-resize bg-luxury-charcoal reveal-3d-popup delay-100"
         >
-          {/* BEFORE: Underneath Grayscale Layer */}
+          {/* BEFORE: Underneath Real Raw Site Layer */}
           <div className="absolute inset-0 w-full h-full z-0 bg-luxury-charcoal">
             <img 
-              src="/images/service-furniture.png" 
-              alt="Original Shell Before Renovation"
+              src={news1Img} 
+              alt="Bare Site Frame Before Renovation"
               className="absolute inset-0 w-full h-full object-cover select-none"
               style={{
-                filter: 'grayscale(1) brightness(0.4) contrast(1.15)',
                 pointerEvents: 'none'
               }}
             />
             {/* Tag (Right aligned) */}
             <div className="absolute top-6 right-6 z-10">
-              <span className="bg-black/60 backdrop-blur-md border border-white/10 px-3.5 py-1.5 rounded-lg text-[9px] font-sans font-bold tracking-[0.2em] text-white/70 uppercase">
-                ✦ ORIGINAL BASE (BEFORE)
+              <span className="bg-[#121622] text-white border border-white/20 px-3.5 py-1.5 rounded-lg text-[9px] font-sans font-bold tracking-[0.2em] uppercase shadow-md">
+                BEFORE: BARE SITE FRAME
               </span>
             </div>
           </div>
 
-          {/* AFTER: Cliped Color Masterpiece Layer */}
+          {/* AFTER: Clipped Real Finished Masterpiece Layer */}
           <div 
             className="absolute inset-0 h-full overflow-hidden z-10 bg-luxury-charcoal"
             style={{
@@ -112,10 +111,10 @@ export default function BeforeAfter() {
               transition: isDragging ? 'none' : 'width 0.15s ease-out'
             }}
           >
-            <div className="absolute top-0 left-0 w-full h-full aspect-[16/10] md:aspect-[16/9] lg:max-h-[600px]" style={{ width: containerRef.current ? containerRef.current.clientWidth : '100vw' }}>
+            <div className="absolute top-0 left-0 w-full h-full aspect-[16/10] md:aspect-[16/9] lg:max-h-[580px]" style={{ width: containerRef.current ? containerRef.current.clientWidth : '100vw' }}>
               <img 
-                src="/images/service-furniture.png" 
-                alt="Sharkings Masterpiece After Renovation"
+                src={modularKitchenImg} 
+                alt="Sharkings Modular Kitchen After Renovation"
                 className="absolute inset-0 w-full h-full object-cover select-none"
                 style={{
                   pointerEvents: 'none'
@@ -123,8 +122,8 @@ export default function BeforeAfter() {
               />
               {/* Tag (Left aligned) */}
               <div className="absolute top-6 left-6 z-10">
-                <span className="bg-luxury-sage text-luxury-cream border border-luxury-sage/20 px-3.5 py-1.5 rounded-lg text-[9px] font-sans font-bold tracking-[0.2em] uppercase shadow-lg">
-                  ✦ SHARKINGS MASTERPIECE (AFTER)
+                <span className="bg-luxury-sage text-luxury-cream border border-luxury-sage/30 px-3.5 py-1.5 rounded-lg text-[9px] font-sans font-bold tracking-[0.2em] uppercase shadow-lg">
+                  AFTER: SHARKINGS MODULAR KITCHEN
                 </span>
               </div>
             </div>
@@ -159,8 +158,8 @@ export default function BeforeAfter() {
 
         {/* Drag Helper tip under card */}
         <div className="text-center">
-          <p className="font-sans text-[10px] tracking-[0.2em] uppercase text-luxury-charcoal/40 animate-pulse">
-            ← Hold & slide gold handle to compare →
+          <p className="font-sans text-[10px] tracking-[0.2em] uppercase text-luxury-charcoal/50 animate-pulse">
+            ← Drag gold handle to compare before & after →
           </p>
         </div>
 

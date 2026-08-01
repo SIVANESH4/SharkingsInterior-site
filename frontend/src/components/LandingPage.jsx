@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import Navbar from './Navbar';
 import Hero from './sections/Hero';
+import AboutUs from './sections/AboutUs';
 import WhyUs from './sections/WhyUs';
 import ServicesSlider from './sections/ServicesSlider';
 import CuratedAtelier from './sections/CuratedAtelier';
@@ -14,9 +15,11 @@ import GetInTouch from './sections/GetInTouch';
 import Footer from './sections/Footer';
 import ReturnToHomeFAB from './sections/ReturnToHomeFAB';
 
+let initialPreloadDone = false;
+
 const LandingPage = ({ onNavigate }) => {
-  const [loading, setLoading] = useState(true);
-  const [progress, setProgress] = useState(0);
+  const [loading, setLoading] = useState(!initialPreloadDone);
+  const [progress, setProgress] = useState(initialPreloadDone ? 100 : 0);
   const [activeIndex, setActiveIndex] = useState(0);
   const [prevActiveIndex, setPrevActiveIndex] = useState(null);
   const [isPaused, setIsPaused] = useState(false);
@@ -60,6 +63,12 @@ const LandingPage = ({ onNavigate }) => {
 
   // Preloading images in JS (All 6 key visual assets)
   useEffect(() => {
+    if (initialPreloadDone) {
+      setLoading(false);
+      setProgress(100);
+      return;
+    }
+
     let loadedCount = 0;
     const imageUrls = [
       '/images/slide-living.png',
@@ -80,6 +89,7 @@ const LandingPage = ({ onNavigate }) => {
         setProgress(percent);
         if (loadedCount === imageUrls.length) {
           setTimeout(() => {
+            initialPreloadDone = true;
             setLoading(false);
           }, 800);
         }
@@ -300,6 +310,8 @@ const LandingPage = ({ onNavigate }) => {
       <BeforeAfter />
 
       <ProjectGlimpse onNavigate={onNavigate} />
+
+      <AboutUs onNavigate={onNavigate} />
 
       <Testimonial
         testimonialRef={testimonialRef}

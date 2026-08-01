@@ -132,13 +132,13 @@ export default function Showrooms({ showroomRef, scrollProgress = 0, isDesktop =
   };
 
   return (
-    <section 
-      ref={showroomRef} 
-      id="showrooms" 
+    <section
+      ref={showroomRef}
+      id="showrooms"
       className="relative w-full py-28 bg-[#f8f7f3] text-luxury-charcoal overflow-hidden z-30 shadow-[0_-20px_50px_rgba(0,0,0,0.05)]"
     >
       {/* Background Parallax Floating Watermark */}
-      <div 
+      <div
         className="absolute font-display text-[18vw] text-[#710014]/[0.025] font-extralight select-none pointer-events-none z-0 left-0 top-1/4 whitespace-nowrap"
         style={{
           transform: `translateX(${(scrollProgress - 0.5) * -120}px)`,
@@ -153,23 +153,23 @@ export default function Showrooms({ showroomRef, scrollProgress = 0, isDesktop =
       <div className="absolute bottom-10 right-0 w-[550px] h-[550px] bg-[#838f6f]/[0.04] rounded-full blur-[140px] pointer-events-none z-0" />
 
       <div className="max-w-7xl mx-auto w-full px-6 md:px-16 lg:px-24 relative z-10 space-y-12">
-        
+
         {/* SECTION HEADER (Rich Light Theme with Royal Burgundy Accent) */}
         <div className="text-center max-w-3xl mx-auto space-y-4 reveal-3d-popup">
           <div className="flex items-center justify-center gap-3">
             <span className="w-8 h-[1px] bg-[#710014]/30" />
             <span className="font-sans text-[10px] md:text-xs font-bold tracking-[0.35em] text-[#710014] uppercase">
-              EXPERIENCE CENTRES
+              OUR STUDIOS
             </span>
             <span className="w-8 h-[1px] bg-[#710014]/30" />
           </div>
-          
+
           <h2 className="font-display text-3xl md:text-5xl lg:text-6xl font-light text-[#1a1a1a] tracking-tight">
-            Visit Our <span className="italic font-normal text-[#710014]">Showrooms</span>
+            Visit Our <span className="italic font-normal text-[#710014]">Design Studios</span>
           </h2>
-          
+
           <p className="font-sans text-xs md:text-sm text-luxury-charcoal/70 leading-relaxed font-light max-w-2xl mx-auto">
-            Step in to feel the premium veneers, run your hands along brushed gold finishes, and interact with smart modular cabinet pull-outs. Our designers are waiting to host you.
+            Drop by our studio to check out real wood finishes, look at metal hardware in person, and chat with our designers over a cup of coffee to plan your space.
           </p>
 
           {/* LOCATION TABS SWITCHER (Royal Burgundy Pill Tabs) */}
@@ -180,12 +180,14 @@ export default function Showrooms({ showroomRef, scrollProgress = 0, isDesktop =
                 return (
                   <button
                     key={loc.id}
-                    onClick={() => setActiveLocationIdx(idx)}
-                    className={`px-8 py-3 rounded-none text-xs font-sans font-bold tracking-widest uppercase transition-all duration-300 flex items-center gap-2.5 cursor-pointer relative ${
-                      isActive 
-                        ? 'bg-[#710014] text-white shadow-md font-extrabold' 
+                    onClick={() => {
+                      setActiveLocationIdx(idx);
+                      setActiveMediaType('map');
+                    }}
+                    className={`px-8 py-3 rounded-none text-xs font-sans font-bold tracking-widest uppercase transition-all duration-300 flex items-center gap-2.5 cursor-pointer relative ${isActive
+                        ? 'bg-[#710014] text-white shadow-md font-extrabold'
                         : 'text-luxury-charcoal/70 hover:text-[#710014]'
-                    }`}
+                      }`}
                   >
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4">
                       <path fillRule="evenodd" d="m11.54 22.351.07.04.028.016a.76.76 0 0 0 .723 0l.028-.015.071-.041a16.975 16.975 0 0 0 1.144-.742 19.58 19.58 0 0 0 2.683-2.282c1.944-1.99 3.963-4.98 3.963-8.827a8.25 8.25 0 0 0-16.5 0c0 3.846 2.02 6.837 3.963 8.827a19.58 19.58 0 0 0 2.682 2.282 16.975 16.975 0 0 0 1.145.742ZM12 13.5a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" clipRule="evenodd" />
@@ -199,104 +201,69 @@ export default function Showrooms({ showroomRef, scrollProgress = 0, isDesktop =
 
         </div>
 
-        {/* MAIN SHOWROOM CARD (Cool Light Luxury White Card with Burgundy & Gold Accents) */}
-        <div 
-          ref={cardRef}
-          onMouseMove={handleMouseMove}
-          onMouseLeave={handleMouseLeave}
-          style={{
-            transform: isDesktop ? `perspective(1200px) rotateY(${mouseOffset.x}deg) rotateX(${mouseOffset.y}deg)` : 'none',
-            transition: 'transform 0.15s ease-out'
-          }}
-          className="w-full rounded-none bg-white border border-black/10 p-6 md:p-10 shadow-[0_25px_70px_rgba(0,0,0,0.05)] relative overflow-hidden backdrop-blur-xl"
-        >
-          {/* Top burgundy accent gradient bar */}
-          <div className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-transparent via-[#710014] to-transparent" />
+        {/* MAIN DISPLAY CONTAINER */}
+        <div className="bg-white border border-black/10 rounded-3xl p-6 sm:p-8 lg:p-10 shadow-[0_25px_70px_rgba(0,0,0,0.06)] relative overflow-hidden reveal-3d-popup delay-100">
+          
+          {/* Subtle Top Burgundy Line */}
+          <div className="absolute top-0 left-0 right-0 h-1 bg-[#710014]" />
 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-stretch">
             
-            {/* LEFT COLUMN: Clean Info Details & Aligned Action Buttons */}
-            <div className="lg:col-span-5 flex flex-col justify-between space-y-8">
+            {/* LEFT COLUMN: Showroom Info Card */}
+            <div className="lg:col-span-5 space-y-6 flex flex-col justify-between">
               
               <div className="space-y-6">
-                
-                {/* Badge & Title Header */}
+                {/* Badge & Name */}
                 <div className="space-y-2">
                   <div className="flex items-center gap-2">
-                    <span className="text-[10px] font-sans font-bold tracking-[0.25em] text-[#710014] border border-[#710014]/25 px-3.5 py-1 rounded-full bg-[#710014]/5 uppercase">
+                    <span className="px-3 py-1 rounded-full bg-[#710014]/10 text-[#710014] text-[9px] font-sans font-bold tracking-widest uppercase border border-[#710014]/20">
                       {currentLocation.badge}
                     </span>
+                    <span className="text-[10px] font-sans text-luxury-charcoal/50 font-medium">
+                      STUDIO LOCATION
+                    </span>
                   </div>
-
-                  <h3 className="font-display text-3xl md:text-4xl font-light text-luxury-charcoal pt-1">
+                  <h3 className="font-display text-2xl sm:text-3xl font-light text-luxury-charcoal">
                     {currentLocation.name}
                   </h3>
-                  
-                  <p className="font-sans text-xs italic text-[#710014] font-medium">
-                    {currentLocation.landmark}
-                  </p>
                 </div>
 
-                {/* Vertical Details List with Royal Burgundy Circle Icons */}
-                <div className="space-y-5 pt-2">
+                {/* Address & Specs List */}
+                <div className="space-y-4 pt-2 border-t border-black/5">
                   
-                  {/* Address */}
-                  <div className="flex items-start gap-4">
-                    <div className="w-10 h-10 rounded-none bg-[#710014]/5 border border-[#710014]/20 flex items-center justify-center text-[#710014] flex-shrink-0 mt-0.5 shadow-sm">
-                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4">
-                        <path fillRule="evenodd" d="m11.54 22.351.07.04.028.016a.76.76 0 0 0 .723 0l.028-.015.071-.041a16.975 16.975 0 0 0 1.144-.742 19.58 19.58 0 0 0 2.683-2.282c1.944-1.99 3.963-4.98 3.963-8.827a8.25 8.25 0 0 0-16.5 0c0 3.846 2.02 6.837 3.963 8.827a19.58 19.58 0 0 0 2.682 2.282 16.975 16.975 0 0 0 1.145.742ZM12 13.5a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" clipRule="evenodd" />
+                  <div className="flex items-start gap-3">
+                    <div className="w-8 h-8 rounded-full bg-[#710014]/10 text-[#710014] flex items-center justify-center flex-shrink-0 mt-0.5">
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" />
                       </svg>
                     </div>
                     <div>
                       <span className="font-sans text-[10px] font-bold tracking-widest uppercase text-[#710014]/70 block mb-0.5">ADDRESS</span>
-                      <p className="font-sans text-xs text-luxury-charcoal/85 font-medium leading-relaxed">
+                      <p className="font-sans text-xs text-luxury-charcoal/85 leading-relaxed font-medium">
                         {currentLocation.address}
                       </p>
                     </div>
                   </div>
 
-                  {/* Direct Line */}
-                  <div className="flex items-start gap-4">
-                    <div className="w-10 h-10 rounded-none bg-[#710014]/5 border border-[#710014]/20 flex items-center justify-center text-[#710014] flex-shrink-0 mt-0.5 shadow-sm">
-                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4">
-                        <path fillRule="evenodd" d="M1.5 4.5a3 3 0 0 1 3-3h1.372c.86 0 1.61.586 1.819 1.42l1.105 4.423a1.875 1.875 0 0 1-.694 1.955l-1.293.97c.135.252.286.505.452.757.946 1.433 2.164 2.651 3.597 3.597.252.166.505.317.757.452l.97-1.293a1.875 1.875 0 0 1 1.955-.694l4.423 1.105c.834.209 1.42.959 1.42 1.82V19.5a3 3 0 0 1-3 3h-2.25C8.552 22.5 1.5 15.448 1.5 6.75V4.5Z" clipRule="evenodd" />
+                  <div className="flex items-start gap-3">
+                    <div className="w-8 h-8 rounded-full bg-[#710014]/10 text-[#710014] flex items-center justify-center flex-shrink-0 mt-0.5">
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 0 0 2.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-2.828-1.015-5.144-3.331-6.159-6.159l1.293-.97c.362-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 0 0-1.091-.852H4.5A2.25 2.25 0 0 0 2.25 4.5v2.25Z" />
                       </svg>
                     </div>
                     <div>
-                      <span className="font-sans text-[10px] font-bold tracking-widest uppercase text-[#710014]/70 block mb-0.5">DIRECT LINE</span>
-                      <a 
-                        href={`tel:${currentLocation.phone.replace(/\s+/g, '')}`}
-                        className="font-sans text-xs font-bold text-luxury-charcoal hover:text-[#710014] transition-colors"
-                      >
+                      <span className="font-sans text-[10px] font-bold tracking-widest uppercase text-[#710014]/70 block mb-0.5">PHONE & INQUIRIES</span>
+                      <p className="font-sans text-xs text-luxury-charcoal/85 leading-relaxed font-medium">
                         {currentLocation.phone}
-                      </a>
+                      </p>
                     </div>
                   </div>
 
-                  {/* Email Support */}
-                  <div className="flex items-start gap-4">
-                    <div className="w-10 h-10 rounded-none bg-[#710014]/5 border border-[#710014]/20 flex items-center justify-center text-[#710014] flex-shrink-0 mt-0.5 shadow-sm">
-                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4">
-                        <path d="M1.5 8.67v8.58a3 3 0 0 0 3 3h15a3 3 0 0 0 3-3V8.67l-8.928 5.493a3 3 0 0 1-3.144 0L1.5 8.67Z" />
-                        <path d="M22.5 6.908V6.75a3 3 0 0 0-3-3h-15a3 3 0 0 0-3 3v.158l9.714 5.978a1.5 1.5 0 0 0 1.572 0L22.5 6.908Z" />
-                      </svg>
-                    </div>
-                    <div>
-                      <span className="font-sans text-[10px] font-bold tracking-widest uppercase text-[#710014]/70 block mb-0.5">E-MAIL SUPPORT</span>
-                      <a 
-                        href={`mailto:${currentLocation.email}`}
-                        className="font-sans text-xs font-medium text-luxury-charcoal/80 hover:text-[#710014] transition-colors"
-                      >
-                        {currentLocation.email}
-                      </a>
-                    </div>
-                  </div>
-
-                  {/* Visiting Hours */}
-                  <div className="flex items-start gap-4">
-                    <div className="w-10 h-10 rounded-none bg-[#710014]/5 border border-[#710014]/20 flex items-center justify-center text-[#710014] flex-shrink-0 mt-0.5 shadow-sm">
-                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4">
-                        <path fillRule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25ZM12.75 6a.75.75 0 0 0-1.5 0v6c0 .2.079.39.22.53l3.75 3.75a.75.75 0 1 0 1.06-1.06l-3.53-3.53V6Z" clipRule="evenodd" />
+                  <div className="flex items-start gap-3">
+                    <div className="w-8 h-8 rounded-full bg-[#710014]/10 text-[#710014] flex items-center justify-center flex-shrink-0 mt-0.5">
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                       </svg>
                     </div>
                     <div>
@@ -308,7 +275,6 @@ export default function Showrooms({ showroomRef, scrollProgress = 0, isDesktop =
                   </div>
 
                 </div>
-
               </div>
 
               {/* Action Buttons Row */}
@@ -326,84 +292,104 @@ export default function Showrooms({ showroomRef, scrollProgress = 0, isDesktop =
                   <span>GET DIRECTIONS</span>
                 </a>
 
-                <a
-                  href={`tel:${currentLocation.phone.replace(/\s+/g, '')}`}
+                <button
+                  onClick={() => {
+                    setSelectedBookingLocation(currentLocation.id);
+                    setBookingModalOpen(true);
+                  }}
                   className="w-full sm:w-1/2 px-6 py-3.5 rounded-none bg-[#710014] text-white text-xs font-sans font-extrabold tracking-widest uppercase hover:bg-[#580010] transition-all text-center flex items-center justify-center gap-2 shadow-lg shadow-[#710014]/20 cursor-pointer"
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4">
                     <path fillRule="evenodd" d="M1.5 4.5a3 3 0 0 1 3-3h1.372c.86 0 1.61.586 1.819 1.42l1.105 4.423a1.875 1.875 0 0 1-.694 1.955l-1.293.97c.135.252.286.505.452.757.946 1.433 2.164 2.651 3.597 3.597.252.166.505.317.757.452l.97-1.293a1.875 1.875 0 0 1 1.955-.694l4.423 1.105c.834.209 1.42.959 1.42 1.82V19.5a3 3 0 0 1-3 3h-2.25C8.552 22.5 1.5 15.448 1.5 6.75V4.5Z" clipRule="evenodd" />
                   </svg>
-                  <span>CALL EXPERIENCE</span>
-                </a>
+                  <span>BOOK A TOUR</span>
+                </button>
 
               </div>
 
             </div>
 
-            {/* RIGHT COLUMN: Map Frame & Floating Regal Burgundy Live Photo Overlay */}
-            <div className="lg:col-span-7 relative flex flex-col min-h-[380px] lg:min-h-[440px]">
+            {/* RIGHT COLUMN: Map Frame & Clean Interactive Media Display */}
+            <div className="lg:col-span-7 relative flex flex-col h-full min-h-[400px] lg:min-h-[460px]">
               
-              {/* Map View Container */}
-              <div className="w-full h-full min-h-[380px] lg:min-h-[440px] rounded-2xl overflow-hidden border border-black/10 relative bg-[#eae8e3]">
+              {/* Top Right Floating Mode Switcher */}
+              <div className="absolute top-4 right-4 z-30 flex items-center gap-2">
+                {activeMediaType === 'gallery' ? (
+                  <>
+                    <button
+                      onClick={() => setActiveMediaType('map')}
+                      className="px-3.5 py-2 rounded-full bg-[#0f1118]/90 text-white border border-[#c5a059]/40 hover:border-[#c5a059] text-[10px] font-sans font-bold tracking-widest uppercase flex items-center gap-2 transition-all shadow-xl cursor-pointer"
+                    >
+                      <svg className="w-3.5 h-3.5 text-[#c5a059]" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+                      </svg>
+                      <span>Map View</span>
+                    </button>
+
+                    <button
+                      onClick={() => {
+                        setLightboxImg(currentLocation.images[activeGalleryImgIdx].url);
+                        setLightboxOpen(true);
+                      }}
+                      className="w-8 h-8 rounded-full bg-[#0f1118]/90 text-[#c5a059] border border-[#c5a059]/40 hover:scale-105 flex items-center justify-center transition-all shadow-xl cursor-pointer"
+                      title="Fullscreen Photo"
+                    >
+                      <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 3.75v4.5m0-4.5h4.5m-4.5 0L9 9M20.25 3.75h-4.5m4.5 0v4.5m0-4.5L15 9m5.25 11.25v-4.5m0 4.5h-4.5m4.5 0L15 15m-11.25 5.25h4.5m-4.5 0v-4.5m0 4.5L9 15" />
+                      </svg>
+                    </button>
+                  </>
+                ) : (
+                  <button
+                    onClick={() => setActiveMediaType('gallery')}
+                    className="px-4 py-2 rounded-full bg-[#710014] text-white border border-[#8a1226] hover:bg-[#5c0010] text-[10px] font-sans font-bold tracking-widest uppercase flex items-center gap-2 transition-all shadow-xl cursor-pointer group"
+                  >
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                    <span>Live Showroom Photo</span>
+                    <span className="text-[#c5a059] group-hover:translate-x-0.5 transition-transform">→</span>
+                  </button>
+                )}
+              </div>
+
+              {/* Map View / Gallery Container (Fills 100% Height & Width) */}
+              <div className="w-full h-full min-h-[400px] lg:min-h-[460px] rounded-2xl overflow-hidden border border-black/10 relative bg-[#eae8e3] flex-1">
                 {activeMediaType === 'map' ? (
                   <iframe
                     title={`${currentLocation.name} Map`}
                     src={currentLocation.mapUrl}
-                    className="w-full h-full border-0 filter grayscale contrast-110 opacity-90 hover:grayscale-0 hover:opacity-100 transition-all duration-500"
+                    className="absolute inset-0 w-full h-full border-0 filter grayscale contrast-110 opacity-90 hover:grayscale-0 hover:opacity-100 transition-all duration-500"
                     loading="lazy"
                     allowFullScreen
                   />
                 ) : (
-                  <div className="relative w-full h-full">
+                  <div className="absolute inset-0 w-full h-full">
                     <img 
                       src={currentLocation.images[activeGalleryImgIdx].url} 
                       alt={currentLocation.images[activeGalleryImgIdx].caption} 
                       className="w-full h-full object-cover"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
-                    <div className="absolute bottom-16 left-6 text-white font-display text-lg font-light">
-                      {currentLocation.images[activeGalleryImgIdx].caption}
+                    
+                    {/* Gallery Image Caption & Back Button Bar */}
+                    <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between z-20">
+                      <div className="bg-[#0f1118]/85 backdrop-blur-md border border-white/10 px-4 py-2 rounded-xl text-white">
+                        <span className="text-[9px] font-sans font-bold tracking-widest text-[#c5a059] uppercase block">
+                          {currentLocation.name.split(' ')[0]} STUDIO
+                        </span>
+                        <p className="font-display text-xs text-white/90">
+                          {currentLocation.images[activeGalleryImgIdx].caption}
+                        </p>
+                      </div>
+
+                      <button
+                        onClick={() => setActiveMediaType('map')}
+                        className="px-3.5 py-2 rounded-xl bg-white/90 hover:bg-white text-luxury-charcoal text-[10px] font-sans font-bold tracking-wider uppercase shadow-lg transition-all cursor-pointer flex items-center gap-1.5"
+                      >
+                        <span>← Back</span>
+                      </button>
                     </div>
                   </div>
                 )}
-              </div>
-
-              {/* Floating Regal Burgundy Live Showroom Photo Overlay */}
-              <div 
-                onClick={() => {
-                  if (activeMediaType === 'map') {
-                    setActiveMediaType('gallery');
-                  } else {
-                    setLightboxImg(currentLocation.images[0].url);
-                    setLightboxOpen(true);
-                  }
-                }}
-                className="absolute bottom-4 left-4 right-4 p-3.5 rounded-2xl bg-[#710014] text-white border border-[#8a1226] flex items-center justify-between cursor-pointer hover:bg-[#5c0010] transition-all shadow-2xl group/photo z-20"
-              >
-                <div className="flex items-center gap-3">
-                  <div className="w-14 h-12 rounded-xl overflow-hidden relative border border-white/20 flex-shrink-0">
-                    <img 
-                      src={currentLocation.images[0].url} 
-                      alt="Live showroom preview" 
-                      className="w-full h-full object-cover group-hover/photo:scale-110 transition-transform duration-500"
-                    />
-                  </div>
-                  <div>
-                    <div className="flex items-center gap-1.5">
-                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                      <span className="text-[9px] font-sans font-bold tracking-widest text-[#c5a059] uppercase">
-                        LIVE SHOWROOM PHOTO
-                      </span>
-                    </div>
-                    <h4 className="font-display text-sm font-light text-white mt-0.5">
-                      Visit us in {currentLocation.name.split(' ')[0]}
-                    </h4>
-                  </div>
-                </div>
-
-                <span className="text-[10px] font-sans font-bold text-[#c5a059] group-hover/photo:translate-x-1 transition-transform flex items-center gap-1">
-                  {activeMediaType === 'map' ? 'SEE PHOTOS →' : 'FULL GALLERY →'}
-                </span>
               </div>
 
             </div>
@@ -418,7 +404,7 @@ export default function Showrooms({ showroomRef, scrollProgress = 0, isDesktop =
       {bookingModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-md">
           <div className="relative w-full max-w-lg bg-white border border-black/10 rounded-3xl p-6 md:p-8 shadow-2xl space-y-6 text-luxury-charcoal">
-            
+
             {/* Close Button */}
             <button
               onClick={() => setBookingModalOpen(false)}
@@ -456,11 +442,10 @@ export default function Showrooms({ showroomRef, scrollProgress = 0, isDesktop =
                       key={loc.id}
                       type="button"
                       onClick={() => setSelectedBookingLocation(loc.id)}
-                      className={`p-3 rounded-2xl border text-xs font-sans text-left transition-all cursor-pointer ${
-                        selectedBookingLocation === loc.id 
-                          ? 'border-[#710014] bg-[#710014]/10 text-[#710014] font-bold' 
+                      className={`p-3 rounded-2xl border text-xs font-sans text-left transition-all cursor-pointer ${selectedBookingLocation === loc.id
+                          ? 'border-[#710014] bg-[#710014]/10 text-[#710014] font-bold'
                           : 'border-black/10 bg-black/5 text-luxury-charcoal/60 hover:border-black/30'
-                      }`}
+                        }`}
                     >
                       <div className="font-bold">{loc.name.split(' ')[0]}</div>
                       <div className="text-[9px] text-black/40 uppercase">{loc.badge}</div>
@@ -524,7 +509,7 @@ export default function Showrooms({ showroomRef, scrollProgress = 0, isDesktop =
 
       {/* LIGHTBOX PHOTO MODAL */}
       {lightboxOpen && (
-        <div 
+        <div
           onClick={() => setLightboxOpen(false)}
           className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/90 backdrop-blur-lg cursor-pointer"
         >

@@ -4,23 +4,23 @@ import { useScrollReveal } from '../../hooks/useScrollReveal';
 const FAQ_ITEMS = [
   {
     num: '01',
-    question: 'How does the initial spatial consultation work?',
-    answer: 'We begin with a personalized lifestyle audit at our Madurai or Ramanathapuram experience centres, or virtually via high-definition 3D walk-throughs.'
+    question: 'How do we get started with a project?',
+    answer: 'We start with a friendly chat at our Madurai or Ramanathapuram studios (or online) to understand what you need, your space, and your budget.'
   },
   {
     num: '02',
-    question: 'What is the design to final execution timeline?',
-    answer: 'Concept designs and 3D models take 7-10 business days. German-machined factory production and on-site assembly take 30-45 business days.'
+    question: 'How long does design and installation take?',
+    answer: 'Initial 3D designs take about 7-10 days. Factory manufacturing and on-site setup take around 30-45 business days depending on the project size.'
   },
   {
     num: '03',
-    question: 'What warranties and guarantees are provided?',
-    answer: 'All modular cabinetry carries a 10-Year Structural Warranty with certified German dampener hardware (Hettich & Blum).'
+    question: 'Do you offer a warranty on your woodwork?',
+    answer: 'Yes! All our modular kitchens and cabinets come with a 10-Year Structural Warranty using reliable hardware brands like Hettich and Blum.'
   },
   {
     num: '04',
-    question: 'Can I visit live material samples and veneer boards?',
-    answer: 'Yes! Over 100+ live teak, ceramic, quartz, and veneer swatches are available for tactile inspection at both experience centres.'
+    question: 'Can I check material and wood samples in person?',
+    answer: 'Definitely. We have over 100+ wood veneers, laminates, quartz, and hardware samples available to touch and check out at both of our studios.'
   }
 ];
 
@@ -34,7 +34,7 @@ export default function GetInTouch({ getInTouchRef, scrollProgress, isDesktop })
     name: '',
     email: '',
     phone: '',
-    subject: 'Bespoke Modular Kitchen',
+    subject: 'Modular Kitchen',
     message: ''
   });
 
@@ -77,34 +77,34 @@ export default function GetInTouch({ getInTouchRef, scrollProgress, isDesktop })
 
       {/* Background Parallax Watermark */}
       <div className="absolute font-display text-[16vw] text-[#710014]/[0.02] font-extralight select-none pointer-events-none z-0 left-0 top-1/3 whitespace-nowrap">
-        ATELIER CONCIERGE
+        GET IN TOUCH
       </div>
 
       <div className="max-w-7xl mx-auto relative z-10 space-y-16">
         
-        {/* Section Header (Light Luxury Theme) */}
+        {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto space-y-4 reveal-3d-popup">
           <div className="flex items-center justify-center gap-3">
             <span className="w-8 h-[1px] bg-[#710014]/30" />
             <span className="font-sans text-[10px] md:text-xs font-bold tracking-[0.35em] text-[#710014] uppercase">
-              ATELIER CONCIERGE
+              CONTACT US
             </span>
             <span className="w-8 h-[1px] bg-[#710014]/30" />
           </div>
 
           <h2 className="font-display text-3xl md:text-5xl lg:text-6xl font-light text-[#1a1a1a] tracking-tight">
-            Let's Co-create Your Private <span className="italic font-normal text-[#710014]">Sanctuary</span>
+            Let's Talk About Your <span className="italic font-normal text-[#710014]">Project</span>
           </h2>
 
           <p className="font-sans text-xs md:text-sm text-luxury-charcoal/70 leading-relaxed font-light max-w-2xl mx-auto">
-            Whether starting a luxury villa interior, bespoke modular kitchen, or commercial experience centre, our principal architects are ready to guide your vision into architectural reality.
+            Planning a new home interior, modular kitchen, or commercial storefront? Drop us a message or give us a call, and our team will get back to you quickly.
           </p>
         </div>
 
-        {/* Main 2-Column Editorial Grid */}
+        {/* Main 2-Column Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-start">
           
-          {/* LEFT COLUMN: Inquiry Blueprint Form (7 Cols) */}
+          {/* LEFT COLUMN: Form (7 Cols) */}
           <div className="lg:col-span-7 reveal-3d-popup delay-100">
             <div
               ref={cardRef}
@@ -116,27 +116,25 @@ export default function GetInTouch({ getInTouchRef, scrollProgress, isDesktop })
               }}
               className="w-full bg-white border border-black/10 p-6 md:p-10 shadow-[0_25px_70px_rgba(0,0,0,0.05)] relative overflow-hidden space-y-6"
             >
-              {/* Top Burgundy Accent Bar */}
               <div className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-transparent via-[#710014] to-transparent" />
 
               <div className="border-b border-black/10 pb-4">
                 <h3 className="font-display text-2xl font-light text-[#1a1a1a]">
-                  Send Inquiry Blueprint
+                  Send Us a Message
                 </h3>
                 <p className="font-sans text-xs text-luxury-charcoal/60 font-light mt-1">
-                  Fill out your details below to receive a direct response from our principal design team within 24 hours.
+                  Fill out the form below and we’ll get in touch with you within 24 hours.
                 </p>
               </div>
 
               {submitted ? (
-                /* SUCCESS STATE */
                 <div className="py-12 text-center space-y-4">
                   <div className="w-16 h-16 bg-[#710014]/10 border border-[#710014]/30 text-[#710014] flex items-center justify-center mx-auto text-2xl animate-bounce">
                     ✓
                   </div>
-                  <h4 className="font-display text-2xl font-light text-[#1a1a1a]">Inquiry Blueprint Received</h4>
+                  <h4 className="font-display text-2xl font-light text-[#1a1a1a]">Message Sent Successfully</h4>
                   <p className="font-sans text-xs md:text-sm text-luxury-charcoal/70 max-w-md mx-auto font-light leading-relaxed">
-                    Thank you, <span className="text-[#710014] font-semibold">{formState.name}</span>. Our lead architect will review your project details and get in touch directly.
+                    Thank you, <span className="text-[#710014] font-semibold">{formState.name}</span>. We have received your details and will call you shortly.
                   </p>
                   <button
                     type="button"
@@ -153,12 +151,12 @@ export default function GetInTouch({ getInTouchRef, scrollProgress, isDesktop })
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="space-y-1.5">
                       <label className="text-[11px] font-sans font-bold tracking-wider text-[#710014] uppercase block">
-                        01. Full Name *
+                        Full Name *
                       </label>
                       <input
                         type="text"
                         required
-                        placeholder="E.g., Alexander Wright"
+                        placeholder="E.g., Rajesh Kumar"
                         value={formState.name}
                         onChange={(e) => setFormState({ ...formState, name: e.target.value })}
                         className="w-full px-4 py-3 bg-[#f6f5f1] border border-black/10 text-xs md:text-sm font-sans text-[#1a1a1a] placeholder:text-black/30 focus:outline-none focus:border-[#710014] transition-colors"
@@ -167,7 +165,7 @@ export default function GetInTouch({ getInTouchRef, scrollProgress, isDesktop })
 
                     <div className="space-y-1.5">
                       <label className="text-[11px] font-sans font-bold tracking-wider text-[#710014] uppercase block">
-                        02. Email Address *
+                        Email Address *
                       </label>
                       <input
                         type="email"
@@ -180,11 +178,11 @@ export default function GetInTouch({ getInTouchRef, scrollProgress, isDesktop })
                     </div>
                   </div>
 
-                  {/* Hotline Phone & Scope */}
+                  {/* Phone & Scope */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="space-y-1.5">
                       <label className="text-[11px] font-sans font-bold tracking-wider text-[#710014] uppercase block">
-                        03. Hotline / WhatsApp Number *
+                        Phone / WhatsApp Number *
                       </label>
                       <input
                         type="tel"
@@ -198,47 +196,47 @@ export default function GetInTouch({ getInTouchRef, scrollProgress, isDesktop })
 
                     <div className="space-y-1.5">
                       <label className="text-[11px] font-sans font-bold tracking-wider text-[#710014] uppercase block">
-                        04. Spatial Scope *
+                        What do you need? *
                       </label>
                       <select
                         value={formState.subject}
                         onChange={(e) => setFormState({ ...formState, subject: e.target.value })}
                         className="w-full px-4 py-3 bg-[#f6f5f1] border border-black/10 text-xs md:text-sm font-sans text-[#1a1a1a] focus:outline-none focus:border-[#710014] transition-colors cursor-pointer"
                       >
-                        <option value="Bespoke Modular Kitchen">Bespoke Modular Kitchen</option>
-                        <option value="Full Villa Interior">Full Luxury Villa Interior</option>
-                        <option value="Commercial Showroom">Commercial Showroom & Retail</option>
-                        <option value="Architectural Renovation">Architectural Renovation</option>
+                        <option value="Modular Kitchen">Modular Kitchen</option>
+                        <option value="Full Villa Interior">Full Villa / House Interior</option>
+                        <option value="Commercial Showroom">Commercial / Office Space</option>
+                        <option value="Renovation">General Renovation</option>
                       </select>
                     </div>
                   </div>
 
-                  {/* Requirements Message */}
+                  {/* Message */}
                   <div className="space-y-1.5">
                     <label className="text-[11px] font-sans font-bold tracking-wider text-[#710014] uppercase block">
-                      05. Project Requirements & Vision *
+                      Tell us about your project *
                     </label>
                     <textarea
                       required
                       rows={3}
-                      placeholder="Describe your floor area, preferences, timeline, or specific questions..."
+                      placeholder="Share a bit about your rooms, ideas, or questions..."
                       value={formState.message}
                       onChange={(e) => setFormState({ ...formState, message: e.target.value })}
                       className="w-full px-4 py-3 bg-[#f6f5f1] border border-black/10 text-xs md:text-sm font-sans text-[#1a1a1a] placeholder:text-black/30 focus:outline-none focus:border-[#710014] transition-colors resize-none"
                     />
                   </div>
 
-                  {/* Submit Button & Privacy Assurance */}
+                  {/* Submit Button & Privacy */}
                   <div className="pt-2 flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-black/10">
                     <span className="text-xs font-sans text-black/50 font-light">
-                      Strict privacy assurance. No spam or third-party sharing.
+                      We respect your privacy. No spam guaranteed.
                     </span>
 
                     <button
                       type="submit"
                       className="w-full sm:w-auto px-8 py-4 bg-[#710014] text-white text-xs font-sans font-extrabold tracking-widest uppercase hover:bg-[#580010] transition-all shadow-lg shadow-[#710014]/20 cursor-pointer flex items-center justify-center gap-2 group"
                     >
-                      <span>Send Enquiry Blueprint</span>
+                      <span>Send Message</span>
                       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4 group-hover:translate-x-1 transition-transform">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
                       </svg>
@@ -251,17 +249,16 @@ export default function GetInTouch({ getInTouchRef, scrollProgress, isDesktop })
             </div>
           </div>
 
-          {/* RIGHT COLUMN: Direct Contacts, FAQ & Social Links (5 Cols) */}
+          {/* RIGHT COLUMN: Contact Info, FAQs, Socials (5 Cols) */}
           <div className="lg:col-span-5 space-y-8 reveal-3d-popup delay-200">
             
-            {/* Direct Contact Cards */}
+            {/* Direct Contacts */}
             <div className="p-6 bg-white border border-black/10 space-y-6 shadow-[0_15px_45px_rgba(0,0,0,0.04)]">
               <h3 className="font-display text-xl font-light text-[#1a1a1a] border-b border-black/10 pb-3">
-                Direct Atelier Lines
+                Direct Contact
               </h3>
 
               <div className="space-y-4 font-sans text-xs">
-                {/* Phone */}
                 <div className="flex items-start gap-4">
                   <div className="w-10 h-10 bg-[#710014]/5 border border-[#710014]/20 text-[#710014] flex items-center justify-center flex-shrink-0">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4">
@@ -269,14 +266,13 @@ export default function GetInTouch({ getInTouchRef, scrollProgress, isDesktop })
                     </svg>
                   </div>
                   <div>
-                    <span className="text-[10px] font-bold tracking-widest text-[#710014] uppercase block mb-0.5">DIRECT HOTLINE</span>
+                    <span className="text-[10px] font-bold tracking-widest text-[#710014] uppercase block mb-0.5">CALL US</span>
                     <a href="tel:+918098090204" className="text-sm font-bold text-[#710014] hover:underline">
                       +91 80980 90204
                     </a>
                   </div>
                 </div>
 
-                {/* Email */}
                 <div className="flex items-start gap-4">
                   <div className="w-10 h-10 bg-[#710014]/5 border border-[#710014]/20 text-[#710014] flex items-center justify-center flex-shrink-0">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4">
@@ -284,7 +280,7 @@ export default function GetInTouch({ getInTouchRef, scrollProgress, isDesktop })
                     </svg>
                   </div>
                   <div>
-                    <span className="text-[10px] font-bold tracking-widest text-[#710014] uppercase block mb-0.5">EMAIL BLUEPRINT</span>
+                    <span className="text-[10px] font-bold tracking-widest text-[#710014] uppercase block mb-0.5">EMAIL US</span>
                     <a href="mailto:sharkingsindia@gmail.com" className="text-xs font-medium text-luxury-charcoal/80 hover:text-[#710014] transition-colors">
                       sharkingsindia@gmail.com
                     </a>
@@ -293,10 +289,10 @@ export default function GetInTouch({ getInTouchRef, scrollProgress, isDesktop })
               </div>
             </div>
 
-            {/* Design FAQ Accordion */}
+            {/* FAQs */}
             <div className="p-6 bg-white border border-black/10 space-y-4 shadow-[0_15px_45px_rgba(0,0,0,0.04)]">
               <h3 className="font-display text-xl font-light text-[#1a1a1a] border-b border-black/10 pb-3">
-                Architectural FAQ
+                Frequently Asked Questions
               </h3>
 
               <div className="space-y-3">
@@ -334,7 +330,7 @@ export default function GetInTouch({ getInTouchRef, scrollProgress, isDesktop })
             {/* Social Media Links */}
             <div className="p-6 bg-white border border-black/10 flex items-center justify-between shadow-[0_15px_45px_rgba(0,0,0,0.04)]">
               <span className="font-sans text-xs font-bold tracking-wider text-[#710014] uppercase">
-                CONNECT WITH OUR ATELIER
+                Follow Us Online
               </span>
 
               <div className="flex items-center gap-2.5">

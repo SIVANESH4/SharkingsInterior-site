@@ -41,8 +41,8 @@ export default function InteractiveStudio({
     const y = e.clientY - rect.top;
     const xc = rect.width / 2;
     const yc = rect.height / 2;
-    const rotX = ((yc - y) / yc) * 2.5; 
-    const rotY = ((x - xc) / xc) * 2.5; 
+    const rotX = ((yc - y) / yc) * 2.5;
+    const rotY = ((x - xc) / xc) * 2.5;
     setTiltStyle({
       transform: `perspective(1000px) rotateX(${rotX}deg) rotateY(${rotY}deg)`,
       transition: 'transform 0.1s ease-out',
@@ -69,13 +69,13 @@ export default function InteractiveStudio({
     scene.background = new THREE.Color('#121622');
 
     const camera = new THREE.PerspectiveCamera(40, width / height, 0.1, 100);
-    
+
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
     renderer.setSize(width, height);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-    
+
     container.innerHTML = '';
     container.appendChild(renderer.domElement);
 
@@ -136,9 +136,9 @@ export default function InteractiveStudio({
     scene.add(couchGroup);
 
     const upholsteryColor = UPHOLSTERY_PIGMENTS[selectedPigmentIdx].value;
-    const couchMat = new THREE.MeshStandardMaterial({ 
+    const couchMat = new THREE.MeshStandardMaterial({
       color: new THREE.Color(upholsteryColor),
-      roughness: 0.65 
+      roughness: 0.65
     });
 
     const baseGeo = new THREE.BoxGeometry(2.6, 0.35, 1.1);
@@ -247,8 +247,8 @@ export default function InteractiveStudio({
 
     // Bulb
     const bulbGeo = new THREE.SphereGeometry(0.05, 16, 16);
-    const bulbMat = new THREE.MeshBasicMaterial({ 
-      color: lampOn ? 0xfffaed : 0x666666 
+    const bulbMat = new THREE.MeshBasicMaterial({
+      color: lampOn ? 0xfffaed : 0x666666
     });
     const bulb = new THREE.Mesh(bulbGeo, bulbMat);
     bulb.position.set(0, 1.6, 0.5);
@@ -268,7 +268,7 @@ export default function InteractiveStudio({
 
     const lampSpot = new THREE.SpotLight(
       0xfffaed,
-      lampOn ? 4.2 : 0, 
+      lampOn ? 4.2 : 0,
       9,
       Math.PI / 3.8,
       0.45,
@@ -414,7 +414,7 @@ export default function InteractiveStudio({
   return (
     <section id="interactive-studio" className="relative z-30 bg-[#0f1118] text-luxury-cream py-24 px-6 md:px-16 lg:px-24 border-t border-white/5">
       <div className="max-w-7xl mx-auto space-y-16">
-        
+
         {/* Section Header */}
         <div className="text-center max-w-2xl mx-auto space-y-4 reveal-3d-popup">
           <span className="font-sans text-[10px] md:text-xs font-bold tracking-[0.35em] text-luxury-sage uppercase">
@@ -429,13 +429,13 @@ export default function InteractiveStudio({
         </div>
 
         {/* Studio Panel Card */}
-        <div 
+        <div
           onMouseMove={handleCardMouseMove}
           onMouseLeave={handleCardMouseLeave}
           style={tiltStyle}
           className="bg-[#181c2b] border border-white/5 rounded-[24px] p-4 md:p-6 lg:p-8 shadow-[0_40px_80px_rgba(0,0,0,0.4)] grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch transition-transform duration-100 ease-out"
         >
-          
+
           {/* Left Column: Canvas (7 cols) */}
           <div className="lg:col-span-8 relative rounded-xl overflow-hidden min-h-[380px] lg:min-h-[500px] bg-[#121622] border border-white/[0.03]">
             <div ref={studioCanvasRef} className="absolute inset-0 w-full h-full cursor-grab active:cursor-grabbing" />
@@ -450,13 +450,12 @@ export default function InteractiveStudio({
             </div>
 
             <div className="absolute bottom-4 right-4 z-10">
-              <button 
+              <button
                 onClick={() => setLampOn(!lampOn)}
-                className={`px-4 py-2 rounded-full font-sans text-[9px] font-bold tracking-widest uppercase transition-all duration-300 flex items-center gap-2 shadow-lg border ${
-                  lampOn 
-                    ? 'bg-luxury-cream text-luxury-charcoal border-luxury-cream hover:bg-white' 
-                    : 'bg-black/60 text-white/50 border-white/10 hover:border-white/30 hover:text-white'
-                }`}
+                className={`px-4 py-2 rounded-full font-sans text-[9px] font-bold tracking-widest uppercase transition-all duration-300 flex items-center gap-2 shadow-lg border ${lampOn
+                  ? 'bg-luxury-cream text-luxury-charcoal border-luxury-cream hover:bg-white'
+                  : 'bg-black/60 text-white/50 border-white/10 hover:border-white/30 hover:text-white'
+                  }`}
               >
                 <span className={`w-2 h-2 rounded-full ${lampOn ? 'bg-luxury-sage animate-pulse' : 'bg-red-500'}`} />
                 <span>Lamp: {lampOn ? 'ON' : 'OFF'}</span>
@@ -467,9 +466,9 @@ export default function InteractiveStudio({
 
           {/* Right Column: Controls Panel (4 cols) */}
           <div className="lg:col-span-4 p-4 lg:p-6 bg-[#131622] rounded-xl border border-white/[0.03] flex flex-col justify-between space-y-8">
-            
+
             <div className="space-y-6">
-              
+
               <div className="space-y-2">
                 <h3 className="font-display text-xl lg:text-2xl font-light tracking-wide text-luxury-cream uppercase">
                   Studio Concept Planner
@@ -513,11 +512,10 @@ export default function InteractiveStudio({
                     <button
                       key={item.id}
                       onClick={() => setSpatialArrangement(item.id)}
-                      className={`py-2 rounded font-sans text-[9px] font-semibold tracking-wider uppercase transition-all duration-300 border ${
-                        spatialArrangement === item.id 
-                          ? 'bg-[#838f6f] text-white border-[#838f6f] shadow-md' 
-                          : 'bg-transparent text-white/50 border-white/10 hover:border-white/30 hover:text-white'
-                      }`}
+                      className={`py-2 rounded font-sans text-[9px] font-semibold tracking-wider uppercase transition-all duration-300 border ${spatialArrangement === item.id
+                        ? 'bg-[#838f6f] text-white border-[#838f6f] shadow-md'
+                        : 'bg-transparent text-white/50 border-white/10 hover:border-white/30 hover:text-white'
+                        }`}
                     >
                       {item.label}
                     </button>
@@ -529,15 +527,14 @@ export default function InteractiveStudio({
 
             {/* Footer metadata */}
             <div className="space-y-4 pt-6 border-t border-white/5">
-              
+
               <div className="flex items-center justify-between text-[10px] font-sans">
                 <span className="text-white/40">Auto Rotation</span>
-                <button 
+                <button
                   onClick={() => setStudioAutoRotate(!studioAutoRotate)}
-                  className={`px-3 py-1 rounded text-[8px] font-bold uppercase tracking-wider transition-colors duration-300 ${
-                    studioAutoRotate 
-                      ? 'bg-luxury-sage text-white' 
-                      : 'bg-white/5 text-white/60 hover:bg-white/10'
+                  className={`px-3 py-1 rounded text-[8px] font-bold uppercase tracking-wider transition-colors duration-300 ${studioAutoRotate
+                    ? 'bg-luxury-sage text-white'
+                    : 'bg-white/5 text-white/60 hover:bg-white/10'
                     }`}
                 >
                   {studioAutoRotate ? 'ROTATING' : 'PAUSED'}

@@ -22,6 +22,7 @@ export default function Navbar({ onNavigate }) {
 
       const sections = [
         { id: 'hero', selector: 'header, section:first-of-type' },
+        { id: 'about', selector: '#about' },
         { id: 'why-us', selector: '#why-us' },
         { id: 'services', selector: '#services' },
         { id: 'interactive-studio', selector: '#interactive-studio' },
@@ -78,6 +79,7 @@ export default function Navbar({ onNavigate }) {
   };
 
   const navItems = [
+    { label: 'About Us', href: '#about', id: 'about' },
     { label: 'Why Us', href: '#why-us', id: 'why-us' },
     { label: 'Services', href: '#/services', isPage: true, pageTarget: 'services', id: 'services' },
     { label: '3D Studio', href: '#interactive-studio', id: 'interactive-studio' },

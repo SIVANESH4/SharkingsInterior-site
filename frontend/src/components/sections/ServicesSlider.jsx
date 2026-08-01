@@ -1,3 +1,7 @@
+import modularKitchenImg from '../../assets/modular-kitchen.webp';
+import acpelvationImg from '../../assets/ACP-elevation.webp';
+import falseCeilingImg from '../../assets/false-ceiling-work.webp';
+
 export default function ServicesSlider({ 
   servicesRef, 
   scrollProgress, 
@@ -37,7 +41,7 @@ export default function ServicesSlider({
           }}
         >
           
-          {/* Slide 1: Private Residences */}
+          {/* Slide 1: Modular Kitchen */}
           <div style={getSlideStyle(0)} className="w-screen h-full flex items-center px-6 md:px-16 lg:px-24">
             <div className="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
               
@@ -51,12 +55,12 @@ export default function ServicesSlider({
                 </div>
                 
                 <h2 className="font-display text-3xl md:text-5xl lg:text-6xl font-light text-luxury-cream leading-tight">
-                  Private Residences
+                  Modular Kitchen
                 </h2>
                 <div className="w-16 h-[1px] bg-luxury-cream/15" />
                 
-                <p className="font-sans text-xs md:text-sm text-luxury-cream/60 leading-relaxed font-light">
-                  Bespoke spatial design tailored for modern living. We translate personal narratives into quiet luxury homes, focusing on scale, light, and custom materiality.
+                <p className="font-sans text-xs md:text-sm text-luxury-cream/75 leading-relaxed font-light">
+                  We design and install modern modular kitchens that are both stylish and functional. Our layouts maximize space and provide smart storage solutions. We use high-quality materials and durable fittings for long-lasting performance. Each kitchen is customized to match the client's taste and lifestyle.
                 </p>
                 
                 <div className="pt-2">
@@ -64,7 +68,7 @@ export default function ServicesSlider({
                     onClick={() => onNavigate('services')}
                     className="inline-flex items-center gap-2 font-sans text-[10px] tracking-wider text-luxury-sage font-medium uppercase hover:text-luxury-cream transition-colors group"
                   >
-                    <span>Explore Service</span>
+                    <span>Explore Kitchen Designs</span>
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-3 h-3 group-hover:translate-x-1 transition-transform">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
                     </svg>
@@ -75,11 +79,11 @@ export default function ServicesSlider({
               {/* Framed Visual Showcase */}
               <div className="lg:col-span-7 flex justify-center">
                 <div className="relative group w-full lg:w-auto rounded-2xl overflow-hidden shadow-2xl">
-                  <div className="absolute inset-0 bg-luxury-red/10 rounded-2xl blur-xl group-hover:bg-luxury-red/20 transition-all duration-700 pointer-events-none z-10" />
+                  <div className="absolute inset-0 bg-luxury-red/10 rounded-2xl blur-xl  transition-all duration-700 pointer-events-none z-10" />
                   <div className="relative overflow-hidden w-full lg:w-[45vw] h-[35vh] lg:h-[60vh] rounded-2xl border border-luxury-cream/10">
                     <img 
-                      src="/images/service-residential.png" 
-                      alt="Private Residences Design Mockup" 
+                      src={modularKitchenImg} 
+                      alt="Modern Modular Kitchen Design" 
                       className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 ease-out scale-[1.05]"
                       style={{
                         transform: `translateX(${(scrollProgress - 0 / 3) * -70}px) scale(1.1)`,
@@ -106,13 +110,12 @@ export default function ServicesSlider({
                 </div>
                 
                 <h2 className="font-display text-3xl md:text-5xl lg:text-6xl font-light text-luxury-cream leading-tight">
-                  Bespoke Commercial
+                  ACP Elevation
                 </h2>
                 <div className="w-16 h-[1px] bg-luxury-cream/15" />
                 
                 <p className="font-sans text-xs md:text-sm text-luxury-cream/60 leading-relaxed font-light">
-                  Architectural interiors designed to elevate brand presence. From premium showrooms to boutique workspaces, we craft environments that inspire.
-                </p>
+We design modern ACP (Aluminium Composite Panel) elevations to enhance the exterior of buildings. Our panels are durable, weather-resistant, and visually appealing. Customized colors, textures, and patterns are available to match the client’s style. We focus on quality installation and precise finishing. ACP elevation works add a premium look to any property.                </p>
                 
                 <div className="pt-2">
                   <button 
@@ -130,14 +133,14 @@ export default function ServicesSlider({
               {/* Framed Visual Showcase */}
               <div className="lg:col-span-7 flex justify-center">
                 <div className="relative group w-full lg:w-auto rounded-2xl overflow-hidden shadow-2xl">
-                  <div className="absolute inset-0 bg-luxury-sage/10 rounded-2xl blur-xl group-hover:bg-luxury-sage/20 transition-all duration-700 pointer-events-none z-10" />
+                  <div className="absolute inset-0 bg-luxury-red/10 rounded-2xl blur-xl  transition-all duration-700 pointer-events-none z-10" />
                   <div className="relative overflow-hidden w-full lg:w-[45vw] h-[35vh] lg:h-[60vh] rounded-2xl border border-luxury-cream/10">
                     <img 
-                      src="/images/service-commercial.png" 
-                      alt="Bespoke Commercial Showroom" 
+                      src={acpelvationImg} 
+                      alt="ACP Elevation Design" 
                       className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 ease-out scale-[1.05]"
                       style={{
-                        transform: `translateX(${(scrollProgress - 1 / 3) * -70}px) scale(1.1)`,
+                        transform: `translateX(${(scrollProgress - 0 / 3) * -70}px) scale(1.1)`,
                         willChange: 'transform'
                       }}
                     />
@@ -161,13 +164,12 @@ export default function ServicesSlider({
                 </div>
                 
                 <h2 className="font-display text-3xl md:text-5xl lg:text-6xl font-light text-luxury-cream leading-tight">
-                  Tailored Artifacts
+                    False Ceiling Work
                 </h2>
                 <div className="w-16 h-[1px] bg-luxury-cream/15" />
                 
                 <p className="font-sans text-xs md:text-sm text-luxury-cream/60 leading-relaxed font-light">
-                  Custom furniture and modular fittings. We design and manufacture individual pieces with brushed gold, solid walnut, and marble.
-                </p>
+We provide elegant false ceiling solutions that enhance the look and feel of interiors. Our services include gypsum and POP ceiling designs with integrated lighting. False ceilings conceal wiring and improve insulation. We offer modern patterns and durable finishes to suit any décor. Professional installation ensures lasting quality and aesthetics.                </p>
                 
                 <div className="pt-2">
                   <button 
@@ -185,14 +187,14 @@ export default function ServicesSlider({
               {/* Framed Visual Showcase */}
               <div className="lg:col-span-7 flex justify-center">
                 <div className="relative group w-full lg:w-auto rounded-2xl overflow-hidden shadow-2xl">
-                  <div className="absolute inset-0 bg-luxury-red/10 rounded-2xl blur-xl group-hover:bg-luxury-red/20 transition-all duration-700 pointer-events-none z-10" />
+                  <div className="absolute inset-0 bg-luxury-red/10 rounded-2xl blur-xl  transition-all duration-700 pointer-events-none z-10" />
                   <div className="relative overflow-hidden w-full lg:w-[45vw] h-[35vh] lg:h-[60vh] rounded-2xl border border-luxury-cream/10">
                     <img 
-                      src="/images/service-furniture.png" 
-                      alt="Tailored Lounge Chair Mockup" 
+                      src={falseCeilingImg} 
+                      alt="False Ceiling Design" 
                       className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 ease-out scale-[1.05]"
                       style={{
-                        transform: `translateX(${(scrollProgress - 2 / 3) * -70}px) scale(1.1)`,
+                        transform: `translateX(${(scrollProgress - 0 / 3) * -70}px) scale(1.1)`,
                         willChange: 'transform'
                       }}
                     />
@@ -208,17 +210,17 @@ export default function ServicesSlider({
               <div className="flex justify-center items-center gap-3">
                 <span className="w-8 h-[1px] bg-luxury-sage" />
                 <span className="font-sans text-[10px] md:text-xs font-bold tracking-[0.35em] text-luxury-sage uppercase">
-                  THE ATELIER SPECTRA
+                  OUR SERVICES
                 </span>
                 <span className="w-8 h-[1px] bg-luxury-sage" />
               </div>
               
               <h2 className="font-display text-3xl md:text-5xl lg:text-7xl font-extralight text-luxury-cream leading-tight tracking-wide">
-                Elevating Spaces, Customizing Lives
+                Custom Interior Design & Full Catalogs
               </h2>
               
               <p className="font-sans text-xs md:text-sm text-luxury-cream/60 max-w-xl mx-auto leading-relaxed font-light">
-                Explore our comprehensive catalog of spatial architectures, customized finishes, project schedules, and material specs.
+                Browse our complete project catalog to see custom layouts, material options, finishes, and timelines for your home or office.
               </p>
 
               <div className="pt-4">
@@ -227,7 +229,7 @@ export default function ServicesSlider({
                   className="relative px-8 py-3.5 bg-luxury-cream text-luxury-charcoal font-sans text-xs uppercase tracking-widest font-semibold overflow-hidden group transition-all duration-300 shadow-[0_10px_30px_rgba(131,143,111,0.1)] hover:shadow-[0_10px_35px_rgba(131,143,111,0.2)]"
                 >
                   <span className="relative z-10 transition-colors duration-500 group-hover:text-luxury-cream">
-                    View Full Services Catalog
+                    Browse Services Catalog
                   </span>
                   <span className="absolute inset-0 bg-luxury-red -translate-x-full group-hover:translate-x-0 transition-transform duration-500 ease-out" />
                 </button>
