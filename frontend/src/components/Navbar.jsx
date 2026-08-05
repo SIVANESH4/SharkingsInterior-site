@@ -111,7 +111,7 @@ export default function Navbar({ onNavigate }) {
           >
             <img
               src={slogo}
-              alt="Sharkings Interior"
+              alt="Sharkings Interiors & Exteriors"
               className="h-7 sm:h-8 md:h-10 w-auto object-contain transition-all duration-300 opacity-90 group-hover:opacity-100 group-hover:scale-[1.03] mix-blend-multiply"
             />
           </a>
@@ -197,7 +197,7 @@ export default function Navbar({ onNavigate }) {
           <div className="flex items-center gap-2.5">
             <img
               src={slogo}
-              alt="Sharkings Interior"
+              alt="Sharkings Interiors & Exteriors"
               className="h-8 w-auto object-contain mix-blend-multiply"
             />
             <span className="font-display text-lg tracking-[0.25em] text-[#1a1a1a]">

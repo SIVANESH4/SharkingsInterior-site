@@ -42,14 +42,35 @@
   }
 }
 
+/* Global Smooth Scrolling & High Performance Rendering for Google PageSpeed */
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 90px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
 @layer base {
   body {
     @apply bg-luxury-charcoal text-luxury-cream font-sans antialiased selection:bg-luxury-red selection:text-luxury-cream overflow-x-hidden;
+    -webkit-overflow-scrolling: touch;
   }
 }
 
-*{
-  scrollbar-width: none;
+/* Custom Sleek Luxury Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #0b0d13;
+}
+::-webkit-scrollbar-thumb {
+  background: #710014;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #838f6f;
 }
 
 /* 3D Perspective Pop-Up Unfold (guaranteed 100% visible) */

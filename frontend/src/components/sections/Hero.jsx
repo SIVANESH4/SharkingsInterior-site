@@ -146,7 +146,7 @@ export default function Hero({
                 ? 'PREPARING DESIGN FINISHES'
                 : progress < 100
                 ? 'SETTING UP LUXURY SPACES'
-                : 'SHARKINGS INTERIOR DESIGN'}
+                : 'SHARKINGS INTERIORS & EXTERIORS'}
             </span>
 
           </div>
@@ -203,6 +203,8 @@ export default function Hero({
                     <img
                       src={slide.image}
                       alt={slide.alt || "Sharkings Interior - Bespoke Luxury Interior Design"}
+                      decoding="async"
+                      fetchpriority={idx === 0 ? "high" : "low"}
                       className="w-full h-full object-cover"
                       style={{
                         transform: `translate(${mousePos.x * -0.2}px, calc(${mousePos.y * -0.2}px + ${heroBgY}px))`,

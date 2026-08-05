@@ -30,10 +30,11 @@ const LandingPage = ({ onNavigate }) => {
   const [scrollProgress, setScrollProgress] = useState(0);
   const [isDesktop, setIsDesktop] = useState(true);
 
-  // 3D Studio state
-  const [selectedPigmentIdx, setSelectedPigmentIdx] = useState(3);
-  const [spatialArrangement, setSpatialArrangement] = useState('compact');
-  const [lampOn, setLampOn] = useState(true);
+  // 3D Studio state (Modular Kitchen)
+  const [cabinetFinishIdx, setCabinetFinishIdx] = useState(0);
+  const [countertopIdx, setCountertopIdx] = useState(0);
+  const [kitchenLayout, setKitchenLayout] = useState('l-shaped');
+  const [underCabinetLightOn, setUnderCabinetLightOn] = useState(true);
   const [studioAutoRotate, setStudioAutoRotate] = useState(false);
 
   // Curation tab state
@@ -296,12 +297,14 @@ const LandingPage = ({ onNavigate }) => {
       />
 
       <InteractiveStudio
-        selectedPigmentIdx={selectedPigmentIdx}
-        setSelectedPigmentIdx={setSelectedPigmentIdx}
-        spatialArrangement={spatialArrangement}
-        setSpatialArrangement={setSpatialArrangement}
-        lampOn={lampOn}
-        setLampOn={setLampOn}
+        cabinetFinishIdx={cabinetFinishIdx}
+        setCabinetFinishIdx={setCabinetFinishIdx}
+        countertopIdx={countertopIdx}
+        setCountertopIdx={setCountertopIdx}
+        kitchenLayout={kitchenLayout}
+        setKitchenLayout={setKitchenLayout}
+        underCabinetLightOn={underCabinetLightOn}
+        setUnderCabinetLightOn={setUnderCabinetLightOn}
         studioAutoRotate={studioAutoRotate}
         setStudioAutoRotate={setStudioAutoRotate}
         loading={loading}

@@ -1,32 +1,32 @@
 import React, { useState, useEffect, useRef } from 'react';
 
 const TESTIMONIALS_DATA = [
- {
-    id: 1,
-    name: 'Sivakumar Rajendran',
-    role: 'Homeowner',
-    location: 'Anna Nagar, Madurai',
-    quote: 'We gave them our villa keys and honestly didn\'t expect it to turn out this good. The living room feels super cozy now, and the gold highlights don\'t look flashy at all—they fit right in.',
-    rating: 5,
-    tag: 'Villa Renovation'
-  },
   {
-    id: 2,
-    name: 'Meera Krishnakumar',
-    role: 'Architect',
-    location: 'Ramanathapuram',
-    quote: 'Working with them was a relief. I’m pretty picky about layouts, but their 3D tool made it so easy to sit down and figure out what actually worked before buying anything.',
+    id: 1,
+    name: 'Jai Krihna',
+    // role: 'Homeowner',
+    // location: 'Anna Nagar, Madurai',
+    quote: 'Sharkings, one of the best interiors in Tamilnadu. Works are highly professional and the design and concepts are just amazing... As the result we could get outstanding interior design. Both my house and office interior and exterior done by sharkings...one word.. Thanks man🙏... I would strongly recommend Sharkings for your interior and exterior 😊',
     rating: 5,
     tag: 'Interior Design'
   },
   {
+    id: 2,
+    name: 'Abdul Kalam',
+    // role: 'Architect',
+    // location: 'Ramanathapuram',
+    quote: 'One of the best and professional working in Interior and Exterior in Tamilnadu. And also doing a lots of Container Projects.',
+    rating: 4,
+    tag: 'Interior Design'
+  },
+  {
     id: 3,
-    name: 'Arun Pragadeesh',
-    role: 'Restaurant Owner',
-    location: 'KK Nagar, Madurai',
-    quote: 'Got my restaurant done through them. They finished right on time before our opening date, which is rare for contractors here. Customers keep complimenting the terracotta walls.',
+    name: 'Sarbu Deen',
+    // role: 'Restaurant Owner',
+    // location: 'KK Nagar, Madurai',
+    quote: 'Absolutely loved Sharking!!!!! The process was simple and the designers understood my vision and made it a reality. Communication was amazing. I’m now in the shopping stage and can’t wait until it’s all done.Thanks Mr.Sharukhan.',
     rating: 5,
-    tag: 'Commercial Project'
+    tag: 'Interior Design'
   }
 ];
 
@@ -234,8 +234,8 @@ export default function Testimonial({ testimonialRef }) {
                   onClick={() => setMobileActive(idx)}
                   aria-label={`Go to slide ${idx + 1}`}
                   className={`h-2 rounded-full transition-all duration-300 cursor-pointer ${mobileActive === idx
-                      ? 'w-7 bg-[#c5a059]'
-                      : 'w-2 bg-white/20'
+                    ? 'w-7 bg-[#c5a059]'
+                    : 'w-2 bg-white/20'
                     }`}
                 />
               ))}

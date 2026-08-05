@@ -215,7 +215,7 @@ export default function ServicePage({ onNavigate }) {
           {/* Clean Typography Brand Title */}
           <div className="text-center">
             <span className="font-display text-sm sm:text-base tracking-[0.3em] font-light text-[#1a1a1a] uppercase">
-              SHARKINGS <span className="text-[#710014] font-normal">INTERIOR</span>
+              SHARKINGS <span className="text-[#710014] font-normal">INTERIORS & EXTERIORS</span>
             </span>
           </div>
 
@@ -391,12 +391,12 @@ export default function ServicePage({ onNavigate }) {
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-3">
             <span className="font-display text-xs tracking-widest text-[#c5a059] uppercase">
-              SHARKINGS INTERIOR  • MADURAI & RAMANATHAPURAM
+              SHARKINGS INTERIORS & EXTERIORS • MADURAI & RAMANATHAPURAM
             </span>
           </div>
 
           <div className="font-sans text-xs text-white/60">
-            © {new Date().getFullYear()} Sharkings Interior Design. All Rights Reserved.
+            © {new Date().getFullYear()} Sharkings Interiors & Exteriors. All Rights Reserved.
           </div>
         </div>
       </footer>

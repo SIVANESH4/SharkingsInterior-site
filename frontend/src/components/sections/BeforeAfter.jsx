@@ -56,7 +56,7 @@ export default function BeforeAfter() {
       </div>
 
       <div className="max-w-7xl mx-auto space-y-10 relative z-10">
-        
+
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto space-y-3 reveal-3d-popup">
           <div className="flex items-center justify-center gap-3">
@@ -72,11 +72,11 @@ export default function BeforeAfter() {
           </h2>
 
           <p className="font-sans text-xs md:text-sm text-luxury-charcoal/70 leading-relaxed font-light max-w-2xl mx-auto">
-Drag the slider to compare before-and-after layouts and see how a custom design completely changes the space.          </p>
+            Drag the slider to compare before-and-after layouts and see how a custom design completely changes the space.          </p>
         </div>
 
         {/* Interactive Comparison Card Container */}
-        <div 
+        <div
           ref={containerRef}
           onMouseMove={handleMouseMove}
           onTouchMove={handleTouchMove}
@@ -87,8 +87,8 @@ Drag the slider to compare before-and-after layouts and see how a custom design 
         >
           {/* BEFORE: Underneath Real Raw Site Layer */}
           <div className="absolute inset-0 w-full h-full z-0 bg-luxury-charcoal">
-            <img 
-              src={news1Img} 
+            <img
+              src={news1Img}
               alt="Bare Site Frame Before Renovation"
               className="absolute inset-0 w-full h-full object-cover select-none"
               style={{
@@ -104,7 +104,7 @@ Drag the slider to compare before-and-after layouts and see how a custom design 
           </div>
 
           {/* AFTER: Clipped Real Finished Masterpiece Layer */}
-          <div 
+          <div
             className="absolute inset-0 h-full overflow-hidden z-10 bg-luxury-charcoal"
             style={{
               width: `${sliderPos}%`,
@@ -112,8 +112,8 @@ Drag the slider to compare before-and-after layouts and see how a custom design 
             }}
           >
             <div className="absolute top-0 left-0 w-full h-full aspect-[16/10] md:aspect-[16/9] lg:max-h-[580px]" style={{ width: containerRef.current ? containerRef.current.clientWidth : '100vw' }}>
-              <img 
-                src={modularKitchenImg} 
+              <img
+                src={modularKitchenImg}
                 alt="Sharkings Modular Kitchen After Renovation"
                 className="absolute inset-0 w-full h-full object-cover select-none"
                 style={{
@@ -130,7 +130,7 @@ Drag the slider to compare before-and-after layouts and see how a custom design 
           </div>
 
           {/* Gold Divider Line */}
-          <div 
+          <div
             className="absolute top-0 bottom-0 w-[2.5px] bg-[#c5a059] z-20 pointer-events-none shadow-[0_0_10px_rgba(197,160,89,0.3)]"
             style={{
               left: `${sliderPos}%`,
@@ -139,7 +139,7 @@ Drag the slider to compare before-and-after layouts and see how a custom design 
           />
 
           {/* Draggable Circle Gold Handle */}
-          <button 
+          <button
             onMouseDown={() => setIsDragging(true)}
             onTouchStart={() => setIsDragging(true)}
             className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-12 h-12 rounded-full bg-[#121622] border-2 border-[#c5a059] text-[#c5a059] flex items-center justify-center z-30 shadow-[0_10px_25px_rgba(0,0,0,0.5)] hover:scale-110 active:scale-95 transition-transform duration-300 cursor-grab active:cursor-grabbing focus:outline-none"

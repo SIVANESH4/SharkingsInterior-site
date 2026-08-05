@@ -111,9 +111,11 @@ export default function ProjectPage({ onNavigate }) {
           {/* Clean Typography Title */}
           <div className="text-center">
             <span className="font-display text-sm sm:text-base tracking-[0.3em] font-light text-[#1a1a1a] uppercase">
-              SHARKINGS <span className="text-[#710014] font-normal">INTERIOR</span>
+              SHARKINGS <span className="text-[#710014] font-normal">INTERIORS & EXTERIORS</span>
             </span>
+            
           </div>
+          
 
           <button
             onClick={() => onNavigate('landing')}
@@ -264,7 +266,7 @@ export default function ProjectPage({ onNavigate }) {
 
             {/* Bottom Footer Info */}
             <div className="hidden sm:flex items-center justify-between pt-6 border-t border-[#e5e0d3] font-sans text-[10px] tracking-widest text-[#777777] uppercase">
-              <span>SHARKINGS INTERIOR</span>
+              <span>SHARKINGS INTERIORS & EXTERIORS</span>
               <span className="font-bold text-[#710014]">
                 0{activeGalleryIndex + 1} / 0{selectedProject.gallery.length}
               </span>
@@ -334,12 +336,12 @@ export default function ProjectPage({ onNavigate }) {
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-3">
             <span className="font-display text-xs tracking-widest text-[#c5a059] uppercase">
-              SHARKINGS INTERIOR • MADURAI & RAMANATHAPURAM
+              SHARKINGS INTERIORS & EXTERIORS • MADURAI & RAMANATHAPURAM
             </span>
           </div>
 
           <div className="font-sans text-xs text-white/60">
-            © {new Date().getFullYear()} Sharkings Interior Design. All Rights Reserved.
+            © {new Date().getFullYear()} Sharkings Interiors & Exteriors. All Rights Reserved.
           </div>
         </div>
       </footer>

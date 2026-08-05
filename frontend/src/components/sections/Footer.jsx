@@ -20,13 +20,13 @@ export default function Footer({ onNavigate }) {
       <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-[#c5a059]/50 to-transparent" />
 
       <div className="max-w-7xl mx-auto w-full px-6 md:px-16 lg:px-24 space-y-12">
-        
+
         {/* MAIN 3-COLUMN EDITORIAL GRID */}
         <div className="grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-12 items-start">
-          
+
           {/* COLUMN 1: BRAND LOGO & CONTACT INFO (5 Cols) */}
           <div className="md:col-span-5 space-y-5">
-            
+
             {/* Minimal Brand Title */}
             <div className="flex items-center gap-3.5">
               <a
@@ -48,7 +48,7 @@ export default function Footer({ onNavigate }) {
               </a>
               <div>
                 <h4 className="font-display text-lg font-bold text-white tracking-wider uppercase leading-none">
-                  SHARKINGS INTERIOR
+                  SHARKINGS INTERIORS & EXTERIORS
                 </h4>
                 <span className="text-[9px] font-sans font-bold tracking-[0.25em] text-[#c5a059] uppercase block mt-1">
                   FULL-SERVICE INTERIOR DESIGN FIRM
@@ -58,7 +58,7 @@ export default function Footer({ onNavigate }) {
 
             {/* Description */}
             <p className="font-sans text-xs text-white/70 font-light leading-relaxed max-w-sm">
-Since 2010, Sharkings Interior Design is a full-service interior design firm in Madurai & Ramanathapuram, Sharkings interiors, specializing in both residential and commercial design. We will have the experience to ensure that the project runs smoothly and gives you the best possible results, whether you need a simple refresh of furniture and paint colors, or a comprehensive whole-house renovation.            </p>
+              Since 2010, Sharkings Interiors & Exteriors is a full-service interior design firm in Madurai & Ramanathapuram, Sharkings interiors, specializing in both residential and commercial design. We will have the experience to ensure that the project runs smoothly and gives you the best possible results, whether you need a simple refresh of furniture and paint colors, or a comprehensive whole-house renovation.            </p>
 
             {/* Contact Details */}
             <div className="space-y-2 font-sans text-xs pt-1">
@@ -87,98 +87,98 @@ Since 2010, Sharkings Interior Design is a full-service interior design firm in 
 
             <ul className="space-y-2.5 font-sans text-xs font-light text-white/80">
               <li>
-                <a 
-                  href="#about" 
+                <a
+                  href="#about"
                   onClick={(e) => {
                     e.preventDefault();
                     smoothScrollToTarget('#about');
-                  }} 
+                  }}
                   className="hover:text-[#c5a059] transition-colors flex items-center gap-1.5"
                 >
                   <span className="text-[#c5a059]">›</span> About Us
                 </a>
               </li>
               <li>
-                <a 
-                  href="#why-us" 
+                <a
+                  href="#why-us"
                   onClick={(e) => {
                     e.preventDefault();
                     smoothScrollToTarget('#why-us');
-                  }} 
+                  }}
                   className="hover:text-[#c5a059] transition-colors flex items-center gap-1.5"
                 >
                   <span className="text-[#c5a059]">›</span> Why Us
                 </a>
               </li>
               <li>
-                <a 
-                  href="#/services" 
+                <a
+                  href="#/services"
                   onClick={(e) => {
                     e.preventDefault();
                     if (onNavigate) onNavigate('services');
                     else window.location.hash = '#/services';
-                  }} 
+                  }}
                   className="hover:text-[#c5a059] transition-colors flex items-center gap-1.5"
                 >
                   <span className="text-[#c5a059]">›</span> Our Services
                 </a>
               </li>
               <li>
-                <a 
-                  href="#interactive-studio" 
+                <a
+                  href="#interactive-studio"
                   onClick={(e) => {
                     e.preventDefault();
                     smoothScrollToTarget('#interactive-studio');
-                  }} 
+                  }}
                   className="hover:text-[#c5a059] transition-colors flex items-center gap-1.5"
                 >
                   <span className="text-[#c5a059]">›</span> 3D Studio
                 </a>
               </li>
               <li>
-                <a 
-                  href="#/projects" 
+                <a
+                  href="#/projects"
                   onClick={(e) => {
                     e.preventDefault();
                     if (onNavigate) onNavigate('projects');
                     else window.location.hash = '#/projects';
-                  }} 
+                  }}
                   className="hover:text-[#c5a059] transition-colors flex items-center gap-1.5"
                 >
                   <span className="text-[#c5a059]">›</span> Our Projects
                 </a>
               </li>
               <li>
-                <a 
-                  href="#showrooms" 
+                <a
+                  href="#showrooms"
                   onClick={(e) => {
                     e.preventDefault();
                     smoothScrollToTarget('#showrooms');
-                  }} 
+                  }}
                   className="hover:text-[#c5a059] transition-colors flex items-center gap-1.5"
                 >
                   <span className="text-[#c5a059]">›</span> Design Studios
                 </a>
               </li>
               <li>
-                <a 
-                  href="#testimonials" 
+                <a
+                  href="#testimonials"
                   onClick={(e) => {
                     e.preventDefault();
                     smoothScrollToTarget('#testimonials');
-                  }} 
+                  }}
                   className="hover:text-[#c5a059] transition-colors flex items-center gap-1.5"
                 >
                   <span className="text-[#c5a059]">›</span> Client Reviews
                 </a>
               </li>
               <li>
-                <a 
-                  href="#get-in-touch" 
+                <a
+                  href="#get-in-touch"
                   onClick={(e) => {
                     e.preventDefault();
                     smoothScrollToTarget('#get-in-touch');
-                  }} 
+                  }}
                   className="hover:text-[#c5a059] transition-colors flex items-center gap-1.5"
                 >
                   <span className="text-[#c5a059]">›</span> Contact Us
@@ -210,7 +210,8 @@ Since 2010, Sharkings Interior Design is a full-service interior design firm in 
                   <span className="w-2 h-2 rounded-full bg-[#c5a059]" /> Ramanathapuram Studio
                 </h5>
                 <p className="text-xs sm:text-sm text-white/85 font-light leading-relaxed pl-4">
-                  Main Road, Ramanathapuram, Tamil Nadu.
+                  Bus Stop, 13/2993/26, Madurai - Rameswaram Hwy, Subbaiah Nagar, Ram Nagar,
+                  Ramanathapuram, Tamil Nadu 623501.
                 </p>
               </div>
             </div>
@@ -221,7 +222,7 @@ Since 2010, Sharkings Interior Design is a full-service interior design firm in 
         {/* MINIMAL FOOTER SUB-BAR */}
         <div className="border-t border-[#c5a059]/20 pt-6 flex flex-col sm:flex-row items-center justify-between gap-3 font-sans text-[11px] text-white/50 text-center sm:text-left">
           <div>
-            © {new Date().getFullYear()} Sharkings Interior Design. All Rights Reserved.
+            © {new Date().getFullYear()} Sharkings Interiors & Exteriors. All Rights Reserved.
           </div>
 
           <div>

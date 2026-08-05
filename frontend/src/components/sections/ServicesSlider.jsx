@@ -84,6 +84,8 @@ export default function ServicesSlider({
                     <img 
                       src={modularKitchenImg} 
                       alt="Modern Modular Kitchen Design" 
+                      loading="lazy"
+                      decoding="async"
                       className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 ease-out scale-[1.05]"
                       style={{
                         transform: `translateX(${(scrollProgress - 0 / 3) * -70}px) scale(1.1)`,
@@ -138,6 +140,8 @@ We design modern ACP (Aluminium Composite Panel) elevations to enhance the exter
                     <img 
                       src={acpelvationImg} 
                       alt="ACP Elevation Design" 
+                      loading="lazy"
+                      decoding="async"
                       className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 ease-out scale-[1.05]"
                       style={{
                         transform: `translateX(${(scrollProgress - 0 / 3) * -70}px) scale(1.1)`,
@@ -192,6 +196,8 @@ We provide elegant false ceiling solutions that enhance the look and feel of int
                     <img 
                       src={falseCeilingImg} 
                       alt="False Ceiling Design" 
+                      loading="lazy"
+                      decoding="async"
                       className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 ease-out scale-[1.05]"
                       style={{
                         transform: `translateX(${(scrollProgress - 0 / 3) * -70}px) scale(1.1)`,

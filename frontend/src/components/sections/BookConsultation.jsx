@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { useScrollReveal } from '../../hooks/useScrollReveal';
+import { sendConsultationEmail } from '../../utils/emailService';
 
 const SPATIAL_SCOPES = [
   {
@@ -47,7 +48,7 @@ const SPATIAL_SCOPES = [
 const VENUES = [
   { id: 'madurai', label: 'Madurai Studio', info: 'TNHB Colony, Villapuram' },
   { id: 'ramanathapuram', label: 'Ramanathapuram Studio', info: 'Kenikarai Main Road' },
-  { id: 'virtual', label: 'Virtual Online Call', info: 'Live Video Consultation' }
+  // { id: 'virtual', label: 'Virtual Online Call', info: 'Live Video Consultation' }
 ];
 
 const TIME_SLOTS = ['10:30 AM', '02:00 PM', '05:00 PM', '07:30 PM'];
@@ -91,10 +92,26 @@ export default function BookConsultation({ consultationRef, scrollProgress = 0, 
     setMouseOffset({ x: 0, y: 0 });
   };
 
-  const handleSubmit = (e) => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsSubmitting(true);
     const randomCode = 'SHARKINGS-' + Math.floor(100000 + Math.random() * 900000);
     setBookingCode(randomCode);
+
+    const bookingPayload = {
+      ...formData,
+      venue: selectedVenue,
+      scope: SPATIAL_SCOPES.find(s => s.id === selectedScope)?.title || selectedScope,
+      date: selectedDate,
+      time: selectedTime,
+      budget: `${BUDGET_TIERS[selectedBudgetIdx].label} (${BUDGET_TIERS[selectedBudgetIdx].title})`,
+      bookingCode: randomCode
+    };
+
+    await sendConsultationEmail(bookingPayload);
+    setIsSubmitting(false);
     setSubmitted(true);
   };
 
@@ -144,8 +161,8 @@ export default function BookConsultation({ consultationRef, scrollProgress = 0, 
                 <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
                 <span>Studios Open Mon-Sat</span>
               </span>
-              <span>•</span>
-              <span>Free 45-Min Chat</span>
+
+              {/* <span>Free 45-Min Chat</span> */}
             </div>
           </div>
         </div>
@@ -182,7 +199,7 @@ export default function BookConsultation({ consultationRef, scrollProgress = 0, 
               </p>
 
               <div className="pt-2 border-t border-white/10 flex items-center justify-between text-[11px] font-sans text-luxury-cream/60">
-                <span>Avg Session: 45 Mins</span>
+                {/* <span>Avg Session: 45 Mins</span> */}
                 <span className="text-luxury-sage font-medium">✓ Completely Free</span>
               </div>
             </div>
@@ -483,12 +500,22 @@ export default function BookConsultation({ consultationRef, scrollProgress = 0, 
                   {/* SUBMIT BUTTON */}
                   <button
                     type="submit"
-                    className="w-full py-4 rounded-none bg-[#c5a059] text-luxury-charcoal text-xs font-sans font-extrabold tracking-widest uppercase hover:bg-white hover:text-luxury-charcoal transition-all duration-300 shadow-xl shadow-[#c5a059]/20 cursor-pointer flex items-center justify-center gap-2 group"
+                    disabled={isSubmitting}
+                    className="w-full py-4 rounded-none bg-[#c5a059] text-luxury-charcoal text-xs font-sans font-extrabold tracking-widest uppercase hover:bg-white hover:text-luxury-charcoal transition-all duration-300 shadow-xl shadow-[#c5a059]/20 cursor-pointer flex items-center justify-center gap-2 group disabled:opacity-60"
                   >
-                    <span>CONFIRM MY APPOINTMENT</span>
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4 group-hover:translate-x-1 transition-transform">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
-                    </svg>
+                    {isSubmitting ? (
+                      <>
+                        <span className="w-4 h-4 border-2 border-luxury-charcoal border-t-transparent rounded-full animate-spin" />
+                        <span>CONFIRMING APPOINTMENT & SENDING EMAIL...</span>
+                      </>
+                    ) : (
+                      <>
+                        <span>CONFIRM MY APPOINTMENT</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4 group-hover:translate-x-1 transition-transform">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+                        </svg>
+                      </>
+                    )}
                   </button>
 
                 </form>

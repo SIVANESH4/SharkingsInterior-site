@@ -15,7 +15,7 @@ export default function WhyUs({
       description: 'Our team brings 15+ years of experience in residential, office, and commercial interior design. We work directly with you to plan every detail.',
       pill: 'Homes, Offices & Commercial Spaces',
       image: news1Img,
-      alt: 'Experienced interior design and build team by Sharkings Interior',
+      alt: 'Experienced interior design and build team by Sharkings Interiors & Exteriors',
       bgTag: 'bg-luxury-sage/10 text-luxury-sage'
     },
     {
@@ -78,7 +78,7 @@ export default function WhyUs({
           </div>
 
           <h2 className="font-display text-2xl sm:text-3xl lg:text-4xl font-light text-luxury-charcoal leading-tight tracking-wide">
-            Why Work With Sharkings Interior?
+            Why Work With Sharkings Interiors?
           </h2>
 
           <p className="font-sans text-xs sm:text-sm text-luxury-charcoal/75 leading-relaxed font-light max-w-2xl">
@@ -109,6 +109,8 @@ export default function WhyUs({
                   <img 
                     src={step.image} 
                     alt={step.alt}
+                    loading="lazy"
+                    decoding="async"
                     className="w-full h-full object-cover transform transition-transform duration-700 ease-out group-hover:scale-105"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none" />

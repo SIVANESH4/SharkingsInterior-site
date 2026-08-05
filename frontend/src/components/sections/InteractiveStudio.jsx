@@ -1,38 +1,50 @@
 import { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { useScrollReveal } from '../../hooks/useScrollReveal';
 
-const UPHOLSTERY_PIGMENTS = [
-  { name: 'Warm Tan', value: '#c5a080' },
-  { name: 'Rich Cocoa', value: '#5a3d28' },
-  { name: 'Warm Cream', value: '#f5eedc' },
-  { name: 'Olive Green', value: '#838f6f' },
-  { name: 'Antique Gold', value: '#c5a059' }
+const CABINET_FINISHES = [
+  { name: 'Warm Teak Veneer', value: '#7c4d28', metalness: 0.1, roughness: 0.6 },
+  { name: 'Matte Charcoal', value: '#242830', metalness: 0.1, roughness: 0.8 },
+  { name: 'Royal Burgundy', value: '#6b0f1a', metalness: 0.2, roughness: 0.4 },
+  { name: 'Sage Laminate', value: '#707f62', metalness: 0.1, roughness: 0.65 },
+  { name: 'Soft Cream', value: '#eee6d8', metalness: 0.05, roughness: 0.7 }
 ];
 
-const SPATIAL_ARRANGEMENTS = [
-  { id: 'standard', label: 'Standard' },
-  { id: 'compact', label: 'Compact' },
-  { id: 'minimalist', label: 'Minimalist' }
+const COUNTERTOP_STONES = [
+  { name: 'Calacatta Marble', value: '#f2f0eb', roughness: 0.25 },
+  { name: 'Nero Marquina Granite', value: '#1a1c20', roughness: 0.2 },
+  { name: 'Concrete Quartz', value: '#73777f', roughness: 0.5 },
+  { name: 'Crisp White Quartz', value: '#fafaf8', roughness: 0.2 }
+];
+
+const KITCHEN_LAYOUTS = [
+  { id: 'l-shaped', label: 'L-Shaped + Island' },
+  { id: 'parallel', label: 'Parallel Studio' },
+  { id: 'minimalist', label: 'Linear Wall' }
 ];
 
 export default function InteractiveStudio({
-  selectedPigmentIdx,
-  setSelectedPigmentIdx,
-  spatialArrangement,
-  setSpatialArrangement,
-  lampOn,
-  setLampOn,
-  studioAutoRotate,
-  setStudioAutoRotate,
-  loading
+  cabinetFinishIdx = 0,
+  setCabinetFinishIdx = () => {},
+  countertopIdx = 0,
+  setCountertopIdx = () => {},
+  kitchenLayout = 'l-shaped',
+  setKitchenLayout = () => {},
+  underCabinetLightOn = true,
+  setUnderCabinetLightOn = () => {},
+  studioAutoRotate = false,
+  setStudioAutoRotate = () => {},
+  loading = false
 }) {
   useScrollReveal();
   const studioCanvasRef = useRef(null);
-  const yawRef = useRef(Math.PI / 4);
-  const pitchRef = useRef(Math.PI / 8);
+  const yawRef = useRef(Math.PI / 4.2);
+  const pitchRef = useRef(Math.PI / 7);
 
   const [tiltStyle, setTiltStyle] = useState({});
+  const [modelSource, setModelSource] = useState('procedural'); // 'procedural' or 'gltf'
+  const [gltfLoadStatus, setGltfLoadStatus] = useState(null);
 
   const handleCardMouseMove = (e) => {
     const card = e.currentTarget;
@@ -63,10 +75,10 @@ export default function InteractiveStudio({
 
     const container = studioCanvasRef.current;
     const width = container.clientWidth;
-    const height = container.clientHeight || 450;
+    const height = container.clientHeight || 480;
 
     const scene = new THREE.Scene();
-    scene.background = new THREE.Color('#121622');
+    scene.background = new THREE.Color('#0f1117');
 
     const camera = new THREE.PerspectiveCamera(40, width / height, 0.1, 100);
 
@@ -79,240 +91,421 @@ export default function InteractiveStudio({
     container.innerHTML = '';
     container.appendChild(renderer.domElement);
 
-    // Floor
-    const floorGeo = new THREE.BoxGeometry(8, 0.1, 8);
-    const floorMat = new THREE.MeshStandardMaterial({ color: 0x1d1e22, roughness: 0.85 });
+    // --- MATERIALS ---
+    const cabinetConfig = CABINET_FINISHES[cabinetFinishIdx] || CABINET_FINISHES[0];
+    const cabinetMat = new THREE.MeshStandardMaterial({
+      color: new THREE.Color(cabinetConfig.value),
+      roughness: cabinetConfig.roughness,
+      metalness: cabinetConfig.metalness
+    });
+
+    const countertopConfig = COUNTERTOP_STONES[countertopIdx] || COUNTERTOP_STONES[0];
+    const countertopMat = new THREE.MeshStandardMaterial({
+      color: new THREE.Color(countertopConfig.value),
+      roughness: countertopConfig.roughness,
+      metalness: 0.1
+    });
+
+    const brassMat = new THREE.MeshStandardMaterial({
+      color: 0xd4af37,
+      metalness: 0.88,
+      roughness: 0.2
+    });
+
+    const chromeMat = new THREE.MeshStandardMaterial({
+      color: 0xe0e0e0,
+      metalness: 0.92,
+      roughness: 0.15
+    });
+
+    const stainlessMat = new THREE.MeshStandardMaterial({
+      color: 0x4a4e54,
+      metalness: 0.75,
+      roughness: 0.3
+    });
+
+    const glassMat = new THREE.MeshPhysicalMaterial({
+      color: 0x111625,
+      metalness: 0.1,
+      roughness: 0.1,
+      transmission: 0.6,
+      transparent: true,
+      opacity: 0.7
+    });
+
+    // Floor & Room Studio
+    const floorGeo = new THREE.BoxGeometry(9, 0.1, 9);
+    const floorMat = new THREE.MeshStandardMaterial({ color: 0x181a20, roughness: 0.7 });
     const floor = new THREE.Mesh(floorGeo, floorMat);
     floor.position.y = -0.05;
     floor.receiveShadow = true;
     scene.add(floor);
 
-    // Back wall 1
-    const wallMat = new THREE.MeshStandardMaterial({ color: 0x0f1118, roughness: 0.95 });
-    const wall1Geo = new THREE.BoxGeometry(0.1, 4.5, 8);
-    const wall1 = new THREE.Mesh(wall1Geo, wallMat);
-    wall1.position.set(-4, 2.2, 0);
-    wall1.receiveShadow = true;
-    scene.add(wall1);
+    // Back Wall
+    const wallMat = new THREE.MeshStandardMaterial({ color: 0x12141a, roughness: 0.9 });
+    const wallBackGeo = new THREE.BoxGeometry(9, 5, 0.1);
+    const wallBack = new THREE.Mesh(wallBackGeo, wallMat);
+    wallBack.position.set(0, 2.45, -4.45);
+    wallBack.receiveShadow = true;
+    scene.add(wallBack);
 
-    // Back wall 2
-    const wall2Geo = new THREE.BoxGeometry(8, 4.5, 0.1);
-    const wall2 = new THREE.Mesh(wall2Geo, wallMat);
-    wall2.position.set(0, 2.2, -4);
-    wall2.receiveShadow = true;
-    scene.add(wall2);
+    // Side Wall
+    const wallSideGeo = new THREE.BoxGeometry(0.1, 5, 9);
+    const wallSide = new THREE.Mesh(wallSideGeo, wallMat);
+    wallSide.position.set(-4.45, 2.45, 0);
+    wallSide.receiveShadow = true;
+    scene.add(wallSide);
 
-    // Rug
-    const rugGeo = new THREE.BoxGeometry(4.8, 0.01, 3.8);
-    const rugMat = new THREE.MeshStandardMaterial({ color: 0xe0dbd3, roughness: 0.95 });
-    const rug = new THREE.Mesh(rugGeo, rugMat);
-    rug.position.set(0, 0.005, 0.2);
-    rug.receiveShadow = true;
-    scene.add(rug);
+    // Backsplash Panel with Subtle Geometric Trim
+    const backsplashGeo = new THREE.BoxGeometry(5.2, 1.1, 0.05);
+    const backsplashMat = new THREE.MeshStandardMaterial({ color: 0x222630, roughness: 0.4 });
+    const backsplash = new THREE.Mesh(backsplashGeo, backsplashMat);
+    backsplash.position.set(-0.5, 1.45, -4.38);
+    scene.add(backsplash);
 
-    // Painting Art on wall
-    const artFrameGeo = new THREE.BoxGeometry(0.04, 1.6, 1.1);
-    const artFrameMat = new THREE.MeshStandardMaterial({ color: 0x3d2b1f, roughness: 0.7 });
-    const artFrame = new THREE.Mesh(artFrameGeo, artFrameMat);
-    artFrame.position.set(-3.94, 2.3, 0.8);
-    scene.add(artFrame);
-
-    const artCanvasGeo = new THREE.BoxGeometry(0.01, 1.5, 1.0);
-    const artCanvasMat = new THREE.MeshStandardMaterial({ color: 0xeae8e4, roughness: 0.95 });
-    const artCanvas = new THREE.Mesh(artCanvasGeo, artCanvasMat);
-    artCanvas.position.set(-3.92, 2.3, 0.8);
-    scene.add(artCanvas);
-
-    // Graphic circle in painting
-    const artCircleGeo = new THREE.CylinderGeometry(0.3, 0.3, 0.02, 32);
-    const artCircleMat = new THREE.MeshStandardMaterial({ color: 0x22242a, roughness: 0.9 });
-    const artCircle = new THREE.Mesh(artCircleGeo, artCircleMat);
-    artCircle.rotation.z = Math.PI / 2;
-    artCircle.position.set(-3.91, 2.4, 0.7);
-    scene.add(artCircle);
-
-    // Couch Group
-    const couchGroup = new THREE.Group();
-    scene.add(couchGroup);
-
-    const upholsteryColor = UPHOLSTERY_PIGMENTS[selectedPigmentIdx].value;
-    const couchMat = new THREE.MeshStandardMaterial({
-      color: new THREE.Color(upholsteryColor),
-      roughness: 0.65
-    });
-
-    const baseGeo = new THREE.BoxGeometry(2.6, 0.35, 1.1);
-    const base = new THREE.Mesh(baseGeo, couchMat);
-    base.position.y = 0.22;
-    base.castShadow = true;
-    base.receiveShadow = true;
-    couchGroup.add(base);
-
-    const backrestGeo = new THREE.BoxGeometry(2.6, 0.75, 0.28);
-    const backrest = new THREE.Mesh(backrestGeo, couchMat);
-    backrest.position.set(0, 0.65, -0.42);
-    backrest.castShadow = true;
-    backrest.receiveShadow = true;
-    couchGroup.add(backrest);
-
-    const armrestLGeo = new THREE.BoxGeometry(0.28, 0.58, 1.1);
-    const armrestL = new THREE.Mesh(armrestLGeo, couchMat);
-    armrestL.position.set(-1.3, 0.34, 0);
-    armrestL.castShadow = true;
-    armrestL.receiveShadow = true;
-    couchGroup.add(armrestL);
-
-    const armrestR = new THREE.Mesh(armrestLGeo, couchMat);
-    armrestR.position.set(1.3, 0.34, 0);
-    armrestR.castShadow = true;
-    armrestR.receiveShadow = true;
-    couchGroup.add(armrestR);
-
-    // Metallic Leg finish
-    const legMat = new THREE.MeshStandardMaterial({ color: 0xd4af37, metalness: 0.85, roughness: 0.15 });
-
-    // Legs
-    const legGeo = new THREE.CylinderGeometry(0.035, 0.02, 0.16, 16);
-    const legOffsets = [
-      { x: -1.2, z: -0.45 },
-      { x: 1.2, z: -0.45 },
-      { x: -1.2, z: 0.45 },
-      { x: 1.2, z: 0.45 }
-    ];
-    legOffsets.forEach((offset) => {
-      const leg = new THREE.Mesh(legGeo, legMat);
-      leg.position.set(offset.x, 0.08, offset.z);
-      leg.castShadow = true;
-      couchGroup.add(leg);
-    });
-
-    // Coffee Table Group
-    const tableGroup = new THREE.Group();
-    scene.add(tableGroup);
-
-    // Table Top (Round wood table)
-    const tableTopGeo = new THREE.CylinderGeometry(0.75, 0.75, 0.06, 32);
-    const tableTopMat = new THREE.MeshStandardMaterial({ color: 0x483a2d, roughness: 0.65 });
-    const tableTop = new THREE.Mesh(tableTopGeo, tableTopMat);
-    tableTop.position.y = 0.28;
-    tableTop.castShadow = true;
-    tableTop.receiveShadow = true;
-    tableGroup.add(tableTop);
-
-    // Table Legs
-    const tableLegGeo = new THREE.CylinderGeometry(0.015, 0.015, 0.28, 8);
-    const tableLegMat = new THREE.MeshStandardMaterial({ color: 0x111111, metalness: 0.4, roughness: 0.6 });
-    for (let i = 0; i < 3; i++) {
-      const angle = (i * 2 * Math.PI) / 3;
-      const leg = new THREE.Mesh(tableLegGeo, tableLegMat);
-      leg.position.set(Math.cos(angle) * 0.55, 0.14, Math.sin(angle) * 0.55);
-      leg.rotation.z = -Math.cos(angle) * 0.15;
-      leg.rotation.x = Math.sin(angle) * 0.15;
-      leg.castShadow = true;
-      tableGroup.add(leg);
+    // Tile grid lines on backsplash
+    const tileLineMat = new THREE.MeshBasicMaterial({ color: 0x343a47 });
+    for (let i = -2; i <= 2; i += 0.8) {
+      const lineGeo = new THREE.BoxGeometry(0.015, 1.1, 0.06);
+      const line = new THREE.Mesh(lineGeo, tileLineMat);
+      line.position.set(i - 0.5, 1.45, -4.37);
+      scene.add(line);
     }
 
-    // Floor Lamp Group
-    const lampGroup = new THREE.Group();
-    scene.add(lampGroup);
+    // --- MAIN PROCEDURAL KITCHEN GROUP ---
+    const kitchenGroup = new THREE.Group();
+    scene.add(kitchenGroup);
 
-    // Base
-    const lampBaseGeo = new THREE.CylinderGeometry(0.24, 0.24, 0.02, 16);
-    const lampBase = new THREE.Mesh(lampBaseGeo, legMat);
-    lampBase.position.y = 0.01;
-    lampBase.castShadow = true;
-    lampGroup.add(lampBase);
+    // 1. BASE CABINETS (MAIN LINE RUN)
+    const baseCabinetGeo = new THREE.BoxGeometry(3.6, 0.82, 0.7);
+    const baseCabinet = new THREE.Mesh(baseCabinetGeo, cabinetMat);
+    baseCabinet.position.set(-0.5, 0.41, -3.9);
+    baseCabinet.castShadow = true;
+    baseCabinet.receiveShadow = true;
+    kitchenGroup.add(baseCabinet);
 
-    // Pole
-    const lampPoleGeo = new THREE.CylinderGeometry(0.015, 0.015, 1.8, 8);
-    const lampPole = new THREE.Mesh(lampPoleGeo, legMat);
-    lampPole.position.y = 0.9;
-    lampPole.castShadow = true;
-    lampGroup.add(lampPole);
+    // Toe Kick Recess
+    const toeKickGeo = new THREE.BoxGeometry(3.6, 0.1, 0.1);
+    const toeKickMat = new THREE.MeshStandardMaterial({ color: 0x0c0d10 });
+    const toeKick = new THREE.Mesh(toeKickGeo, toeKickMat);
+    toeKick.position.set(-0.5, 0.05, -3.58);
+    kitchenGroup.add(toeKick);
 
-    // Curved Top Arm
-    const lampArmGeo = new THREE.CylinderGeometry(0.015, 0.015, 0.55, 8);
-    const lampArm = new THREE.Mesh(lampArmGeo, legMat);
-    lampArm.rotation.x = Math.PI / 2;
-    lampArm.position.set(0, 1.8, 0.25);
-    lampArm.castShadow = true;
-    lampGroup.add(lampArm);
+    // Base Cabinet Handle Bars & Doors
+    const doorCount = 4;
+    const doorWidth = 3.6 / doorCount;
+    for (let i = 0; i < doorCount; i++) {
+      const doorX = -0.5 - 1.8 + doorWidth / 2 + i * doorWidth;
+      
+      // Door seam line
+      const seamGeo = new THREE.BoxGeometry(0.01, 0.78, 0.71);
+      const seamMat = new THREE.MeshStandardMaterial({ color: 0x0f1116 });
+      const seam = new THREE.Mesh(seamGeo, seamMat);
+      seam.position.set(doorX + doorWidth / 2 - 0.005, 0.42, -3.9);
+      kitchenGroup.add(seam);
 
-    // Shade
-    const lampShadeGeo = new THREE.CylinderGeometry(0.12, 0.18, 0.22, 16);
-    const lampShade = new THREE.Mesh(lampShadeGeo, legMat);
-    lampShade.position.set(0, 1.7, 0.5);
-    lampShade.castShadow = true;
-    lampGroup.add(lampShade);
+      // Handle bar
+      const handleGeo = new THREE.CylinderGeometry(0.012, 0.012, 0.22, 12);
+      const handle = new THREE.Mesh(handleGeo, brassMat);
+      handle.position.set(doorX, 0.68, -3.53);
+      handle.rotation.z = Math.PI / 2;
+      handle.castShadow = true;
+      kitchenGroup.add(handle);
+    }
 
-    // Bulb
-    const bulbGeo = new THREE.SphereGeometry(0.05, 16, 16);
-    const bulbMat = new THREE.MeshBasicMaterial({
-      color: lampOn ? 0xfffaed : 0x666666
+    // 2. MAIN COUNTERTOP (MARBLE/GRANITE)
+    const mainCounterGeo = new THREE.BoxGeometry(3.68, 0.06, 0.76);
+    const mainCounter = new THREE.Mesh(mainCounterGeo, countertopMat);
+    mainCounter.position.set(-0.5, 0.85, -3.9);
+    mainCounter.castShadow = true;
+    mainCounter.receiveShadow = true;
+    kitchenGroup.add(mainCounter);
+
+    // 3. SINK & GOOSENECK FAUCET
+    const sinkGeo = new THREE.BoxGeometry(0.7, 0.01, 0.45);
+    const sink = new THREE.Mesh(sinkGeo, stainlessMat);
+    sink.position.set(-1.4, 0.885, -3.9);
+    sink.receiveShadow = true;
+    kitchenGroup.add(sink);
+
+    const sinkInnerGeo = new THREE.BoxGeometry(0.64, 0.15, 0.39);
+    const sinkInnerMat = new THREE.MeshStandardMaterial({ color: 0x22242a, roughness: 0.3 });
+    const sinkInner = new THREE.Mesh(sinkInnerGeo, sinkInnerMat);
+    sinkInner.position.set(-1.4, 0.8, -3.9);
+    kitchenGroup.add(sinkInner);
+
+    // Faucet Base & Curved Spout
+    const faucetBaseGeo = new THREE.CylinderGeometry(0.025, 0.03, 0.1, 16);
+    const faucetBase = new THREE.Mesh(faucetBaseGeo, brassMat);
+    faucetBase.position.set(-1.4, 0.93, -4.15);
+    kitchenGroup.add(faucetBase);
+
+    const faucetSpoutGeo = new THREE.TorusGeometry(0.12, 0.012, 12, 24, Math.PI);
+    const faucetSpout = new THREE.Mesh(faucetSpoutGeo, brassMat);
+    faucetSpout.rotation.y = Math.PI / 2;
+    faucetSpout.position.set(-1.4, 1.05, -4.03);
+    kitchenGroup.add(faucetSpout);
+
+    // 4. COOKTOP / HOB (BLACK GLASS)
+    const cooktopGeo = new THREE.BoxGeometry(0.8, 0.015, 0.52);
+    const cooktopMat = new THREE.MeshStandardMaterial({ color: 0x08090b, roughness: 0.1, metalness: 0.8 });
+    const cooktop = new THREE.Mesh(cooktopGeo, cooktopMat);
+    cooktop.position.set(0.6, 0.888, -3.9);
+    kitchenGroup.add(cooktop);
+
+    // Burner Rings
+    const burnerGeo = new THREE.RingGeometry(0.05, 0.09, 24);
+    const burnerMat = new THREE.MeshBasicMaterial({ color: 0xc4a46a, side: THREE.DoubleSide });
+    const burnerOffsets = [
+      { x: 0.45, z: -4.02 },
+      { x: 0.75, z: -4.02 },
+      { x: 0.45, z: -3.78 },
+      { x: 0.75, z: -3.78 }
+    ];
+    burnerOffsets.forEach((b) => {
+      const burner = new THREE.Mesh(burnerGeo, burnerMat);
+      burner.rotation.x = Math.PI / 2;
+      burner.position.set(b.x, 0.897, b.z);
+      kitchenGroup.add(burner);
     });
-    const bulb = new THREE.Mesh(bulbGeo, bulbMat);
-    bulb.position.set(0, 1.6, 0.5);
-    lampGroup.add(bulb);
 
-    // Lighting
-    const ambient = new THREE.AmbientLight(0xffffff, 0.26);
-    scene.add(ambient);
+    // 5. CHIMNEY EXHAUST HOOD
+    const hoodBaseGeo = new THREE.BoxGeometry(0.9, 0.1, 0.52);
+    const hoodBase = new THREE.Mesh(hoodBaseGeo, stainlessMat);
+    hoodBase.position.set(0.6, 2.05, -3.9);
+    hoodBase.castShadow = true;
+    kitchenGroup.add(hoodBase);
 
-    const dirLight = new THREE.DirectionalLight(0xffffff, 0.35);
-    dirLight.position.set(6, 10, 4);
-    dirLight.castShadow = true;
-    dirLight.shadow.mapSize.width = 512;
-    dirLight.shadow.mapSize.height = 512;
-    dirLight.shadow.bias = -0.0005;
-    scene.add(dirLight);
+    const hoodDuctGeo = new THREE.BoxGeometry(0.35, 1.3, 0.32);
+    const hoodDuct = new THREE.Mesh(hoodDuctGeo, stainlessMat);
+    hoodDuct.position.set(0.6, 2.75, -4.0);
+    hoodDuct.castShadow = true;
+    kitchenGroup.add(hoodDuct);
 
-    const lampSpot = new THREE.SpotLight(
-      0xfffaed,
-      lampOn ? 4.2 : 0,
-      9,
-      Math.PI / 3.8,
-      0.45,
-      1
+    // Glass Canopy Trim on Hood
+    const canopyGeo = new THREE.BoxGeometry(0.95, 0.02, 0.55);
+    const canopy = new THREE.Mesh(canopyGeo, glassMat);
+    canopy.position.set(0.6, 2.0, -3.9);
+    kitchenGroup.add(canopy);
+
+    // 6. UPPER WALL CABINETS
+    const wallCabinetGroup = new THREE.Group();
+    const wallCabLeftGeo = new THREE.BoxGeometry(1.6, 0.9, 0.38);
+    const wallCabLeft = new THREE.Mesh(wallCabLeftGeo, cabinetMat);
+    wallCabLeft.position.set(-1.5, 2.45, -4.24);
+    wallCabLeft.castShadow = true;
+    wallCabLeft.receiveShadow = true;
+    wallCabinetGroup.add(wallCabLeft);
+
+    // Glass inserts for aesthetic contrast
+    const glassInsertGeo = new THREE.BoxGeometry(0.6, 0.7, 0.02);
+    const glassInsert = new THREE.Mesh(glassInsertGeo, glassMat);
+    glassInsert.position.set(-1.5, 2.45, -4.04);
+    wallCabinetGroup.add(glassInsert);
+
+    kitchenGroup.add(wallCabinetGroup);
+
+    // 7. UNDER-CABINET LED STRIP LIGHTING
+    const ledStripGeo = new THREE.BoxGeometry(1.58, 0.02, 0.05);
+    const ledStripMat = new THREE.MeshBasicMaterial({
+      color: underCabinetLightOn ? 0xffeaad : 0x333333
+    });
+    const ledStrip = new THREE.Mesh(ledStripGeo, ledStripMat);
+    ledStrip.position.set(-1.5, 1.99, -4.1);
+    kitchenGroup.add(ledStrip);
+
+    const ledSpotLight = new THREE.PointLight(
+      0xffeaad,
+      underCabinetLightOn ? 3.5 : 0,
+      4
     );
-    lampSpot.position.set(0, 1.58, 0.5);
-    lampSpot.castShadow = true;
-    lampSpot.shadow.mapSize.width = 1024;
-    lampSpot.shadow.mapSize.height = 1024;
-    lampSpot.shadow.bias = -0.001;
-    lampGroup.add(lampSpot);
+    ledSpotLight.position.set(-1.5, 1.95, -4.0);
+    kitchenGroup.add(ledSpotLight);
 
-    const spotTarget = new THREE.Object3D();
-    spotTarget.position.set(0, 0, 0.5);
-    lampGroup.add(spotTarget);
-    lampSpot.target = spotTarget;
+    // 8. L-SHAPED EXTENSION RUN (FOR L-SHAPED LAYOUT)
+    const lExtensionGroup = new THREE.Group();
+    const lBaseGeo = new THREE.BoxGeometry(0.7, 0.82, 2.2);
+    const lBase = new THREE.Mesh(lBaseGeo, cabinetMat);
+    lBase.position.set(-3.9, 0.41, -2.45);
+    lBase.castShadow = true;
+    lBase.receiveShadow = true;
+    lExtensionGroup.add(lBase);
 
-    // Arrangements Target Positions
-    const targets = {
-      couch: { x: 0, y: 0, z: 0, scale: 1 },
-      table: { x: 0, y: 0, z: 1.0, scale: 1 },
-      lamp: { x: 1.6, y: 0, z: -0.6 }
+    const lCounterGeo = new THREE.BoxGeometry(0.76, 0.06, 2.25);
+    const lCounter = new THREE.Mesh(lCounterGeo, countertopMat);
+    lCounter.position.set(-3.9, 0.85, -2.45);
+    lCounter.castShadow = true;
+    lCounter.receiveShadow = true;
+    lExtensionGroup.add(lCounter);
+
+    kitchenGroup.add(lExtensionGroup);
+
+    // 9. KITCHEN ISLAND & BAR STOOLS GROUP
+    const islandGroup = new THREE.Group();
+    scene.add(islandGroup);
+
+    // Island Cabinet Body
+    const islandBaseGeo = new THREE.BoxGeometry(2.2, 0.85, 0.95);
+    const islandBase = new THREE.Mesh(islandBaseGeo, cabinetMat);
+    islandBase.position.set(-0.3, 0.425, -1.2);
+    islandBase.castShadow = true;
+    islandBase.receiveShadow = true;
+    islandGroup.add(islandBase);
+
+    // Overhanging Waterfall Marble Countertop
+    const islandTopGeo = new THREE.BoxGeometry(2.35, 0.06, 1.15);
+    const islandTop = new THREE.Mesh(islandTopGeo, countertopMat);
+    islandTop.position.set(-0.3, 0.88, -1.2);
+    islandTop.castShadow = true;
+    islandTop.receiveShadow = true;
+    islandGroup.add(islandTop);
+
+    // Waterfall side slab
+    const waterfallGeo = new THREE.BoxGeometry(0.06, 0.88, 1.15);
+    const waterfall = new THREE.Mesh(waterfallGeo, countertopMat);
+    waterfall.position.set(0.84, 0.44, -1.2);
+    waterfall.castShadow = true;
+    waterfall.receiveShadow = true;
+    islandGroup.add(waterfall);
+
+    // Designer Bar Stools (2 units)
+    const stoolPositions = [
+      { x: -0.8, z: -0.3 },
+      { x: 0.2, z: -0.3 }
+    ];
+
+    stoolPositions.forEach((sp) => {
+      const stoolGroup = new THREE.Group();
+      
+      // Seat Cushion
+      const cushionGeo = new THREE.CylinderGeometry(0.22, 0.22, 0.06, 24);
+      const cushionMat = new THREE.MeshStandardMaterial({ color: 0x2b2e36, roughness: 0.8 });
+      const cushion = new THREE.Mesh(cushionGeo, cushionMat);
+      cushion.position.y = 0.62;
+      cushion.castShadow = true;
+      stoolGroup.add(cushion);
+
+      // Stool Legs (Metallic brass)
+      const stoolLegGeo = new THREE.CylinderGeometry(0.015, 0.01, 0.62, 12);
+      for (let angle = 0; angle < Math.PI * 2; angle += Math.PI / 2) {
+        const leg = new THREE.Mesh(stoolLegGeo, brassMat);
+        leg.position.set(Math.cos(angle) * 0.16, 0.31, Math.sin(angle) * 0.16);
+        leg.rotation.z = -Math.cos(angle) * 0.1;
+        leg.rotation.x = Math.sin(angle) * 0.1;
+        leg.castShadow = true;
+        stoolGroup.add(leg);
+      }
+
+      // Footrest ring
+      const ringGeo = new THREE.TorusGeometry(0.15, 0.008, 12, 24);
+      const ring = new THREE.Mesh(ringGeo, brassMat);
+      ring.rotation.x = Math.PI / 2;
+      ring.position.y = 0.25;
+      stoolGroup.add(ring);
+
+      stoolGroup.position.set(sp.x, 0, sp.z);
+      islandGroup.add(stoolGroup);
+    });
+
+    // --- GLTF CUSTOM MODEL LOADER FALLBACK ---
+    // Attempt to load converted GLB model from public folder if user converted their .skp file
+    const loader = new GLTFLoader();
+    const tryGltfPaths = ['/web-kitchen.glb', '/web modular kitchen file.glb'];
+
+    const tryLoadGltf = (index) => {
+      if (index >= tryGltfPaths.length) {
+        setModelSource('procedural');
+        setGltfLoadStatus('Procedural 3D Model Active');
+        return;
+      }
+      loader.load(
+        tryGltfPaths[index],
+        (gltf) => {
+          // Hide procedural kitchen, show GLTF scene
+          kitchenGroup.visible = false;
+          islandGroup.visible = false;
+
+          const gltfScene = gltf.scene;
+          gltfScene.name = 'userGltfKitchen';
+          
+          // Auto center and scale GLTF model
+          const box = new THREE.Box3().setFromObject(gltfScene);
+          const size = box.getSize(new THREE.Vector3());
+          const maxDim = Math.max(size.x, size.y, size.z);
+          const scale = 4.5 / maxDim;
+          gltfScene.scale.set(scale, scale, scale);
+
+          const center = box.getCenter(new THREE.Vector3());
+          gltfScene.position.set(-center.x * scale, -box.min.y * scale, -center.z * scale - 2);
+
+          gltfScene.traverse((child) => {
+            if (child.isMesh) {
+              child.castShadow = true;
+              child.receiveShadow = true;
+            }
+          });
+
+          scene.add(gltfScene);
+          setModelSource('gltf');
+          setGltfLoadStatus(`Loaded GLB: ${tryGltfPaths[index].replace('/', '')}`);
+        },
+        undefined,
+        () => {
+          // If current path fails, try next path
+          tryLoadGltf(index + 1);
+        }
+      );
     };
 
-    if (spatialArrangement === 'standard') {
-      targets.couch = { x: 0, y: 0, z: 0, scale: 1 };
-      targets.table = { x: 0, y: 0, z: 1.1, scale: 1 };
-      targets.lamp = { x: 1.8, y: 0, z: -0.5 };
-    } else if (spatialArrangement === 'compact') {
-      targets.couch = { x: -0.3, y: 0, z: -0.2, scale: 1 };
-      targets.table = { x: 0.5, y: 0, z: 0.7, scale: 0.95 };
-      targets.lamp = { x: 1.3, y: 0, z: -0.8 };
-    } else if (spatialArrangement === 'minimalist') {
-      targets.couch = { x: 0, y: 0, z: -0.6, scale: 1 };
-      targets.table = { x: 0, y: 0, z: 1.4, scale: 0.8 };
-      targets.lamp = { x: 2.1, y: 0, z: -0.4 };
+    tryLoadGltf(0);
+
+    // --- LIGHTING SETUP ---
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.45);
+    scene.add(ambientLight);
+
+    const mainDirectionalLight = new THREE.DirectionalLight(0xffffff, 0.7);
+    mainDirectionalLight.position.set(5, 8, 4);
+    mainDirectionalLight.castShadow = true;
+    mainDirectionalLight.shadow.mapSize.width = 1024;
+    mainDirectionalLight.shadow.mapSize.height = 1024;
+    mainDirectionalLight.shadow.bias = -0.0005;
+    scene.add(mainDirectionalLight);
+
+    // Warm Accent Spotlight on Island
+    const islandSpotlight = new THREE.SpotLight(0xfff3db, 2.5, 8, Math.PI / 4, 0.4);
+    islandSpotlight.position.set(-0.3, 4.0, -1.2);
+    islandSpotlight.target.position.set(-0.3, 0.8, -1.2);
+    islandSpotlight.castShadow = true;
+    scene.add(islandSpotlight);
+    scene.add(islandSpotlight.target);
+
+    // --- KITCHEN LAYOUT TRANSFORM TARGETS ---
+    const layoutTargets = {
+      lExtension: { visible: true, x: 0 },
+      island: { visible: true, x: -0.3, z: -1.2 }
+    };
+
+    if (kitchenLayout === 'l-shaped') {
+      layoutTargets.lExtension.visible = true;
+      layoutTargets.island.visible = true;
+      layoutTargets.island.x = -0.3;
+      layoutTargets.island.z = -1.2;
+    } else if (kitchenLayout === 'parallel') {
+      layoutTargets.lExtension.visible = false;
+      layoutTargets.island.visible = true;
+      layoutTargets.island.x = -0.5;
+      layoutTargets.island.z = -2.3;
+    } else if (kitchenLayout === 'minimalist') {
+      layoutTargets.lExtension.visible = false;
+      layoutTargets.island.visible = false;
     }
 
-    couchGroup.position.set(targets.couch.x, targets.couch.y, targets.couch.z);
-    tableGroup.position.set(targets.table.x, targets.table.y, targets.table.z);
-    tableGroup.scale.set(targets.table.scale, targets.table.scale, targets.table.scale);
-    lampGroup.position.set(targets.lamp.x, targets.lamp.y, targets.lamp.z);
+    lExtensionGroup.visible = layoutTargets.lExtension.visible;
+    islandGroup.visible = modelSource === 'gltf' ? false : layoutTargets.island.visible;
+    islandGroup.position.set(layoutTargets.island.x, 0, layoutTargets.island.z);
 
-    const radius = 6.4;
+    // --- ORBIT & CAMERA INTERACTION ---
+    const radius = 7.5;
     let isDragging = false;
     let prevMouseX = 0;
     let prevMouseY = 0;
@@ -329,7 +522,7 @@ export default function InteractiveStudio({
       const deltaY = e.clientY - prevMouseY;
 
       yawRef.current -= deltaX * 0.006;
-      pitchRef.current = Math.max(-0.2, Math.min(Math.PI / 2.8, pitchRef.current + deltaY * 0.006));
+      pitchRef.current = Math.max(-0.1, Math.min(Math.PI / 2.6, pitchRef.current + deltaY * 0.006));
 
       prevMouseX = e.clientX;
       prevMouseY = e.clientY;
@@ -348,7 +541,7 @@ export default function InteractiveStudio({
 
       if (scrolled >= 0 && scrolled <= totalDist) {
         const prog = Math.min(Math.max(0, scrolled / totalDist), 1);
-        yawRef.current = Math.PI / 4 + (prog - 0.5) * 0.8;
+        yawRef.current = Math.PI / 4.2 + (prog - 0.5) * 0.6;
       }
     };
 
@@ -368,23 +561,7 @@ export default function InteractiveStudio({
       camera.position.x = radius * Math.sin(yawRef.current) * Math.cos(pitchRef.current);
       camera.position.z = radius * Math.cos(yawRef.current) * Math.cos(pitchRef.current);
       camera.position.y = radius * Math.sin(pitchRef.current) + 1.8;
-      camera.lookAt(0, 0.7, 0.2);
-
-      couchGroup.position.x += (targets.couch.x - couchGroup.position.x) * 0.09;
-      couchGroup.position.y += (targets.couch.y - couchGroup.position.y) * 0.09;
-      couchGroup.position.z += (targets.couch.z - couchGroup.position.z) * 0.09;
-
-      tableGroup.position.x += (targets.table.x - tableGroup.position.x) * 0.09;
-      tableGroup.position.y += (targets.table.y - tableGroup.position.y) * 0.09;
-      tableGroup.position.z += (targets.table.z - tableGroup.position.z) * 0.09;
-
-      const currentScale = tableGroup.scale.x;
-      const scaleLerp = currentScale + (targets.table.scale - currentScale) * 0.09;
-      tableGroup.scale.set(scaleLerp, scaleLerp, scaleLerp);
-
-      lampGroup.position.x += (targets.lamp.x - lampGroup.position.x) * 0.09;
-      lampGroup.position.y += (targets.lamp.y - lampGroup.position.y) * 0.09;
-      lampGroup.position.z += (targets.lamp.z - lampGroup.position.z) * 0.09;
+      camera.lookAt(-0.5, 1.2, -2.4);
 
       renderer.render(scene, camera);
     };
@@ -393,11 +570,12 @@ export default function InteractiveStudio({
     const handleResize = () => {
       if (!container) return;
       const w = container.clientWidth;
-      const h = container.clientHeight || 450;
+      const h = container.clientHeight || 480;
       camera.aspect = w / h;
       camera.updateProjectionMatrix();
       renderer.setSize(w, h);
     };
+
     window.addEventListener('resize', handleResize);
 
     return () => {
@@ -409,23 +587,38 @@ export default function InteractiveStudio({
       window.removeEventListener('pointerup', handlePointerUp);
       renderer.dispose();
     };
-  }, [selectedPigmentIdx, spatialArrangement, lampOn, studioAutoRotate, loading]);
+  }, [cabinetFinishIdx, countertopIdx, kitchenLayout, underCabinetLightOn, studioAutoRotate, loading]);
 
   return (
-    <section id="interactive-studio" className="relative z-30 bg-[#0f1118] text-luxury-cream py-24 px-6 md:px-16 lg:px-24 border-t border-white/5">
+    <section id="interactive-studio" className="relative z-30 bg-[#0b0d13] text-luxury-cream py-24 px-6 md:px-16 lg:px-24 border-t border-white/5">
       <div className="max-w-7xl mx-auto space-y-16">
 
         {/* Section Header */}
-        <div className="text-center max-w-2xl mx-auto space-y-4 reveal-3d-popup">
-          <span className="font-sans text-[10px] md:text-xs font-bold tracking-[0.35em] text-luxury-sage uppercase">
-            VIRTUAL EXPERIENCE
-          </span>
+        <div className="text-center max-w-3xl mx-auto space-y-4 reveal-3d-popup">
+          <div className="flex items-center justify-center gap-3">
+            <span className="w-8 h-[1px] bg-[#838f6f]/40" />
+            <span className="font-sans text-[10px] md:text-xs font-bold tracking-[0.35em] text-[#838f6f] uppercase">
+              VIRTUAL SPATIAL ATELIER
+            </span>
+            <span className="w-8 h-[1px] bg-[#838f6f]/40" />
+          </div>
+
           <h2 className="font-display text-3xl md:text-5xl font-extralight text-luxury-cream leading-tight uppercase tracking-wider">
-            Interactive 3D Living Studio
+            Interactive 3D <span className="italic font-normal text-[#838f6f]">Modular Kitchen</span> Studio
           </h2>
-          <p className="font-sans text-xs md:text-sm text-luxury-cream/60 leading-relaxed font-light">
-            Experience real-time interactive luxury layout planning. Customize couch fabrics with curated navy and gold pigments, toggle metallic leg variations, and cycle structural placements live.
+
+          <p className="font-sans text-xs md:text-sm text-luxury-cream/60 leading-relaxed font-light max-w-2xl mx-auto">
+            Design your ideal kitchen environment in real-time 3D. Experiment with tactile wood veneers, polished marble countertops, under-cabinet ambient lighting, and spatial layouts live.
           </p>
+
+          {gltfLoadStatus && (
+            <div className="pt-2">
+              <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-[10px] font-sans text-white/70">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                {gltfLoadStatus}
+              </span>
+            </div>
+          )}
         </div>
 
         {/* Studio Panel Card */}
@@ -433,88 +626,120 @@ export default function InteractiveStudio({
           onMouseMove={handleCardMouseMove}
           onMouseLeave={handleCardMouseLeave}
           style={tiltStyle}
-          className="bg-[#181c2b] border border-white/5 rounded-[24px] p-4 md:p-6 lg:p-8 shadow-[0_40px_80px_rgba(0,0,0,0.4)] grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch transition-transform duration-100 ease-out"
+          className="bg-[#141722] border border-white/10 rounded-[24px] p-4 md:p-6 lg:p-8 shadow-[0_40px_80px_rgba(0,0,0,0.5)] grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch transition-transform duration-100 ease-out"
         >
 
-          {/* Left Column: Canvas (7 cols) */}
-          <div className="lg:col-span-8 relative rounded-xl overflow-hidden min-h-[380px] lg:min-h-[500px] bg-[#121622] border border-white/[0.03]">
+          {/* Left Column: 3D Canvas (8 cols) */}
+          <div className="lg:col-span-8 relative rounded-xl overflow-hidden min-h-[420px] lg:min-h-[520px] bg-[#0f1117] border border-white/[0.05]">
             <div ref={studioCanvasRef} className="absolute inset-0 w-full h-full cursor-grab active:cursor-grabbing" />
 
             <div className="absolute top-4 left-4 z-10 pointer-events-none">
-              <div className="bg-black/60 backdrop-blur-md border border-white/10 px-3.5 py-1.5 rounded-full flex items-center gap-2">
-                <span className="w-1.5 h-1.5 bg-luxury-sage rounded-full animate-ping" />
+              <div className="bg-black/70 backdrop-blur-md border border-white/10 px-3.5 py-1.5 rounded-full flex items-center gap-2">
+                <span className="w-1.5 h-1.5 bg-[#838f6f] rounded-full animate-ping" />
                 <span className="font-sans text-[9px] font-semibold tracking-wider text-white/90">
-                  Drag to Orbit 3D Room
+                  Drag to Orbit 3D Kitchen
                 </span>
               </div>
             </div>
 
             <div className="absolute bottom-4 right-4 z-10">
               <button
-                onClick={() => setLampOn(!lampOn)}
-                className={`px-4 py-2 rounded-full font-sans text-[9px] font-bold tracking-widest uppercase transition-all duration-300 flex items-center gap-2 shadow-lg border ${lampOn
-                  ? 'bg-luxury-cream text-luxury-charcoal border-luxury-cream hover:bg-white'
-                  : 'bg-black/60 text-white/50 border-white/10 hover:border-white/30 hover:text-white'
+                onClick={() => setUnderCabinetLightOn(!underCabinetLightOn)}
+                className={`px-4 py-2 rounded-full font-sans text-[9px] font-bold tracking-widest uppercase transition-all duration-300 flex items-center gap-2 shadow-lg border ${underCabinetLightOn
+                    ? 'bg-luxury-cream text-luxury-charcoal border-luxury-cream hover:bg-white'
+                    : 'bg-black/70 text-white/50 border-white/10 hover:border-white/30 hover:text-white'
                   }`}
               >
-                <span className={`w-2 h-2 rounded-full ${lampOn ? 'bg-luxury-sage animate-pulse' : 'bg-red-500'}`} />
-                <span>Lamp: {lampOn ? 'ON' : 'OFF'}</span>
+                <span className={`w-2 h-2 rounded-full ${underCabinetLightOn ? 'bg-amber-400 animate-pulse' : 'bg-red-500'}`} />
+                <span>LED Strip: {underCabinetLightOn ? 'ON' : 'OFF'}</span>
               </button>
             </div>
 
           </div>
 
           {/* Right Column: Controls Panel (4 cols) */}
-          <div className="lg:col-span-4 p-4 lg:p-6 bg-[#131622] rounded-xl border border-white/[0.03] flex flex-col justify-between space-y-8">
+          <div className="lg:col-span-4 p-4 lg:p-6 bg-[#0f121a] rounded-xl border border-white/[0.05] flex flex-col justify-between space-y-6">
 
             <div className="space-y-6">
 
               <div className="space-y-2">
                 <h3 className="font-display text-xl lg:text-2xl font-light tracking-wide text-luxury-cream uppercase">
-                  Studio Concept Planner
+                  Kitchen Material Atelier
                 </h3>
                 <p className="font-sans text-xs text-luxury-cream/50 leading-relaxed font-light">
-                  Interact with our virtual 3D showcase. Spin the camera, toggling layouts and materials designed live with earthy pigments and hand-polished gold trim.
+                  Tailor every element of your kitchen configuration. Switch cabinet laminates, natural marble tops, and functional spatial blueprints.
                 </p>
               </div>
 
               <div className="w-full h-[1px] bg-white/5" />
 
-              {/* Pigments */}
+              {/* CABINET FINISHES */}
               <div className="space-y-3">
-                <span className="font-sans text-[9px] font-bold tracking-[0.25em] text-luxury-sage uppercase">
-                  UPHOLSTERY PIGMENTS
-                </span>
-                <div className="flex items-center gap-3">
-                  {UPHOLSTERY_PIGMENTS.map((color, idx) => (
+                <div className="flex items-center justify-between">
+                  <span className="font-sans text-[9px] font-bold tracking-[0.25em] text-[#838f6f] uppercase">
+                    CABINET FINISH
+                  </span>
+                  <span className="text-[10px] text-white/50 font-sans font-semibold">
+                    {CABINET_FINISHES[cabinetFinishIdx].name}
+                  </span>
+                </div>
+                <div className="flex items-center gap-2.5">
+                  {CABINET_FINISHES.map((finish, idx) => (
                     <button
-                      key={color.name}
-                      onClick={() => setSelectedPigmentIdx(idx)}
-                      aria-label={`Select ${color.name}`}
-                      className="relative w-8 h-8 rounded-full border border-white/10 transition-transform duration-300 hover:scale-110 flex items-center justify-center cursor-pointer"
-                      style={{ backgroundColor: color.value }}
+                      key={finish.name}
+                      onClick={() => setCabinetFinishIdx(idx)}
+                      aria-label={`Select ${finish.name}`}
+                      className="relative w-8 h-8 rounded-full border border-white/15 transition-all duration-300 hover:scale-110 flex items-center justify-center cursor-pointer shadow-sm"
+                      style={{ backgroundColor: finish.value }}
                     >
-                      {selectedPigmentIdx === idx && (
-                        <span className="absolute inset-0.5 rounded-full border border-white mix-blend-difference" />
+                      {cabinetFinishIdx === idx && (
+                        <span className="absolute -inset-1 rounded-full border-2 border-[#838f6f]" />
                       )}
                     </button>
                   ))}
                 </div>
               </div>
 
-              {/* Spatial arrangements */}
+              {/* COUNTERTOP STONES */}
               <div className="space-y-3">
-                <span className="font-sans text-[9px] font-bold tracking-[0.25em] text-luxury-sage uppercase">
-                  SPATIAL ARRANGEMENTS
+                <div className="flex items-center justify-between">
+                  <span className="font-sans text-[9px] font-bold tracking-[0.25em] text-[#838f6f] uppercase">
+                    COUNTERTOP STONE
+                  </span>
+                  <span className="text-[10px] text-white/50 font-sans font-semibold">
+                    {COUNTERTOP_STONES[countertopIdx].name}
+                  </span>
+                </div>
+                <div className="grid grid-cols-2 gap-2">
+                  {COUNTERTOP_STONES.map((stone, idx) => (
+                    <button
+                      key={stone.name}
+                      onClick={() => setCountertopIdx(idx)}
+                      className={`px-3 py-2 rounded font-sans text-[9px] font-semibold tracking-wider uppercase transition-all duration-300 border text-left flex items-center gap-2 ${countertopIdx === idx
+                          ? 'bg-[#838f6f] text-white border-[#838f6f] shadow-md'
+                          : 'bg-white/5 text-white/60 border-white/10 hover:border-white/20 hover:text-white'
+                        }`}
+                    >
+                      <span className="w-3 h-3 rounded-full border border-white/20 shrink-0" style={{ backgroundColor: stone.value }} />
+                      <span className="truncate">{stone.name.split(' ')[0]}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* SPATIAL LAYOUTS */}
+              <div className="space-y-3">
+                <span className="font-sans text-[9px] font-bold tracking-[0.25em] text-[#838f6f] uppercase">
+                  SPATIAL CONFIGURATION
                 </span>
-                <div className="grid grid-cols-3 gap-2">
-                  {SPATIAL_ARRANGEMENTS.map((item) => (
+                <div className="grid grid-cols-3 gap-1.5">
+                  {KITCHEN_LAYOUTS.map((item) => (
                     <button
                       key={item.id}
-                      onClick={() => setSpatialArrangement(item.id)}
-                      className={`py-2 rounded font-sans text-[9px] font-semibold tracking-wider uppercase transition-all duration-300 border ${spatialArrangement === item.id
-                        ? 'bg-[#838f6f] text-white border-[#838f6f] shadow-md'
-                        : 'bg-transparent text-white/50 border-white/10 hover:border-white/30 hover:text-white'
+                      onClick={() => setKitchenLayout(item.id)}
+                      className={`py-2 px-1 rounded font-sans text-[8px] font-bold tracking-wider uppercase transition-all duration-300 border ${kitchenLayout === item.id
+                          ? 'bg-luxury-cream text-luxury-charcoal border-luxury-cream shadow-md'
+                          : 'bg-transparent text-white/50 border-white/10 hover:border-white/30 hover:text-white'
                         }`}
                     >
                       {item.label}
@@ -525,30 +750,30 @@ export default function InteractiveStudio({
 
             </div>
 
-            {/* Footer metadata */}
-            <div className="space-y-4 pt-6 border-t border-white/5">
+            {/* Footer metadata & auto-rotate */}
+            <div className="space-y-3 pt-4 border-t border-white/5">
 
               <div className="flex items-center justify-between text-[10px] font-sans">
-                <span className="text-white/40">Auto Rotation</span>
+                <span className="text-white/40">3D Camera Orbit</span>
                 <button
                   onClick={() => setStudioAutoRotate(!studioAutoRotate)}
                   className={`px-3 py-1 rounded text-[8px] font-bold uppercase tracking-wider transition-colors duration-300 ${studioAutoRotate
-                    ? 'bg-luxury-sage text-white'
-                    : 'bg-white/5 text-white/60 hover:bg-white/10'
+                      ? 'bg-[#838f6f] text-white'
+                      : 'bg-white/5 text-white/60 hover:bg-white/10'
                     }`}
                 >
                   {studioAutoRotate ? 'ROTATING' : 'PAUSED'}
                 </button>
               </div>
 
-              <div className="flex items-center justify-between text-[10px] font-sans">
-                <span className="text-white/40">Current Palette</span>
-                <span className="font-bold text-luxury-sage">{UPHOLSTERY_PIGMENTS[selectedPigmentIdx].name}</span>
+              <div className="bg-white/[0.02] p-2.5 rounded border border-white/5 space-y-1">
+                <p className="text-[9px] font-sans text-white/60 font-medium">
+                  💡 SketchUp (.skp) File Notice:
+                </p>
+                <p className="text-[8px] font-sans text-white/40 leading-relaxed font-light">
+                  To view your custom SketchUp model here, export <code className="text-amber-300">web modular kitchen file.skp</code> as <code className="text-amber-300">web-kitchen.glb</code> and place it in <code className="text-amber-300">frontend/public/</code>.
+                </p>
               </div>
-
-              <p className="text-[8px] font-sans text-white/30 leading-normal italic text-center pt-2">
-                *Made with procedural materials on standard WebGL canvas. Responsive aspect resizing active.
-              </p>
 
             </div>
 

@@ -71,7 +71,7 @@ export default function AboutUs({ onNavigate }) {
               </span>
 
               <p className="font-sans text-xs md:text-sm lg:text-base text-luxury-charcoal/85 leading-relaxed font-light">
-                Since 2010, <strong className="font-semibold text-luxury-charcoal">Sharkings Interior Design</strong> is a full-service interior design firm in Madurai & Ramanathapuram, specializing in both residential and commercial design. We will have the experience to ensure that the project runs smoothly and gives you the best possible results, whether you need a simple refresh of furniture and paint colors, or a comprehensive whole-house renovation.
+                Since 2010, <strong className="font-semibold text-luxury-charcoal">Sharkings Interiors & Exteriors</strong> is a full-service interior design firm in Madurai & Ramanathapuram, specializing in both residential and commercial design. We will have the experience to ensure that the project runs smoothly and gives you the best possible results, whether you need a simple refresh of furniture and paint colors, or a comprehensive whole-house renovation.
               </p>
 
               <div className="p-5 rounded-2xl bg-white border border-black/10 shadow-[0_10px_30px_rgba(0,0,0,0.03)] space-y-3">
@@ -116,6 +116,8 @@ export default function AboutUs({ onNavigate }) {
               <img
                 src={homeInteriorImg}
                 alt="Sharkings Full Service Living Interior"
+                loading="lazy"
+                decoding="async"
                 className="w-full aspect-[4/5] object-cover group-hover:scale-105 transition-transform duration-700"
                 style={{ transform: `scale(1.08) translateY(${parallaxOffset * -0.12}px)` }}
               />
