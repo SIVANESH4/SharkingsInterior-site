@@ -1,15 +1,65 @@
 import { useState, useEffect, useRef } from 'react';
 import { useScrollReveal } from '../../hooks/useScrollReveal';
 
+// Project Assets from Billionaires & FacetoFace (referencing ProjectPage.jsx)
+import b1 from '../../assets/Billionaires/sharking1.webp';
+import b2 from '../../assets/Billionaires/sharking2.webp';
+import b3 from '../../assets/Billionaires/sharking3.webp';
+import f1 from '../../assets/FacetoFace/sharking1.webp';
+import f3 from '../../assets/FacetoFace/sharking3.webp';
+import f4 from '../../assets/FacetoFace/sharking4.webp';
+
+// Core Service & Project Assets
+import homeInteriorImg from '../../assets/home-interior.webp';
+import modularKitchenImg from '../../assets/modular-kitchen.webp';
+import officeInteriorImg from '../../assets/office-interior.webp';
+import acpElevationImg from '../../assets/ACP-elevation.webp';
+import turnkeyImg from '../../assets/turnkey.webp';
+import wardrobeImg from '../../assets/wardrobe.webp';
+
 const PROJECTS_DATA = [
   {
     id: 1,
+    category: 'COMMERCIAL',
+    branch: 'MADURAI BRANCH',
+    image: b1,
+    title: 'Billionaires Luxury Studio',
+    description: 'A high-end salon and spa project designed and built in Madurai featuring custom lighted mirrors, smooth wall finishes, and comfortable styling stations.',
+    tags: ['Luxury Salon', 'Madurai Studio', 'Lighted Mirrors', 'Gold Hardware'],
+    architect: 'R. K. SIVANESH',
+    sqft: '3,500 SQ. FT.',
+    materials: [
+      { name: 'Brushed Gold Brass', color: '#d4af37' },
+      { name: 'Warm Oak Veneer', color: '#8a6543' },
+      { name: 'Acoustic Slat Panel', color: '#2a2a2a' },
+      { name: 'Calacatta Marble', color: '#eaeaea' }
+    ]
+  },
+  {
+    id: 2,
+    category: 'COMMERCIAL',
+    branch: 'RAMANATHAPURAM BRANCH',
+    image: f1,
+    title: 'Face to Face Wellness Lounge',
+    description: 'A complete beauty and wellness studio completed in Ramanathapuram. Built with practical styling layouts, soft relaxing lighting, and clean finishes.',
+    tags: ['Wellness Studio', 'Ramanathapuram', 'Relaxing Lighting', 'Clean Finishes'],
+    architect: 'A. MEERA',
+    sqft: '2,800 SQ. FT.',
+    materials: [
+      { name: 'Warm Sandstone', color: '#dcc6a8' },
+      { name: 'Satin Brass', color: '#cfb53b' },
+      { name: 'Obsidian Trim', color: '#111111' },
+      { name: 'Smoked Mirror', color: '#333333' }
+    ]
+  },
+  {
+    id: 3,
     category: 'RESIDENTIAL',
     branch: 'MADURAI BRANCH',
-    image: '/images/slide-living.png',
-    title: 'The Terracotta Oasis',
-    description: 'A modern, high-contrast living room crafted with beige textures, terracotta feature walls, and bespoke gold-brass hardware.',
-    tags: ['Earthy Tones', 'Minimalist', 'Living Room', 'Bespoke Lighting'],
+    image: homeInteriorImg,
+    title: 'The Signature Living Suite',
+    description: 'A modern, high-contrast residential living space crafted with warm oak veneers, bespoke illumination, and premium Italian upholstery.',
+    tags: ['Living Room', 'Earthy Tones', 'Warm Veneer', 'Bespoke Lighting'],
     architect: 'R. K. SIVANESH',
     sqft: '2,400 SQ. FT.',
     materials: [
@@ -20,29 +70,12 @@ const PROJECTS_DATA = [
     ]
   },
   {
-    id: 2,
-    category: 'RESIDENTIAL',
-    branch: 'RAMANATHAPURAM BRANCH',
-    image: '/images/slide-bedroom.png',
-    title: 'The Sand & Serenity Lounge',
-    description: 'An expansive bedroom layout that balances organic textures of warm sandstone, raw linen, and metallic brass details to create a calm retreat.',
-    tags: ['Bedroom', 'Linen', 'Warm Tones', 'Calm Theme'],
-    architect: 'A. MEERA',
-    sqft: '1,850 SQ. FT.',
-    materials: [
-      { name: 'Raw Sandstone', color: '#dcc6a8' },
-      { name: 'Bleached Linen', color: '#f5f3ef' },
-      { name: 'Aged Gold', color: '#bfa15f' },
-      { name: 'Obsidian Trim', color: '#111111' }
-    ]
-  },
-  {
-    id: 3,
+    id: 4,
     category: 'MODULAR KITCHEN',
     branch: 'MADURAI BRANCH',
-    image: '/images/service-furniture.png',
+    image: modularKitchenImg,
     title: 'Minimalist Timber Kitchen',
-    description: 'Precision-finished modular cabinetry accented with hand-polished golden grips and integrated hidden pull-out systems.',
+    description: 'Precision-finished modular cabinetry accented with hand-polished golden grips, soft-close hardware, and integrated hidden storage.',
     tags: ['Kitchen', 'Veneers', 'Gold Grips', 'German Hardware'],
     architect: 'S. KARTHIK',
     sqft: '520 SQ. FT.',
@@ -54,54 +87,88 @@ const PROJECTS_DATA = [
     ]
   },
   {
-    id: 4,
+    id: 5,
     category: 'RESIDENTIAL',
     branch: 'RAMANATHAPURAM BRANCH',
-    image: '/images/slide-dining.png',
-    title: 'The Velvet Dining Pavilion',
-    description: 'Bespoke velvet dining furniture paired with curved overhead brass lamps and low-glow moody backlights.',
-    tags: ['Dining Room', 'Velvet Accent', 'Brass Lamp', 'Backlighting'],
-    architect: 'R. K. SIVANESH',
-    sqft: '1,200 SQ. FT.',
-    materials: [
-      { name: 'Sage Velvet', color: '#838f6f' },
-      { name: 'Polished Brass', color: '#ffd700' },
-      { name: 'Nero Marquina', color: '#1e1e1e' },
-      { name: 'Smoked Mirror', color: '#333333' }
-    ]
-  },
-  {
-    id: 5,
-    category: 'COMMERCIAL',
-    branch: 'MADURAI BRANCH',
-    image: '/images/service-commercial.png',
-    title: 'The Corporate Obsidian Loft',
-    description: 'A striking premium corporate boutique office utilizing floating slate panels and linear architectural fixtures.',
-    tags: ['Workspace', 'Obsidian Slate', 'Linear Lighting', 'Glass Partitions'],
+    image: wardrobeImg,
+    title: 'The Serenity Bedroom & Wardrobe',
+    description: 'An expansive master suite layout balancing organic wood textures, tinted glass wardrobe panels, and ambient backlighting for a calm retreat.',
+    tags: ['Bedroom', 'Custom Wardrobe', 'Glass Panels', 'Calm Theme'],
     architect: 'A. MEERA',
-    sqft: '4,500 SQ. FT.',
+    sqft: '1,850 SQ. FT.',
     materials: [
-      { name: 'Obsidian Slate', color: '#1a1d24' },
-      { name: 'Brushed Steel', color: '#7a7e85' },
-      { name: 'Tinted Glass', color: '#4a535c' },
-      { name: 'Walnut Board', color: '#3d251d' }
+      { name: 'Raw Sandstone', color: '#dcc6a8' },
+      { name: 'Bleached Linen', color: '#f5f3ef' },
+      { name: 'Aged Gold', color: '#bfa15f' },
+      { name: 'Obsidian Trim', color: '#111111' }
     ]
   },
   {
     id: 6,
+    category: 'COMMERCIAL',
+    branch: 'MADURAI BRANCH',
+    image: b3,
+    title: 'Billionaires VIP Styling Bay',
+    description: 'Exclusive workstation bays crafted with polished marble countertops, recessed LED ambient backlighting, and custom leather seating.',
+    tags: ['VIP Suite', 'Ambient Lighting', 'Marble Countertops', 'Commercial'],
+    architect: 'R. K. SIVANESH',
+    sqft: '1,800 SQ. FT.',
+    materials: [
+      { name: 'Nero Marquina', color: '#1e1e1e' },
+      { name: 'Polished Gold', color: '#ffd700' },
+      { name: 'Aged Bronze', color: '#8c6d46' },
+      { name: 'Smoked Glass', color: '#333333' }
+    ]
+  },
+  {
+    id: 7,
     category: 'RENOVATION',
     branch: 'RAMANATHAPURAM BRANCH',
-    image: '/images/service-residential.png',
-    title: 'The Coastal Villa Revival',
-    description: 'Transforming an old coastal residence into a modern quiet luxury home utilizing terrazzo floors and rebuilt structural arches.',
-    tags: ['Renovation', 'Terrazzo', 'Structural Arches', 'Coastal View'],
+    image: acpElevationImg,
+    title: 'Exterior Facade & ACP Revival',
+    description: 'Transforming existing structural facades with modern weather-proof ACP cladding, linear outdoor lighting, and architectural paneling.',
+    tags: ['ACP Cladding', 'Elevation Design', 'Structural Revival', 'Exterior'],
     architect: 'S. KARTHIK',
     sqft: '3,200 SQ. FT.',
     materials: [
-      { name: 'White Terrazzo', color: '#efede8' },
+      { name: 'Metallic Silver ACP', color: '#c0c0c0' },
       { name: 'Curved Stucco', color: '#eadecb' },
-      { name: 'Marine Ply', color: '#6e5138' },
+      { name: 'Charcoal Panels', color: '#222222' },
       { name: 'Gold Anodized', color: '#cda869' }
+    ]
+  },
+  {
+    id: 8,
+    category: 'COMMERCIAL',
+    branch: 'RAMANATHAPURAM BRANCH',
+    image: f3,
+    title: 'Face to Face Reception Lounge',
+    description: 'Welcoming reception and styling lounge featuring soft ceiling cove illumination, marble islands, and custom branding displays.',
+    tags: ['Reception Lounge', 'Cove Lighting', 'Styling Islands', 'Commercial'],
+    architect: 'A. MEERA',
+    sqft: '1,600 SQ. FT.',
+    materials: [
+      { name: 'White Marble', color: '#f5f5f5' },
+      { name: 'Warm LED Cove', color: '#ffe4b5' },
+      { name: 'Satin Brass', color: '#cfb53b' },
+      { name: 'Obsidian Trim', color: '#111111' }
+    ]
+  },
+  {
+    id: 9,
+    category: 'RENOVATION',
+    branch: 'MADURAI BRANCH',
+    image: turnkeyImg,
+    title: 'The Coastal Villa Revival',
+    description: 'Transforming older residential structures into modern quiet luxury homes with full turnkey execution, acoustic walls, and open architectural arches.',
+    tags: ['Renovation', 'Turnkey Execution', 'Quiet Luxury', 'Architectural Arches'],
+    architect: 'S. KARTHIK',
+    sqft: '4,200 SQ. FT.',
+    materials: [
+      { name: 'Italian Marble', color: '#e8e6e1' },
+      { name: 'Teak Wood Veneer', color: '#795548' },
+      { name: 'Brushed Brass', color: '#d4af37' },
+      { name: 'Velvet Trim', color: '#556b2f' }
     ]
   }
 ];
@@ -196,7 +263,7 @@ function ProjectCard({ project, onClick, cardStyle, isActive }) {
         <div className="pt-2 flex items-center justify-between transform translate-z-[10px]">
           {isActive ? (
             <span className="font-sans text-[7px] font-bold tracking-[0.2em] text-[#c5a059] uppercase">
-              ✦ Click again to inspect specs
+              ✦ Click to view full image
             </span>
           ) : (
             <span className="font-sans text-[7px] font-bold tracking-[0.2em] text-white/20 uppercase">
@@ -225,6 +292,23 @@ export default function ProjectGlimpse({ onNavigate }) {
   const filteredProjects = activeCategory === 'ALL'
     ? PROJECTS_DATA
     : PROJECTS_DATA.filter(p => p.category === activeCategory);
+
+  // Keyboard shortcut (Escape) & scroll lock for selected project lightbox
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        setSelectedProject(null);
+      }
+    };
+    if (selectedProject) {
+      window.addEventListener('keydown', handleKeyDown);
+      document.body.style.overflow = 'hidden';
+    }
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      document.body.style.overflow = '';
+    };
+  }, [selectedProject]);
 
   // Resize listener for responsive layout adjustments
   useEffect(() => {
@@ -473,145 +557,81 @@ export default function ProjectGlimpse({ onNavigate }) {
         </div>
       </section>
 
-      {/* Blueprint Details Sidebar/Drawer (Slides in from the right) */}
-      <div
-        className={`fixed inset-0 z-[9999] flex justify-end transition-opacity duration-500 ease-in-out ${selectedProject ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
-          }`}
-      >
+      {/* Fullscreen High-Resolution Project Lightbox Modal */}
+      {selectedProject && (
         <div
-          onClick={() => setSelectedProject(null)}
-          className="absolute inset-0 bg-black/60 backdrop-blur-sm"
-        />
-
-        <div
-          className={`relative w-full max-w-xl md:max-w-2xl h-full bg-[#121622] text-luxury-cream shadow-[0_0_50px_rgba(0,0,0,0.8)] border-l border-white/5 p-6 md:p-10 flex flex-col justify-between overflow-y-auto transform transition-transform duration-500 cubic-bezier(0.16, 1, 0.3, 1) ${selectedProject ? 'translate-x-0' : 'translate-x-full'
-            }`}
+          className="fixed inset-0 z-[9999] bg-black/95 backdrop-blur-2xl flex flex-col justify-between p-4 sm:p-6 md:p-10 transition-all duration-300 animate-fadeIn"
         >
-          {/* Header */}
-          <div className="space-y-6">
-            <div className="flex items-center justify-between border-b border-white/5 pb-5">
-              <div className="space-y-1">
-                <span className="font-sans text-[9px] font-bold tracking-[0.25em] text-luxury-sage uppercase">
-                  {selectedProject?.category} • SPECIFICATIONS
+          {/* Top Header Bar */}
+          <div className="flex items-center justify-between border-b border-white/10 pb-4 z-20">
+            <div className="space-y-1">
+              <span className="font-sans text-[10px] md:text-xs font-bold tracking-[0.3em] text-[#c5a059] uppercase block">
+                {selectedProject.category} • {selectedProject.branch}
+              </span>
+              <h3 className="font-display text-xl sm:text-3xl font-light text-luxury-cream uppercase tracking-wider">
+                {selectedProject.title}
+              </h3>
+            </div>
+
+            <button
+              onClick={() => setSelectedProject(null)}
+              aria-label="Close Lightbox"
+              className="w-11 h-11 sm:w-12 sm:h-12 rounded-full border border-white/20 bg-white/10 hover:bg-white hover:text-black text-white flex items-center justify-center transition-all duration-300 cursor-pointer shadow-lg"
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+
+          {/* Main Stage: Large Visible Image Display */}
+          <div
+            onClick={() => setSelectedProject(null)}
+            className="relative flex-1 w-full my-4 flex items-center justify-center overflow-hidden rounded-2xl bg-[#0a0c10] border border-white/10 group cursor-pointer"
+          >
+            <img
+              src={selectedProject.image}
+              alt={selectedProject.title}
+              className="w-full h-full object-contain max-h-[75vh] md:max-h-[80vh] transition-transform duration-700 group-hover:scale-[1.02]"
+            />
+
+            {/* Gradient Overlay at bottom for readable text */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-transparent to-transparent pointer-events-none" />
+
+            {/* Floating Info Overlay */}
+            <div className="absolute bottom-6 left-6 right-6 md:left-8 md:right-8 flex flex-col md:flex-row md:items-end justify-between gap-4 pointer-events-none">
+              <div className="max-w-3xl space-y-2 pointer-events-auto">
+                <span className="font-sans text-[9px] font-bold tracking-[0.25em] text-[#838f6f] uppercase">
+                  {selectedProject.category}
                 </span>
-                <h3 className="font-display text-2xl lg:text-3xl font-light text-luxury-cream">
-                  {selectedProject?.title}
-                </h3>
+                <p className="font-sans text-xs md:text-sm text-white/80 leading-relaxed font-light drop-shadow-md">
+                  {selectedProject.description}
+                </p>
               </div>
+
               <button
-                onClick={() => setSelectedProject(null)}
-                className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center text-white/50 hover:text-white hover:border-white/30 hover:bg-white/5 transition-all duration-300"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setSelectedProject(null);
+                  if (onNavigate) onNavigate('projects');
+                }}
+                className="px-6 py-3 bg-[#c5a059] text-black hover:bg-white transition-colors duration-300 font-sans text-[10px] font-bold uppercase tracking-widest rounded-full shadow-lg pointer-events-auto flex items-center gap-2 self-start md:self-end cursor-pointer"
               >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                <span>EXPLORE ALL PROJECTS</span>
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
                 </svg>
               </button>
             </div>
-
-            {/* Scope Summary metadata */}
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-4 bg-white/[0.02] border border-white/[0.04] p-4 rounded-xl">
-              <div>
-                <span className="block text-[8px] font-sans font-bold tracking-widest text-white/40 uppercase">architect in charge</span>
-                <span className="text-[11px] font-semibold text-luxury-cream">{selectedProject?.architect}</span>
-              </div>
-              <div>
-                <span className="block text-[8px] font-sans font-bold tracking-widest text-white/40 uppercase">project footprint</span>
-                <span className="text-[11px] font-semibold text-luxury-cream">{selectedProject?.sqft}</span>
-              </div>
-              <div>
-                <span className="block text-[8px] font-sans font-bold tracking-widest text-white/40 uppercase">project site branch</span>
-                <span className="text-[11px] font-semibold text-luxury-sage">{selectedProject?.branch.split(' ')[0]}</span>
-              </div>
-            </div>
-
-            {/* Material board swatches */}
-            <div className="space-y-3">
-              <span className="block text-[9px] font-sans font-bold tracking-[0.2em] text-luxury-sage uppercase">
-                MATERIAL BOARD SELECTIONS
-              </span>
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                {selectedProject?.materials.map((mat, idx) => (
-                  <div key={idx} className="bg-white/[0.02] border border-white/[0.04] p-3 rounded-lg flex flex-col justify-between space-y-3">
-                    <div className="w-6 h-6 rounded border border-white/10" style={{ backgroundColor: mat.color }} />
-                    <span className="font-sans text-[10px] text-white/70 leading-tight font-medium">{mat.name}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Blueprint draft vector */}
-            <div className="space-y-3">
-              <span className="block text-[9px] font-sans font-bold tracking-[0.2em] text-luxury-sage uppercase">
-                ARCHITECTURAL BLUEPRINT GRID
-              </span>
-              <div className="relative aspect-[16/9] w-full rounded-xl overflow-hidden bg-[#0d101d] border border-white/[0.05] flex items-center justify-center p-4">
-                <div
-                  className="absolute inset-0 opacity-[0.07]"
-                  style={{
-                    backgroundImage: `
-                      linear-gradient(to right, #ffffff 1px, transparent 1px),
-                      linear-gradient(to bottom, #ffffff 1px, transparent 1px)
-                    `,
-                    backgroundSize: '20px 20px'
-                  }}
-                />
-
-                <svg className="w-full h-full relative z-10 opacity-75 text-[#838f6f]" viewBox="0 0 400 200" fill="none" stroke="currentColor">
-                  <rect x="20" y="20" width="360" height="160" rx="3" strokeWidth="1.5" strokeDasharray="3 3" />
-                  <rect x="25" y="25" width="350" height="150" rx="2" strokeWidth="1.2" />
-
-                  <line x1="140" y1="25" x2="140" y2="175" strokeWidth="1" />
-                  <line x1="260" y1="25" x2="260" y2="110" strokeWidth="1" />
-                  <line x1="140" y1="110" x2="375" y2="110" strokeWidth="1" />
-
-                  <path d="M 140 145 A 30 30 0 0 1 170 175" strokeWidth="0.8" strokeDasharray="2 2" />
-                  <line x1="140" y1="145" x2="140" y2="175" strokeWidth="0.8" />
-
-                  <path d="M 260 80 A 30 30 0 0 0 230 110" strokeWidth="0.8" strokeDasharray="2 2" />
-                  <line x1="260" y1="80" x2="260" y2="110" strokeWidth="0.8" />
-
-                  <text x="75" y="100" fill="#ffffff" opacity="0.3" fontSize="8" fontFamily="sans-serif" textAnchor="middle" stroke="none">LOUNGE CHAMBER</text>
-                  <text x="200" y="65" fill="#ffffff" opacity="0.3" fontSize="8" fontFamily="sans-serif" textAnchor="middle" stroke="none">VESTIBULE</text>
-                  <text x="320" y="65" fill="#ffffff" opacity="0.3" fontSize="8" fontFamily="sans-serif" textAnchor="middle" stroke="none">OFFICE DRAFT</text>
-                  <text x="255" y="150" fill="#ffffff" opacity="0.3" fontSize="8" fontFamily="sans-serif" textAnchor="middle" stroke="none">TERRACE PAVILION</text>
-
-                  <rect x="40" y="40" width="70" height="25" rx="2" strokeWidth="0.8" opacity="0.5" />
-                  <circle cx="200" cy="145" r="22" strokeWidth="0.8" opacity="0.5" />
-
-                  <line x1="20" y1="10" x2="380" y2="10" strokeWidth="0.5" />
-                  <line x1="20" y1="7" x2="20" y2="13" strokeWidth="0.5" />
-                  <line x1="380" y1="7" x2="380" y2="13" strokeWidth="0.5" />
-                  <text x="200" y="6" fill="#c5a059" fontSize="6" fontFamily="sans-serif" textAnchor="middle" stroke="none">38.0 METERS NOMINAL</text>
-                </svg>
-
-                <div className="absolute bottom-2 left-2 pointer-events-none">
-                  <span className="font-sans text-[7px] text-[#c5a059] font-bold tracking-widest uppercase">
-                    ARCHITECTURAL LAYOUT DRAFT v1.12
-                  </span>
-                </div>
-              </div>
-            </div>
-
           </div>
 
-          {/* Inquiry CTA */}
-          <div className="border-t border-white/5 pt-6 mt-6 flex items-center justify-between">
-            <div className="space-y-1">
-              <span className="block text-[8px] font-sans font-bold tracking-widest text-white/40 uppercase">project footprint spec</span>
-              <span className="text-xs text-white/70">Custom scale blueprints accessible for clients.</span>
-            </div>
-            <a
-              href="#inquire"
-              onClick={() => setSelectedProject(null)}
-              className="px-6 py-2.5 bg-luxury-sage text-luxury-cream hover:bg-white hover:text-luxury-charcoal transition-colors duration-300 font-sans text-[9px] font-bold uppercase tracking-widest"
-            >
-              Inquire About Layout
-            </a>
+          {/* Bottom Bar Footer hint */}
+          <div className="flex items-center justify-between text-white/40 font-sans text-[9px] font-medium tracking-widest uppercase pt-1">
+            <span>SHARKINGS INTERIORS & EXTERIORS • {selectedProject.branch}</span>
+            <span>CLICK ANYWHERE TO CLOSE (ESC)</span>
           </div>
-
         </div>
-
-      </div>
+      )}
     </>
   );
 }
