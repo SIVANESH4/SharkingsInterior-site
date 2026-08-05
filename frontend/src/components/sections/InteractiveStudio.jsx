@@ -26,15 +26,15 @@ const KITCHEN_LAYOUTS = [
 
 export default function InteractiveStudio({
   cabinetFinishIdx = 0,
-  setCabinetFinishIdx = () => {},
+  setCabinetFinishIdx = () => { },
   countertopIdx = 0,
-  setCountertopIdx = () => {},
+  setCountertopIdx = () => { },
   kitchenLayout = 'l-shaped',
-  setKitchenLayout = () => {},
+  setKitchenLayout = () => { },
   underCabinetLightOn = true,
-  setUnderCabinetLightOn = () => {},
+  setUnderCabinetLightOn = () => { },
   studioAutoRotate = false,
-  setStudioAutoRotate = () => {},
+  setStudioAutoRotate = () => { },
   loading = false
 }) {
   useScrollReveal();
@@ -196,7 +196,7 @@ export default function InteractiveStudio({
     const doorWidth = 3.6 / doorCount;
     for (let i = 0; i < doorCount; i++) {
       const doorX = -0.5 - 1.8 + doorWidth / 2 + i * doorWidth;
-      
+
       // Door seam line
       const seamGeo = new THREE.BoxGeometry(0.01, 0.78, 0.71);
       const seamMat = new THREE.MeshStandardMaterial({ color: 0x0f1116 });
@@ -376,7 +376,7 @@ export default function InteractiveStudio({
 
     stoolPositions.forEach((sp) => {
       const stoolGroup = new THREE.Group();
-      
+
       // Seat Cushion
       const cushionGeo = new THREE.CylinderGeometry(0.22, 0.22, 0.06, 24);
       const cushionMat = new THREE.MeshStandardMaterial({ color: 0x2b2e36, roughness: 0.8 });
@@ -427,7 +427,7 @@ export default function InteractiveStudio({
 
           const gltfScene = gltf.scene;
           gltfScene.name = 'userGltfKitchen';
-          
+
           // Auto center and scale GLTF model
           const box = new THREE.Box3().setFromObject(gltfScene);
           const size = box.getSize(new THREE.Vector3());
@@ -646,8 +646,8 @@ export default function InteractiveStudio({
               <button
                 onClick={() => setUnderCabinetLightOn(!underCabinetLightOn)}
                 className={`px-4 py-2 rounded-full font-sans text-[9px] font-bold tracking-widest uppercase transition-all duration-300 flex items-center gap-2 shadow-lg border ${underCabinetLightOn
-                    ? 'bg-luxury-cream text-luxury-charcoal border-luxury-cream hover:bg-white'
-                    : 'bg-black/70 text-white/50 border-white/10 hover:border-white/30 hover:text-white'
+                  ? 'bg-luxury-cream text-luxury-charcoal border-luxury-cream hover:bg-white'
+                  : 'bg-black/70 text-white/50 border-white/10 hover:border-white/30 hover:text-white'
                   }`}
               >
                 <span className={`w-2 h-2 rounded-full ${underCabinetLightOn ? 'bg-amber-400 animate-pulse' : 'bg-red-500'}`} />
@@ -716,8 +716,8 @@ export default function InteractiveStudio({
                       key={stone.name}
                       onClick={() => setCountertopIdx(idx)}
                       className={`px-3 py-2 rounded font-sans text-[9px] font-semibold tracking-wider uppercase transition-all duration-300 border text-left flex items-center gap-2 ${countertopIdx === idx
-                          ? 'bg-[#838f6f] text-white border-[#838f6f] shadow-md'
-                          : 'bg-white/5 text-white/60 border-white/10 hover:border-white/20 hover:text-white'
+                        ? 'bg-[#838f6f] text-white border-[#838f6f] shadow-md'
+                        : 'bg-white/5 text-white/60 border-white/10 hover:border-white/20 hover:text-white'
                         }`}
                     >
                       <span className="w-3 h-3 rounded-full border border-white/20 shrink-0" style={{ backgroundColor: stone.value }} />
@@ -738,8 +738,8 @@ export default function InteractiveStudio({
                       key={item.id}
                       onClick={() => setKitchenLayout(item.id)}
                       className={`py-2 px-1 rounded font-sans text-[8px] font-bold tracking-wider uppercase transition-all duration-300 border ${kitchenLayout === item.id
-                          ? 'bg-luxury-cream text-luxury-charcoal border-luxury-cream shadow-md'
-                          : 'bg-transparent text-white/50 border-white/10 hover:border-white/30 hover:text-white'
+                        ? 'bg-luxury-cream text-luxury-charcoal border-luxury-cream shadow-md'
+                        : 'bg-transparent text-white/50 border-white/10 hover:border-white/30 hover:text-white'
                         }`}
                     >
                       {item.label}
@@ -758,8 +758,8 @@ export default function InteractiveStudio({
                 <button
                   onClick={() => setStudioAutoRotate(!studioAutoRotate)}
                   className={`px-3 py-1 rounded text-[8px] font-bold uppercase tracking-wider transition-colors duration-300 ${studioAutoRotate
-                      ? 'bg-[#838f6f] text-white'
-                      : 'bg-white/5 text-white/60 hover:bg-white/10'
+                    ? 'bg-[#838f6f] text-white'
+                    : 'bg-white/5 text-white/60 hover:bg-white/10'
                     }`}
                 >
                   {studioAutoRotate ? 'ROTATING' : 'PAUSED'}

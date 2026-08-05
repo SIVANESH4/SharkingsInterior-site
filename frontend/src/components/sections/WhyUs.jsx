@@ -13,30 +13,27 @@ export default function WhyUs({
       tag: 'OUR TEAM',
       title: 'Experienced Design & Build Team',
       description: 'Our team brings 15+ years of experience in residential, office, and commercial interior design. We work directly with you to plan every detail.',
-      pill: 'Homes, Offices & Commercial Spaces',
+      pill: 'HOMES, OFFICES & COMMERCIAL SPACES',
       image: news1Img,
-      alt: 'Experienced interior design and build team by Sharkings Interiors & Exteriors',
-      bgTag: 'bg-luxury-sage/10 text-luxury-sage'
+      alt: 'Experienced interior design and build team by Sharkings Interiors & Exteriors'
     },
     {
       num: '02',
       tag: 'FACTORY & MATERIALS',
       title: 'Quality Materials & Factory Finish',
       description: 'We manufacture all modular furniture and cabinets in our own factory using water-resistant marine plywood and premium fittings built to last.',
-      pill: 'Water-Resistant Marine Plywood',
+      pill: 'WATER-RESISTANT MARINE PLYWOOD',
       image: news2Img,
-      alt: 'Quality factory materials and modular furniture finish',
-      bgTag: 'bg-luxury-charcoal/10 text-luxury-charcoal'
+      alt: 'Quality factory materials and modular furniture finish'
     },
     {
       num: '03',
       tag: 'PROJECT PLANNING',
       title: '3D Design Preview & Timely Delivery',
       description: 'See your exact space in 3D before production starts. We follow a clear timeline so your project gets completed on schedule without hassle.',
-      pill: '3D Preview & On-Time Completion',
+      pill: '3D PREVIEW & ON-TIME COMPLETION',
       image: news3Img,
-      alt: 'Custom 3D interior design preview and project planning',
-      bgTag: 'bg-luxury-red/10 text-luxury-red'
+      alt: 'Custom 3D interior design preview and project planning'
     }
   ];
 
@@ -68,11 +65,11 @@ export default function WhyUs({
         }}
       >
         
-        {/* Compact Section Header */}
+        {/* Section Header */}
         <div className="max-w-3xl space-y-2">
           <div className="flex items-center gap-2.5">
-            <span className="w-6 h-[1px] bg-luxury-sage" />
-            <span className="font-sans text-[10px] font-bold tracking-[0.3em] text-luxury-sage uppercase">
+            <span className="w-6 h-[1px] bg-[#710014]" />
+            <span className="font-sans text-[10px] font-bold tracking-[0.3em] text-[#710014] uppercase">
               WHY CHOOSE US
             </span>
           </div>
@@ -86,50 +83,77 @@ export default function WhyUs({
           </p>
         </div>
 
-        {/* Compact Responsive Step Cards (3 Column Row) */}
+        {/* 3 Step Cards Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 items-stretch">
-          {steps.map((step) => (
-            <div 
-              key={step.num}
-              className="bg-white/90 backdrop-blur-md border border-luxury-charcoal/8 p-4 sm:p-5 rounded-2xl flex flex-col justify-between space-y-4 group hover:border-luxury-sage/40 hover:-translate-y-1 transition-all duration-300 ease-out shadow-[0_10px_25px_-10px_rgba(22,22,22,0.04)] hover:shadow-[0_15px_30px_-10px_rgba(22,22,22,0.08)] cursor-pointer"
-            >
-              <div className="space-y-3">
-                {/* Header Tag & Step Number */}
-                <div className="flex items-center justify-between">
-                  <span className={`text-[9px] font-sans font-bold tracking-[0.2em] px-2.5 py-0.5 rounded-full ${step.bgTag}`}>
-                    {step.tag}
-                  </span>
-                  <span className="font-display text-xl font-light text-luxury-charcoal/25 group-hover:text-luxury-sage transition-colors duration-300">
-                    {step.num}
-                  </span>
+          {steps.map((step, idx) => {
+            const isCenter = idx === 1;
+
+            return (
+              <div 
+                key={step.num}
+                className={`p-5 sm:p-6 rounded-2xl flex flex-col justify-between space-y-5 transition-all duration-300 ease-out cursor-pointer group hover:-translate-y-1.5 ${
+                  isCenter
+                    ? 'bg-[#710014] text-white border border-[#710014] shadow-[0_20px_40px_rgba(113,0,20,0.25)] hover:shadow-[0_25px_50px_rgba(113,0,20,0.35)]'
+                    : 'bg-white text-luxury-charcoal border border-black/10 shadow-[0_10px_25px_rgba(0,0,0,0.04)] hover:shadow-[0_15px_30px_rgba(0,0,0,0.08)]'
+                }`}
+              >
+                <div className="space-y-4">
+                  {/* Tag & Step Number */}
+                  <div className="flex items-center justify-between">
+                    <span className={`text-[9px] font-sans font-bold tracking-[0.2em] px-3 py-1 rounded-full uppercase ${
+                      isCenter
+                        ? 'bg-white/15 text-white border border-white/20'
+                        : 'bg-[#710014]/10 text-[#710014] border border-[#710014]/20'
+                    }`}>
+                      {step.tag}
+                    </span>
+                    <span className={`font-display text-xl font-light ${
+                      isCenter ? 'text-[#c5a059]' : 'text-[#710014]/40 group-hover:text-[#710014]'
+                    }`}>
+                      {step.num}
+                    </span>
+                  </div>
+
+                  {/* Image Accent */}
+                  <div className="relative w-full h-36 sm:h-40 rounded-xl overflow-hidden border border-black/5">
+                    <img 
+                      src={step.image} 
+                      alt={step.alt}
+                      loading="lazy"
+                      decoding="async"
+                      className="w-full h-full object-cover transform transition-transform duration-700 ease-out group-hover:scale-105"
+                    />
+                    <div className={`absolute inset-0 bg-gradient-to-t pointer-events-none ${
+                      isCenter ? 'from-[#710014]/60 via-transparent to-transparent' : 'from-black/30 via-transparent to-transparent'
+                    }`} />
+                  </div>
+
+                  {/* Card Title */}
+                  <h3 className={`font-display text-xl sm:text-2xl font-light leading-snug ${
+                    isCenter ? 'text-white' : 'text-[#710014]'
+                  }`}>
+                    {step.title}
+                  </h3>
+
+                  {/* Card Description */}
+                  <p className={`font-sans text-xs leading-relaxed font-light ${
+                    isCenter ? 'text-white/85' : 'text-luxury-charcoal/80'
+                  }`}>
+                    {step.description}
+                  </p>
                 </div>
 
-                {/* Compact Image Accent */}
-                <div className="relative w-full h-32 sm:h-36 rounded-xl overflow-hidden border border-luxury-charcoal/5">
-                  <img 
-                    src={step.image} 
-                    alt={step.alt}
-                    loading="lazy"
-                    decoding="async"
-                    className="w-full h-full object-cover transform transition-transform duration-700 ease-out group-hover:scale-105"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none" />
+                {/* Card Footer Pill */}
+                <div className={`pt-3.5 border-t font-sans text-[11px] font-semibold tracking-wider uppercase ${
+                  isCenter
+                    ? 'border-white/20 text-[#c5a059]'
+                    : 'border-black/10 text-[#710014]'
+                }`}>
+                  ✓ {step.pill}
                 </div>
-
-                <h3 className="font-display text-lg sm:text-xl font-light text-luxury-charcoal leading-snug group-hover:text-luxury-sage transition-colors duration-300">
-                  {step.title}
-                </h3>
-
-                <p className="font-sans text-[11px] sm:text-xs text-luxury-charcoal/75 leading-relaxed font-light">
-                  {step.description}
-                </p>
               </div>
-
-              <div className="pt-3 border-t border-luxury-charcoal/8 font-sans text-[11px] font-semibold tracking-wide text-luxury-sage uppercase">
-                ✓ {step.pill}
-              </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
 
       </div>

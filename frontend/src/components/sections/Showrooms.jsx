@@ -47,8 +47,8 @@ const SHOWROOMS_DATA = [
     email: 'sharkingsindia@gmail.com',
     hours: 'Monday - Saturday: 10:00 AM to 8:30 PM (Sunday Closed)',
     status: 'OPEN NOW',
-    mapUrl: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d125969.72492476532!2d78.69305717180812!3d9.37268452640674!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3b01a3aa7757728d%3A0x966228f4a1b4c145!2sSHARKINGS%20Interiors%20%26%20Exteriors!5e0!3m2!1sen!2sin!4v1785905909098!5m2!1sen!2sin",
-    directMapUrl: 'https://maps.app.goo.gl/aDffZ7P2gQLbmRoD7',
+    mapUrl: "https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d779.1542875671499!2d78.8768028!3d9.3527655!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3b019700371df4c9%3A0xea549e375bf9b0bf!2sSHARKINGS%20Interiors%20and%20Exteriors!5e1!3m2!1sen!2sin!4v1785915240249!5m2!1sen!2sin",
+    directMapUrl: 'https://maps.app.goo.gl/KwVAnbyXtpeHbtpr8',
     images: [
       {
         url: 'https://images.unsplash.com/photo-1600566753376-12c8ab7fb75b?q=80&w=1000&auto=format&fit=crop',
